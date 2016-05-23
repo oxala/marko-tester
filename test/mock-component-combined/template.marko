@@ -1,0 +1,14 @@
+<compiler-options whitespace="preserve"/>
+<var name="viewModel" value="data.viewModel"/>
+<var name="config" value="data.config"/>
+
+<div id="${viewModel.placement}" class="mock-component" if="viewModel" w-bind>
+    <h1>${viewModel.title}</h1>
+    <p>${viewModel.content}</p>
+    <div if="config">
+        <p>${config.url}</p>
+        <p>${config.locale}</p>
+        <p>${config.timeout}</p>
+        <p>$!{config.isDev}</p>
+    </div>
+</div>
