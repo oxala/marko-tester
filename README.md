@@ -2,33 +2,24 @@
 
 ===
 
-Test library to assist with testing UI components generated using Marko Template Engine.
+Test library to assist with testing marko-widget UI components.
 
 ## Usage
 
-### Start using marko-tester with:
+#### Start using marko-tester with:
 
 ```
 npm install --save-dev marko-tester
 ```
 
-See `/test/mock-component` for an example using this test library.
+See `/test` for an example using this test library.
 
-### Build marko-tester with:
+There are two things you can test:
 
-```
-npm install
-```
-
-### Test marko-tester with:
-
-```
-grunt test
-```
-
-## Render testing
+### Template rendering given specific input;
 
 The rendering test works by giving the Marko template the input to use for rendering, and by comparing the generated HTML with the expected HTML.
+
 
 The test works with the following naming conventions required for the input JSON file and the expected HTML file that define a test case:
 
@@ -37,18 +28,28 @@ The test works with the following naming conventions required for the input JSON
 {test-case}.html
 ```
 
-## Client testing
+### Rendered template client testing;
 
-The client test works by instanstiating a marko-widget inside phantomJS browser and testing the functionality against it.
+The client test works by instanstiating a marko-widget and testing the functionality against it.
 
-You need to create a file in which you need to pass your paths to client-tests, see example in:
-
-```
-/test/client.js
-```
-
-You could also use client-helpers to set up widget environment and inject widget into the `window`, see example in:
+You need to create a file in which you can pass settings for client-testing, see example in:
 
 ```
-/test/mock-component-combined/test/client/client-test.js
+/test/index.spec.js
+```
+
+This file should be targeted first by mochacli.
+
+## Contribution
+
+#### Build marko-tester with:
+
+```
+npm install
+```
+
+#### Test marko-tester with:
+
+```
+grunt test
 ```

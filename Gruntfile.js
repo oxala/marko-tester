@@ -7,15 +7,10 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'jshint:validate',
-        'test-unit',
-        'test-client'
+        'test-unit'
     ]);
 
     grunt.registerTask('test-unit', [
         'mochacli:unit'
-    ]);
-
-    grunt.registerTask('test-client', [
-        'shell:test-client'
     ]);
 };

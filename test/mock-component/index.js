@@ -3,21 +3,18 @@
 module.exports = require('marko-widgets').defineComponent({
     template: require('./template.marko'),
 
-    getInitialState: function(input) {
+    getInitialState: function getInitialState(input) {
         return {
             viewModel: input.viewModel,
             config: input.config
         };
     },
 
-    getTemplateData: function(state, input) {
-        return {
-            viewModel: state.viewModel,
-            config: state.config
-        };
+    getTemplateData: function getTemplateData(state, input) {
+        return state;
     },
 
-    init: function() {
+    init: function init() {
         window.alert();
     }
 });

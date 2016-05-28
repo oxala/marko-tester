@@ -4,8 +4,9 @@ module.exports = function jshint(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
     var sourcesToCheck = [
-        'source/!(generated-tests)/*.js',
-        'test/**/*.js'
+        'source/**/*.js',
+        'test/**/*.js',
+        '!source/generated-tests/**/*.js'
     ];
 
     return {

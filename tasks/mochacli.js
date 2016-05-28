@@ -4,7 +4,8 @@ module.exports = function mochacli(grunt) {
     grunt.loadNpmTasks('grunt-mocha-cli');
 
     var unitTestSources = [
-        'test/**/test/unit/*.js'
+        'test/index.spec.js',
+        'test/**/test/index.spec.js'
     ];
 
     return {

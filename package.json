@@ -1,6 +1,6 @@
 {
   "name": "marko-tester",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Assist Marko components unit/client testing",
   "repository": {
     "type": "git",
@@ -8,8 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/grunt test",
-    "test-client": "node ./test/client"
+    "test": "./node_modules/.bin/grunt test"
   },
   "keywords": [
     "marko-tester"
@@ -18,16 +17,18 @@
   "license": "ISC",
   "dependencies": {
     "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
     "fs-extra": "^0.30.0",
     "html-normalizer": "^5.0.0",
     "jquery": "^2.2.3",
+    "jsdom": "^9.2.0",
     "lasso": "^1.11.4",
     "lasso-less": "^2.1.2",
     "lasso-marko": "^2.0.4",
+    "lodash": "^4.13.1",
     "marko": "^2.7.1",
     "marko-widgets": "^5.0.0",
     "mocha": "^2.4.5",
-    "mocha-phantomjs": "^4.0.2",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0"
   },
@@ -36,7 +37,6 @@
     "grunt-config-dir": "^0.3.2",
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-mocha-cli": "^2.0.0",
-    "grunt-shell": "^1.3.0",
     "jshint": "^2.9.1",
     "jshint-html-reporter": "^0.2.4",
     "jshint-stylish": "^2.1.0"
