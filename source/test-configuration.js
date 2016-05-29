@@ -5,6 +5,7 @@ require('marko/node-require').install();
 var path = require('path');
 var fs = require('fs-extra');
 var chai = require('chai');
+var jsdom = require('jsdom');
 var markoCompiler = require.main.require('marko/compiler');
 var lasso = require('lasso');
 var sinonChai = require('sinon-chai');
@@ -26,9 +27,6 @@ try {
     fs.mkdirsSync(outputPath);
 } catch (e) {}
 
-var htmlPath = path.join(outputPath, 'component-tests.html');
-var out = fs.createWriteStream(htmlPath, 'utf8');
-
 lasso.configure({
     outputDir: staticPath,
     plugins: [
@@ -42,9 +40,6 @@ lasso.configure({
 
 module.exports.onInit = function onInit() {};
 module.exports.onDestroy = function onDestroy() {};
-
-module.exports.out = out;
-module.exports.htmlPath = htmlPath;
 
 module.exports.configure = function testConfigure(config) {
     var dependencies = [
@@ -85,4 +80,32 @@ module.exports.configure = function testConfigure(config) {
     if (config.onDestroy) {
         module.exports.onDestroy = config.onDestroy;
     }
+
+    module.exports.buildPage = new Promise(function (resolve, reject) {
+        var htmlPath = path.join(outputPath, 'component-tests.html');
+        var out = fs.createWriteStream(htmlPath, 'utf8');
+
+        require('./test-scaffold.marko')
+            .render({}, out)
+            .on('finish', function () {
+                jsdom.env(
+                    htmlPath, [], {
+                        features: {
+                            FetchExternalResources: ['script']
+                        }
+                    },
+                    function (err, window) {
+                        if (err) {
+                            return reject(err);
+                        }
+
+                        global.window = window;
+                        global.$ = window.jQuery;
+                        window.console = console;
+
+                        resolve(window);
+                    }
+                );
+            });
+    });
 };

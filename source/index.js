@@ -3,42 +3,15 @@
 
 var testConfiguration = require('./test-configuration');
 var testFixtures = require('./test-fixtures');
-var jsdom = require('jsdom');
-var template = require('./test-scaffold.marko');
 
 module.exports.configure = testConfiguration.configure;
 module.exports.testFixtures = testFixtures;
 module.exports.buildComponent = buildComponent;
 module.exports.buildWidget = buildWidget;
 
-var buildPage = new Promise(function (resolve, reject) {
-    template
-        .render({}, testConfiguration.out)
-        .on('finish', function () {
-            jsdom.env(
-                testConfiguration.htmlPath, [], {
-                    features: {
-                        FetchExternalResources: ['script']
-                    }
-                },
-                function (err, window) {
-                    if (err) {
-                        return reject(err);
-                    }
-
-                    global.window = window;
-                    global.$ = window.jQuery;
-                    window.console = console;
-
-                    resolve(window);
-                }
-            );
-        });
-});
-
 function buildComponent(settings) {
     beforeEach(function (done) {
-        buildPage.then(buildDom);
+        testConfiguration.buildPage.then(buildDom);
 
         function buildDom(window) {
             settings.renderer.render(settings.fixture, function (err, result) {

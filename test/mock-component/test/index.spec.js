@@ -5,7 +5,7 @@ var component = require('../');
 
 var testCasesPath = __dirname + '/fixtures';
 
-describe('mock-component-combined test', function () {
+describe('mock-component test', function () {
     var settings = {
         renderer: component.renderer,
         fixture: require('./fixtures/html-content')
