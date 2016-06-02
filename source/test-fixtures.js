@@ -55,7 +55,7 @@ function createTest(testCase) {
 
 function normalizer() {
     var COMPARE_ALL_ATTRIBUTES_STYLES_AND_CLASSES = {
-        attributes: null,
+        attributes: [ 'class', 'style', 'id' ],
         styles: null,
         classNames: null
     };

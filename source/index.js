@@ -26,7 +26,7 @@ function buildComponent(settings) {
                 var widgetPath = componentContainer.children[0].getAttribute('data-widget');
 
                 if (widgetPath) {
-                    global.widget = window.$rmod.require(widgetPath);
+                    global.widget = window.$_mod.require(widgetPath);
 
                     testConfiguration.onInit();
 

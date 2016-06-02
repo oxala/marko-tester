@@ -66,11 +66,13 @@ module.exports.configure = function testConfigure(config) {
     (config.taglibExcludeDirs || []).forEach(function (dirPath) {
         dirPath = path.resolve(rootPath, dirPath);
 
-        markoCompiler.taglibs.excludeDir(dirPath);
+        removeTaglib(dirPath);
     });
 
     (config.taglibExcludePackages || []).forEach(function (packageName) {
-        markoCompiler.taglibs.excludePackage(packageName);
+        var dirPath = path.resolve(rootPath, 'node_modules/' + packageName);
+
+        removeTaglib(dirPath);
     });
 
     if (config.onInit) {
@@ -109,3 +111,20 @@ module.exports.configure = function testConfigure(config) {
             });
     });
 };
+
+function removeTaglib(taglibPath) {
+    var markoTaglibPath = path.join(taglibPath, 'marko.json');
+    var markoTaglibPathTemp = markoTaglibPath + '_temp';
+
+    try {
+        fs.statSync(markoTaglibPath);
+        fs.renameSync(markoTaglibPath, markoTaglibPathTemp);
+    } catch (e) {}
+
+    process.on('exit', function () {
+        try {
+            fs.statSync(markoTaglibPathTemp);
+            fs.renameSync(markoTaglibPathTemp, markoTaglibPath);
+        } catch (e) {}
+    });
+}
