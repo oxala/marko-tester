@@ -20,6 +20,7 @@
     "chai-as-promised": "^5.3.0",
     "fs-extra": "^0.30.0",
     "html-normalizer": "^5.0.0",
+    "i18n-ebay": "^0.3.17",
     "jquery": "^2.2.3",
     "jsdom": "^9.2.0",
     "lasso": "^2.4.1",
