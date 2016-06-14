@@ -4,6 +4,8 @@ var fs = require('fs');
 var path = require('path');
 var Normalizer = require('html-normalizer');
 
+var excludedAttributes = [];
+
 module.exports = function testFixtures(component, testCasesDirectory) {
     var testCases = [];
 
@@ -29,6 +31,11 @@ module.exports = function testFixtures(component, testCasesDirectory) {
         }
     }
 };
+module.exports.excludeAttribute = excludeAttribute;
+
+function excludeAttribute(attr) {
+    excludedAttributes.push(attr);
+}
 
 function createTest(testCase) {
     describe('When component is rendered in "' + testCase.name + '" case', function () {
@@ -55,7 +62,8 @@ function createTest(testCase) {
 
 function normalizer() {
     var COMPARE_ALL_ATTRIBUTES_STYLES_AND_CLASSES = {
-        attributes: [ 'class', 'style', 'id' ],
+        attributes: null,
+        attributesExcluded: excludedAttributes,
         styles: null,
         classNames: null
     };

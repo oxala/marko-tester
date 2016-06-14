@@ -10,6 +10,7 @@ var markoCompiler = require.main.require('marko/compiler');
 var lasso = require('lasso');
 var sinonChai = require('sinon-chai');
 var chaiAsPromised = require('chai-as-promised');
+var testFixtures = require('./test-fixtures');
 var staticDir = 'static';
 var rootPath = process.cwd();
 
@@ -67,13 +68,17 @@ module.exports.configure = function testConfigure(config) {
     (config.taglibExcludeDirs || []).forEach(function (dirPath) {
         dirPath = path.resolve(rootPath, dirPath);
 
-        removeTaglib(dirPath);
+        markoCompiler.taglibFinder.excludeDir(dirPath);
     });
 
     (config.taglibExcludePackages || []).forEach(function (packageName) {
-        var dirPath = path.resolve(rootPath, 'node_modules/' + packageName);
+        markoCompiler.taglibFinder.excludePackage(packageName);
+    });
 
-        removeTaglib(dirPath);
+    (config.excludedAttributes || []).forEach(function (attr) {
+        attr = attr.toLowerCase();
+
+        testFixtures.excludeAttribute(attr);
     });
 
     if (config.onInit) {
@@ -112,20 +117,3 @@ module.exports.configure = function testConfigure(config) {
             });
     });
 };
-
-function removeTaglib(taglibPath) {
-    var markoTaglibPath = path.join(taglibPath, 'marko.json');
-    var markoTaglibPathTemp = markoTaglibPath + '_temp';
-
-    try {
-        fs.statSync(markoTaglibPath);
-        fs.renameSync(markoTaglibPath, markoTaglibPathTemp);
-    } catch (e) {}
-
-    process.on('exit', function () {
-        try {
-            fs.statSync(markoTaglibPathTemp);
-            fs.renameSync(markoTaglibPathTemp, markoTaglibPath);
-        } catch (e) {}
-    });
-}
