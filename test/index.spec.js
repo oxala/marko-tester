@@ -8,6 +8,7 @@ tester.configure({
     ],
     taglibExcludeDirs: [],
     taglibExcludePackages: [],
+    excludedAttributes: ['data-widget'],
     onInit: function () {},
     onDestroy: function () {}
 });

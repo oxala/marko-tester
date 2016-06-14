@@ -39,25 +39,30 @@ function excludeAttribute(attr) {
 
 function createTest(testCase) {
     describe('When component is rendered in "' + testCase.name + '" case', function () {
-        var actualHtml;
-        var expectedHtml;
-
-        beforeEach(function (done) {
-            testCase.component.render(testCase.fixture, function (err, result) {
-                actualHtml = result.html.trim();
-                actualHtml = (actualHtml ? normalizer().domString(actualHtml) : '');
-
-                expectedHtml = testCase.expectedHtml.trim();
-                expectedHtml = (expectedHtml ? normalizer().domString(expectedHtml) : '');
-
-                done();
-            });
-        });
-
         it('should render component with a specified html', function () {
-            expect(actualHtml).to.equal(expectedHtml);
+            return expect(renderedHtmlFor(testCase)).to.eventually.equal(cleanRenderedHtml(testCase.expectedHtml));
         });
     });
+}
+
+function renderedHtmlFor(testCase) {
+    return new Promise(function (resolve, reject) {
+        var callback = function (error, renderedHtml) {
+            if (error) {
+                reject(new Error('Failed to render html'));
+            } else {
+                resolve(cleanRenderedHtml(renderedHtml));
+            }
+        };
+
+        callback.global = {};
+        testCase.component.renderer(testCase.fixture, callback);
+    });
+}
+
+function cleanRenderedHtml(html) {
+    html = html.trim();
+    return (html ? normalizer().domString(html) : '');
 }
 
 function normalizer() {

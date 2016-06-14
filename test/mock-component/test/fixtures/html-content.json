@@ -1,13 +1,13 @@
 {
-  "viewModel": {
-    "placement": "test",
-    "title": "Hello, World!",
-    "content": "Some plain text"
-  },
-  "config": {
-    "url": "www.ebay.com",
-    "locale": "en_US",
-    "timeout": 1000,
-    "isDev": true
-  }
+    "viewModel": {
+        "placement": "test",
+        "title": "Hello, World!",
+        "content": "Some plain text"
+    },
+    "config": {
+        "url": "www.ebay.com",
+        "locale": "en_US",
+        "timeout": 1000,
+        "isDev": true
+    }
 }
