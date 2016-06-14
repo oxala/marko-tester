@@ -30,6 +30,7 @@ try {
 lasso.configure({
     outputDir: staticPath,
     plugins: [
+        'i18n-ebay/optimizer/plugin',
         'lasso-marko',
         'lasso-less'
     ],
