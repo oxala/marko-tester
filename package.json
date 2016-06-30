@@ -8,7 +8,8 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/grunt test"
+    "test": "./node_modules/.bin/mocha test/index.spec.js test/**/test/index.spec.js --ui bdd --reporter spec --timeout 6000",
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha"
   },
   "keywords": [
     "marko-tester"
@@ -21,6 +22,7 @@
     "fs-extra": "^0.30.0",
     "html-normalizer": "^6.0.0",
     "i18n-ebay": "^0.3.17",
+    "istanbul": "^0.4.4",
     "jquery": "^2.2.3",
     "jsdom": "^9.2.0",
     "lasso": "^2.4.1",

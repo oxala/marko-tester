@@ -22,3 +22,4 @@ mocha.xunit
 *.marko.js
 source/generated-tests
 source/browser.json
+.coverage
