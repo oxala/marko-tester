@@ -5,12 +5,13 @@ module.exports = function (grunt) {
         configDir: require('path').join(__dirname, 'tasks')
     });
 
-    grunt.registerTask('test', [
-        'jshint:validate',
-        'test-unit'
+    grunt.registerTask('lint', [
+        'jshint:validate'
     ]);
 
-    grunt.registerTask('test-unit', [
-        'mochacli:unit'
+    grunt.registerTask('test', [
+        'mochacli:unit',
     ]);
 };
+
+

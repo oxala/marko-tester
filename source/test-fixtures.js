@@ -16,11 +16,11 @@ module.exports = function testFixtures(component, testCasesDirectory) {
     function buildCases(file) {
         var absPath = path.join(testCasesDirectory, file);
         var extension = path.extname(absPath);
-        var testName = path.basename(absPath, '.json');
+        var testName = path.basename(absPath, '.html');
 
-        if (extension === '.json') {
-            var fixture = JSON.parse(fs.readFileSync(absPath, 'utf-8'));
-            var expectedHtml = fs.readFileSync(absPath.replace(/.json$/, '.html'), 'utf-8');
+        if (extension === '.html') {
+            var fixture = require(absPath.replace(/.html$/, ''));
+            var expectedHtml = fs.readFileSync(absPath, 'utf-8');
 
             testCases.push({
                 name: testName,

@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha test/index.spec.js test/**/test/index.spec.js --ui bdd --reporter spec --timeout 6000",
-    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha"
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/index.spec.js test/**/test/index.spec.js"
   },
   "keywords": [
     "marko-tester"
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "grunt": "^0.4.5",
+    "grunt-cli": "^1.2.0",
     "grunt-config-dir": "^0.3.2",
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-mocha-cli": "^2.0.0",

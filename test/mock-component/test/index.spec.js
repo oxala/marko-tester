@@ -6,12 +6,12 @@ var component = require('../');
 var testCasesPath = __dirname + '/fixtures';
 
 describe('mock-component test', function () {
+    tester.testFixtures(component, testCasesPath);
+
     var settings = {
         renderer: component.renderer,
         fixture: require('./fixtures/html-content')
     };
-
-    tester.testFixtures(component, testCasesPath);
 
     tester.buildComponent(settings);
 
