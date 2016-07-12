@@ -26,6 +26,8 @@ The test works with the following naming conventions required for the input JSON
 ```
 {test-case}.json
 {test-case}.html
+{another-test-case}.js
+{another-test-case}.html
 ```
 
 ### Rendered template client testing;
