@@ -8,8 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha test/index.spec.js test/**/test/index.spec.js --ui bdd --reporter spec --timeout 6000",
-    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/index.spec.js test/**/test/index.spec.js"
+    "test": "./node_modules/.bin/mocha test/index.spec.js test/**/test/index.spec.js --ui bdd --reporter spec --timeout 6000"
   },
   "keywords": [
     "marko-tester"
@@ -20,6 +19,7 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
     "fs-extra": "^0.30.0",
+    "glob": "^7.0.5",
     "html-normalizer": "^6.0.0",
     "i18n-ebay": "^0.3.17",
     "istanbul": "^0.4.4",

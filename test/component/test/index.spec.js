@@ -5,7 +5,7 @@ var component = require('../');
 
 var testCasesPath = __dirname + '/fixtures';
 
-describe('mock-component test', function () {
+describe('component test', function () {
     tester.testFixtures(component, testCasesPath);
 
     var settings = {

@@ -4,9 +4,12 @@ require('marko/node-require').install();
 
 var path = require('path');
 var fs = require('fs-extra');
+var glob = require('glob');
 var chai = require('chai');
 var jsdom = require('jsdom');
 var markoCompiler = require.main.require('marko/compiler');
+var istanbul = require('istanbul');
+var instrumenter = new istanbul.Instrumenter({noCompact: true});
 var lasso = require('lasso');
 var sinonChai = require('sinon-chai');
 var chaiAsPromised = require('chai-as-promised');
@@ -17,6 +20,7 @@ var rootPath = process.cwd();
 global.expect = chai.expect;
 global.sinon = require('sinon');
 global._ = require('lodash');
+global.withCoverage = process.argv.indexOf('--coverage') > -1;
 
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
@@ -51,10 +55,49 @@ module.exports.configure = function testConfigure(config) {
         { 'path': 'sinon/pkg/sinon.js', 'mask-define': true }
     ];
 
+    if (global.withCoverage) {
+        global.__coverage__ = {};
+
+        var coverageFiles = glob.sync(path.resolve(rootPath, config.coverage.base, '**/*.js'), {
+            ignore: config.coverage.excludes
+        });
+
+        coverageFiles.forEach(function (filePath) {
+            var fileContent = fs.readFileSync(filePath, 'utf8');
+            console.log('filePath', filePath);
+            var instrumentedfileContent = instrumenter.instrumentSync(fileContent, filePath);
+
+            global.__coverage__[filePath] = instrumenter.lastFileCoverage();
+        });
+
+        istanbul.hook.hookRequire(function (requirePath) {
+            return coverageFiles.indexOf(requirePath) > -1;
+        }, function (code, requirePath) {
+            var instrumentedfileContent = instrumenter.instrumentSync(code, requirePath);
+
+            return instrumentedfileContent;
+        });
+
+        process.on('exit', function () {
+            var reporters = config.coverage.reporters || 'text-summary';
+            var dest = config.coverage.dest || '.coverage';
+            var collector = new istanbul.Collector();
+
+            global.window && global.window.__coverage__ && collector.add(window.__coverage__);
+            global && global.__coverage__ && collector.add(global.__coverage__);
+
+            reporters.forEach(function (reporter) {
+                istanbul.Report.create(reporter, {
+                    dir: dest + '/' + reporter
+                }).writeReport(collector, true);
+            });
+        });
+    }
+
     (config.components || []).forEach(function (component) {
         component = path.relative(__dirname, rootPath + '/' + component);
 
-        dependencies.push(component);
+        dependencies.push('require: ' + component);
     });
 
     dependencies.push('require-run: ./mocha-runner');
@@ -96,6 +139,31 @@ module.exports.configure = function testConfigure(config) {
         require('./test-scaffold.marko')
             .render({}, out)
             .on('finish', function () {
+                if (global.withCoverage) {
+                    var packageInfo = require(rootPath + '/package');
+                    var generatedSrcPath = path.resolve(__dirname, 'generated-tests/static/source/' + packageInfo.name + '$' + packageInfo.version, config.coverage.base);
+
+                    var files = glob.sync(path.resolve(generatedSrcPath, '**/*.js'), {
+                        ignore: config.coverage.excludes
+                    });
+
+                    files.forEach(function (filePath) {
+                        var fileContent = fs.readFileSync(filePath, 'utf8');
+                        var realPath = filePath.replace(generatedSrcPath, path.resolve(rootPath, config.coverage.base));
+                        var moduleBody = fileContent;
+
+                        if (fileContent.substring(0, 10) === '$_mod.def(') {
+                            moduleBody = fileContent.substring(fileContent.indexOf("{") + 1, fileContent.lastIndexOf("}"));
+                        }
+
+                        var instrumentedModuleBody = instrumenter.instrumentSync(moduleBody, realPath);
+
+                        fileContent = fileContent.replace(moduleBody, instrumentedModuleBody);
+
+                        fs.writeFileSync(filePath, fileContent, 'utf8');
+                    });
+                }
+
                 jsdom.env(
                     htmlPath, [], {
                         features: {
