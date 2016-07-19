@@ -14,7 +14,11 @@ function buildComponent(settings) {
         testConfiguration.buildPage.then(buildDom);
 
         function buildDom(window) {
-            (settings.renderer.render || settings.renderer.renderer)(settings.fixture, function (err, result) {
+            if (!settings.renderer.render) {
+                settings.renderer.render = settings.renderer.renderer;
+            }
+
+            settings.renderer.render(settings.fixture, function (err, result) {
                 if (_.isObject(result)) {
                     result = result.html;
                 }
