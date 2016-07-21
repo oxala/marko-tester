@@ -1,7 +1,5 @@
 'use strict';
 
-require('marko/node-require').install();
-
 var path = require('path');
 var fs = require('fs-extra');
 var glob = require('glob');
@@ -17,10 +15,14 @@ var testFixtures = require('./test-fixtures');
 var staticDir = 'static';
 var rootPath = process.cwd();
 
+require('marko/node-require').install();
+require('app-module-path').addPath(rootPath);
+
 global.expect = chai.expect;
 global.sinon = require('sinon');
 global._ = require('lodash');
 global.withCoverage = process.argv.indexOf('--coverage') > -1;
+global.window = global.document = global.widget = global.$ = {};
 
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
@@ -28,9 +30,7 @@ chai.use(chaiAsPromised);
 var outputPath = path.join(__dirname, 'generated-tests');
 var staticPath = path.join(outputPath, staticDir);
 
-try {
-    fs.mkdirsSync(outputPath);
-} catch (e) {}
+fs.ensureDirSync(outputPath);
 
 lasso.configure({
     outputDir: staticPath,
@@ -175,6 +175,7 @@ module.exports.configure = function testConfigure(config) {
                         }
 
                         global.window = window;
+                        global.document = window.document;
                         global.$ = window.jQuery;
                         window.console = console;
 

@@ -27,7 +27,7 @@ function buildComponent(settings) {
 
                 componentContainer.innerHTML = result;
 
-                var widgetPath = componentContainer.children[0].getAttribute('data-widget');
+                var widgetPath = componentContainer.querySelectorAll('[data-widget]')[0].getAttribute('data-widget');
 
                 if (widgetPath) {
                     global.widget = window.$_mod.require(widgetPath);
@@ -49,7 +49,7 @@ function buildComponent(settings) {
 
 function buildWidget() {
     beforeEach(function (done) {
-        var widgetId = window['component-container'].children[0].id;
+        var widgetId = window['component-container'].querySelectorAll('[data-widget]')[0].id;
 
         window.$markoWidgets(widgetId);
 
