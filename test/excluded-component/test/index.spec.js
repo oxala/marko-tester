@@ -1,7 +1,7 @@
 'use strict';
 
 var tester = require('../../../');
-var component = require('../');
+var component = require('../renderer');
 
 var testCasesPath = __dirname + '/fixtures';
 
