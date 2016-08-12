@@ -8,6 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
+    "lint": "./node_modules/.bin/jshint source test --exclude source/generated-tests",
     "test": "./node_modules/.bin/mocha test/index.spec.js test/**/test/index.spec.js --ui bdd --reporter spec --timeout 6000 --check-leaks"
   },
   "keywords": [
@@ -38,13 +39,6 @@
     "sinon-chai": "^2.8.0"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-cli": "^1.2.0",
-    "grunt-config-dir": "^0.3.2",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-mocha-cli": "^2.0.0",
-    "jshint": "^2.9.1",
-    "jshint-html-reporter": "^0.2.4",
-    "jshint-stylish": "^2.1.0"
+    "jshint": "^2.9.2"
   }
 }

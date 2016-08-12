@@ -64,7 +64,7 @@ module.exports.configure = function testConfigure(config) {
 
         coverageFiles.forEach(function (filePath) {
             var fileContent = fs.readFileSync(filePath, 'utf8');
-            var instrumentedfileContent = instrumenter.instrumentSync(fileContent, filePath);
+            instrumenter.instrumentSync(fileContent, filePath);
 
             global.__coverage__[filePath] = instrumenter.lastFileCoverage();
         });
