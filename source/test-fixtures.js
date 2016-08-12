@@ -3,6 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 var Normalizer = require('html-normalizer');
+var _ = require('lodash');
 
 var excludedAttributes = [];
 
