@@ -1,7 +1,5 @@
 'use strict';
 
-var template = require('./template.marko');
-
-exports.renderer = function renderer(data, context) {
-    template.render(data, context);
-};
+module.exports = require('marko-widgets').defineRenderer({
+    template: require('./template.marko')
+});

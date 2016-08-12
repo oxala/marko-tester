@@ -49,11 +49,19 @@ function renderedHtmlFor(testCase) {
     return new Promise(function (resolve, reject) {
         var callback = function (error, renderedHtml) {
             if (error) {
-                reject(new Error('Failed to render html'));
-            } else {
-                resolve(cleanRenderedHtml(renderedHtml));
+                return reject(new Error('Failed to render html'));
             }
+
+            if (_.isObject(renderedHtml)) {
+                renderedHtml = renderedHtml.html;
+            }
+
+            resolve(cleanRenderedHtml(renderedHtml));
         };
+
+        if (!testCase.component.renderer) {
+            testCase.component.renderer = testCase.component.render;
+        }
 
         callback.global = {};
         testCase.component.renderer(testCase.fixture, callback);
