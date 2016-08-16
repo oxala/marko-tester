@@ -20,6 +20,14 @@ function buildComponent(settings) {
 
             settings.renderer.render(settings.fixture, function (err, result) {
                 if (_.isObject(result)) {
+                    var widget = result.context.attributes.widgets.widgets[0];
+                    var widgetId = widget.id;
+
+                    window.$markoWidgetsState = {};
+                    window.$markoWidgetsState[widgetId] = widget.state;
+                    window.$markoWidgetsConfig = {};
+                    window.$markoWidgetsConfig[widgetId] = widget.config;
+
                     result = result.html;
                 }
 
@@ -49,10 +57,13 @@ function buildComponent(settings) {
 
 function buildWidget() {
     beforeEach(function (done) {
-        var widgetId = window['component-container'].querySelectorAll('[data-widget]')[0].id;
+        var widgetContainers = window['component-container'].querySelectorAll('[data-widget]');
+        var widgetId = widgetContainers[0].id;
 
-        window.$markoWidgets(widgetId);
+        // Initialize the widget
+        window.$MARKO_WIDGETS.initWidgets(widgetId);
 
+        // Make the widget available to the global scope
         global.widget = window.$MARKO_WIDGETS.getWidgetForEl(widgetId);
 
         done();
