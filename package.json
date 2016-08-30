@@ -27,6 +27,7 @@
     "istanbul": "^0.4.4",
     "jquery": "^2.2.3",
     "jsdom": "^9.2.0",
+    "jshint": "^2.9.3",
     "lasso": "^2.4.1",
     "lasso-less": "^2.1.2",
     "lasso-marko": "^2.0.4",
@@ -37,8 +38,5 @@
     "rewire": "^2.5.2",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0"
-  },
-  "devDependencies": {
-    "jshint": "^2.9.2"
   }
 }
