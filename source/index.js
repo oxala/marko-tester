@@ -14,6 +14,10 @@ function buildComponent(settings) {
         testConfiguration.buildPage.then(buildDom);
 
         function buildDom(window) {
+            if (!settings.renderer) {
+                return done();
+            }
+
             if (!settings.renderer.render) {
                 settings.renderer.render = settings.renderer.renderer;
             }
