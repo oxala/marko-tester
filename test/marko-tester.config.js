@@ -17,7 +17,8 @@ tester.configure({
     coverage: {
         reporters: [
             'text-summary',
-            'html'
+            'html',
+            'json-summary'
         ],
         dest: '.coverage',
         base: 'source',

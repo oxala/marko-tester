@@ -99,6 +99,10 @@ module.exports.configure = function testConfigure(config) {
     });
   }
 
+  process.on('exit', function () {
+    require('child_process').exec('rm -rf $(find ' + rootPath + ' -name "*.marko.js")')
+  });
+
   (config.components || []).forEach(function (component) {
     component = path.relative(__dirname, rootPath + '/' + component);
 
