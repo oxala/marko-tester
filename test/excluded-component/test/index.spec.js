@@ -6,5 +6,5 @@ var component = require('../renderer');
 var testCasesPath = __dirname + '/fixtures';
 
 describe('excluded-component test', function () {
-    tester.testFixtures(component, testCasesPath);
+  tester.testFixtures(component, testCasesPath);
 });

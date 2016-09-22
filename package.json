@@ -6,16 +6,22 @@
     "type": "git",
     "url": "git@github.corp.ebay.com:SellerHub/marko-tester.git"
   },
-  "main": "index.js",
+  "main": "./source/",
   "scripts": {
     "lint": "./node_modules/.bin/jshint source test --exclude source/generated-tests",
-    "unit-test": "./node_modules/.bin/mocha test/marko-tester.config.js test/**/test/index.spec.js --ui bdd --reporter spec --timeout 6000 --check-leaks",
-    "test": "npm run lint && npm run unit-test"
+    "unit-test": "./node_modules/.bin/mocha test/marko-tester.config.js $(find test -name '*.spec.js') --ui bdd --reporter spec --check-leaks",
+    "test": "npm run lint && npm run unit-test",
+    "clean": "rm -rf .beans .cache source/generated-tests"
   },
+  "precommit": [
+    "test"
+  ],
   "keywords": [
+    "marko",
+    "test",
     "marko-tester"
   ],
-  "author": "Gleb Ryshkov",
+  "author": "Ryshkov, Gleb <gryshkov@ebay.com>",
   "license": "ISC",
   "dependencies": {
     "app-module-path": "^2.0.0",
@@ -39,5 +45,8 @@
     "rewire": "^2.5.2",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0"
+  },
+  "devDependencies": {
+    "pre-commit": "^1.1.3"
   }
 }

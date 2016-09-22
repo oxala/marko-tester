@@ -1,9 +1,9 @@
 'use strict';
 
 module.exports = require('marko-widgets').defineComponent({
-    template: require('./template.marko'),
+  template: require('./template.marko'),
 
-    init: function init() {
-        window.alert();
-    }
+  init: function init() {
+    window.alert();
+  }
 });

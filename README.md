@@ -37,14 +37,14 @@ The client test works by instanstiating a marko-widget and testing the functiona
 You need to create a file in which you can pass settings for client-testing, see example in:
 
 ```
-/test/index.spec.js
+/test/marko-tester.config.js
 ```
 
-This file should be targeted first by mochacli.
+This file should be targeted first by mocha.
 
 ## Coverage
 
-Having tests is awesome, but we should know how much we tested already and how much of code still left to cover. That's why i've implemented Istanbul coverage tool to gather that data for you. Long story short, after a little bit of setup istanbul will gather test coverage from server-side fixture rendering, combine it with client-side marko-widget code coverage and report it in the way you need.
+Having tests is awesome, but we should also know how much we tested already and how much of code still left to cover. That's why i've implemented Istanbul coverage tool to gather that data for you. Long story short, after a little bit of setup istanbul will gather test coverage from server-side fixture rendering, combine it with client-side marko-widget code coverage and report it in the way you need.
 
 ### Configuration:
 
@@ -57,7 +57,8 @@ tester.configure({
         // Type of reporters you want your coverage be printed out.
         reporters: [
             'text-summary',
-            'html'
+            'html',
+            'json-summary'
         ],
         // Base of your project, in which the JS files should be tested.
         base: 'src',
@@ -76,7 +77,9 @@ Imagine you have this command (possible in package.json) to run the unit-tests:
 
 ``` 
 "scripts": {
-    "unit-test": "./node_modules/marko-tester/node_modules/.bin/mocha test/unit/index.spec.js src/components/**/test/*.spec.js --ui bdd --reporter spec"
+    "lint": "./node_modules/marko-tester/node_modules/.bin/jshint source",
+    "unit-test": "./node_modules/marko-tester/node_modules/.bin/mocha test/marko-tester.config.js $(find source -name '*.spec.js') --ui bdd --reporter spec --check-leaks --timeout 6000",
+    "test": "npm run lint && npm run unit-test",
 }
 ```
 
@@ -84,7 +87,7 @@ You can see the coverage by simply passing `--coverage` argument to that script:
 
 ```
 npm run unit-test -- --coverage
-// ./node_modules/marko-tester/node_modules/.bin/mocha test/unit/index.spec.js src/components/**/test/*.spec.js --ui bdd --reporter spec --coverage
+// ./node_modules/marko-tester/node_modules/.bin/mocha test/marko-tester.config.js $(find source -name '*.spec.js') --ui bdd --reporter spec --check-leaks --timeout 6000 --coverage
 ```
 
 ## Contribution
@@ -95,8 +98,8 @@ npm run unit-test -- --coverage
 npm install
 ```
 
-#### Test marko-tester with:
+#### Lint & Test marko-tester with:
 
 ```
-grunt test
+npm test
 ```

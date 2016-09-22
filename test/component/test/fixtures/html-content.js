@@ -18,7 +18,7 @@ module.exports = {
         "moduleId": function (moduleId) {
           return {
             "linkId": function (linkId) {
-                return moduleId + linkId;
+              return moduleId + linkId;
             }
           };
         }
