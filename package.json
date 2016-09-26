@@ -8,7 +8,6 @@
   },
   "main": "./source/",
   "scripts": {
-    "install": "sh ./tasks/postinstall.sh",
     "test": "npm run jscs && npm run lint && npm run unit-test -- --coverage",
     "jscs": "./node_modules/.bin/jscs source test",
     "lint": "./node_modules/.bin/jshint source test --exclude source/generated-tests",
