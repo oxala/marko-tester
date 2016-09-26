@@ -8,13 +8,12 @@
   },
   "main": "./source/",
   "scripts": {
-    "install": "if [ \"$NODE_ENV\" == \"TEST\" ]; then npm run test && npm run bump; fi",
-    "test": "npm run jscs && npm run lint && npm run unit-test",
+    "install": "sh ./tasks/postinstall.sh",
+    "test": "npm run jscs && npm run lint && npm run unit-test -- --coverage",
     "jscs": "./node_modules/.bin/jscs source test",
     "lint": "./node_modules/.bin/jshint source test --exclude source/generated-tests",
     "unit-test": "./node_modules/.bin/mocha test/marko-tester.config.js $(find test -name '*.spec.js') --ui bdd --reporter spec --check-leaks",
-    "clean": "rm -rf .beans .cache source/generated-tests",
-    "bump": "sh ./tasks/bump.sh"
+    "clean": "rm -rf .beans .cache source/generated-tests"
   },
   "precommit": [
     "test"
