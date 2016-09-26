@@ -1,4 +1,8 @@
 {
+  "maxparams": 3,
+  "maxdepth": 2,
+  "maxcomplexity": 4,
+
   "passfail": false,
   "maxerr": 100,
 

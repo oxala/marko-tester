@@ -8,9 +8,10 @@
   },
   "main": "./source/",
   "scripts": {
+    "jscs": "./node_modules/.bin/jscs source test",
     "lint": "./node_modules/.bin/jshint source test --exclude source/generated-tests",
     "unit-test": "./node_modules/.bin/mocha test/marko-tester.config.js $(find test -name '*.spec.js') --ui bdd --reporter spec --check-leaks",
-    "test": "npm run lint && npm run unit-test",
+    "test": "npm run jscs && npm run lint && npm run unit-test",
     "clean": "rm -rf .beans .cache source/generated-tests"
   },
   "precommit": [
@@ -33,6 +34,7 @@
     "i18n-ebay": "^0.3.17",
     "istanbul": "^0.4.4",
     "jquery": "^2.2.3",
+    "jscs": "^3.0.7",
     "jsdom": "^9.2.0",
     "jshint": "^2.9.3",
     "lasso": "^2.4.1",

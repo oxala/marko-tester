@@ -32,6 +32,7 @@ module.exports = function testFixtures(component, testCasesDirectory) {
     }
   }
 };
+
 module.exports.excludeAttribute = excludeAttribute;
 
 function excludeAttribute(attr) {
@@ -41,7 +42,10 @@ function excludeAttribute(attr) {
 function createTest(testCase) {
   describe('When component is rendered in "' + testCase.name + '" case', function () {
     it('should render component with a specified html', function () {
-      return expect(renderedHtmlFor(testCase)).to.eventually.equal(cleanRenderedHtml(testCase.expectedHtml));
+      var actualHtml = renderedHtmlFor(testCase);
+      var expectedHtml = cleanRenderedHtml(testCase.expectedHtml);
+
+      return expect(actualHtml).to.eventually.equal(expectedHtml);
     });
   });
 }

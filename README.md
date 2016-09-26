@@ -90,6 +90,36 @@ npm run unit-test -- --coverage
 // ./node_modules/marko-tester/node_modules/.bin/mocha test/marko-tester.config.js $(find source -name '*.spec.js') --ui bdd --reporter spec --check-leaks --timeout 6000 --coverage
 ```
 
+## Code style
+
+Bundle comes with additional tools to raise (or keep) your code quality.
+
+### JSHint
+
+`JSHint` comes as part of the package to lint the `marko-tester` itself, but of course it could be easily used to test your app. Just add a `.jshintrc` configuration file to the root of the project (you can copy the one from here, it's quit stict, but we shouldn't be soft when it comes down to code quality). And point to `JSHint` binary that comes with `marko-tester` with folders to search for `JS` files:
+
+```
+"scripts": {
+    ...
+    "lint": "./node_modules/marko-tester/node_modules/.bin/jshint source test",
+    ...
+}
+```
+
+### JSCS
+
+As an addition to our weaponry to fight bad code we can (read as should) add a `JSCS` to be sure that our code is more readable and consistent. The procedure is the same as for `JSHint`: add a `.jscsrc` file that you can just copy from this project to yours. And have a command in your `package.json` file that will use `jscs` binary from `marko-tester` and point to folders you want to check:
+
+```
+"scripts": {
+    ...
+    "jscs": "./node_modules/marko-tester/node_modules/.bin/jscs source test",
+    ...
+}
+```
+
+And you all done, happy code style linting!
+
 ## Contribution
 
 #### Build marko-tester with:

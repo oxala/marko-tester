@@ -1,0 +1,6 @@
+{
+    "preset": "airbnb",
+    "excludeFiles": ["source/generated-tests/**"],
+    "requireTrailingComma": false,
+    "validateIndentation": 2
+}

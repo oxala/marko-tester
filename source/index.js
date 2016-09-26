@@ -39,7 +39,8 @@ function buildComponent(settings) {
 
         componentContainer.innerHTML = result;
 
-        var widgetPath = componentContainer.querySelectorAll('[data-widget]')[0].getAttribute('data-widget');
+        var widgetEl = componentContainer.querySelector('[data-widget]');
+        var widgetPath = widgetEl.getAttribute('data-widget');
 
         if (widgetPath) {
           global.widget = window.$_mod.require(widgetPath);
