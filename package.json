@@ -13,7 +13,8 @@
     "jscs": "./node_modules/.bin/jscs source test",
     "lint": "./node_modules/.bin/jshint source test --exclude source/generated-tests",
     "unit-test": "./node_modules/.bin/mocha test/marko-tester.config.js $(find test -name '*.spec.js') --ui bdd --reporter spec --check-leaks",
-    "clean": "rm -rf .beans .cache source/generated-tests"
+    "clean": "rm -rf .beans .cache source/generated-tests",
+    "bump": "sh ./tasks/bump.sh"
   },
   "precommit": [
     "test"
