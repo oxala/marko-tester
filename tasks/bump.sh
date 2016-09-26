@@ -1,10 +1,10 @@
 echo "**** NPM bump version ****"
 
 branch=`echo $GIT_BRANCH | cut -d"/" -f2`
-git checkout $branch
 
 if [ "$(echo "$branch" | cut -c1-6)" = "master" ]
 then
+  git checkout $branch
   npm version patch --no-git-tag-version
 
   PACKAGE_VERSION=$(cat package.json \
