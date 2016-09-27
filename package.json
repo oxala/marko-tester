@@ -1,6 +1,6 @@
 {
   "name": "marko-tester",
-  "version": "5.2.4",
+  "version": "5.3.0",
   "description": "Assist Marko components unit/client testing",
   "repository": {
     "type": "git",
@@ -8,9 +8,8 @@
   },
   "main": "./source/",
   "scripts": {
-    "test": "npm run jscs && npm run lint && npm run unit-test -- --coverage",
-    "jscs": "./node_modules/.bin/jscs source test",
-    "lint": "./node_modules/.bin/jshint source test --exclude source/generated-tests",
+    "test": "npm run eslint && npm run unit-test -- --coverage",
+    "eslint": "./node_modules/.bin/eslint source test",
     "unit-test": "./node_modules/.bin/mocha test/marko-tester.config.js $(find test -name '*.spec.js') --ui bdd --reporter spec --check-leaks --timeout 6000",
     "clean": "rm -rf .beans .cache source/generated-tests",
     "bump": "sh ./tasks/bump.sh"
@@ -29,13 +28,14 @@
     "app-module-path": "^2.0.0",
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
+    "eslint": "^3.6.1",
+    "eslint-config-ebay": "0.0.5",
     "fs-extra": "^0.30.0",
     "glob": "^7.0.5",
     "html-normalizer": "^6.0.0",
     "i18n-ebay": "^0.3.17",
     "istanbul": "^0.4.4",
     "jquery": "^2.2.3",
-    "jscs": "^3.0.7",
     "jsdom": "^9.2.0",
     "jshint": "^2.9.3",
     "lasso": "^2.4.1",

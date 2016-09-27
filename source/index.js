@@ -1,19 +1,11 @@
-/* globals _ */
 'use strict';
 
 var testConfiguration = require('./test-configuration');
 var testFixtures = require('./test-fixtures');
 
-module.exports.configure = testConfiguration.configure;
-module.exports.testFixtures = testFixtures;
-module.exports.buildComponent = buildComponent;
-module.exports.buildWidget = buildWidget;
-
 function buildComponent(settings) {
   beforeEach(function (done) {
-    testConfiguration.buildPage.then(buildDom);
-
-    function buildDom(window) {
+    function buildDom() {
       if (!settings) {
         done();
       }
@@ -23,7 +15,7 @@ function buildComponent(settings) {
       }
 
       settings.renderer.render(settings.fixture, function (err, result) {
-        if (_.isObject(result)) {
+        if (global._.isObject(result)) {
           var widget = result.context.attributes.widgets.widgets[0];
           var widgetId = widget.id;
 
@@ -51,6 +43,8 @@ function buildComponent(settings) {
         }
       });
     }
+
+    testConfiguration.buildPage.then(buildDom);
   });
 
   afterEach(function () {
@@ -74,3 +68,8 @@ function buildWidget() {
     done();
   });
 }
+
+module.exports.configure = testConfiguration.configure;
+module.exports.testFixtures = testFixtures;
+module.exports.buildComponent = buildComponent;
+module.exports.buildWidget = buildWidget;

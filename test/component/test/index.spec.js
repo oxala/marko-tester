@@ -17,17 +17,17 @@ describe('component test', function () {
 
   describe('When widget is rendered', function () {
     beforeEach(function () {
-      sinon.stub(window, 'alert');
+      sinon.stub(document.location, 'replace');
     });
 
     afterEach(function () {
-      window.alert.restore();
+      document.location.replace.restore();
     });
 
     tester.buildWidget();
 
     it('should alert the user', function () {
-      expect(window.alert).to.be.called;
+      expect(document.location.replace).to.be.called;
     });
   });
 });

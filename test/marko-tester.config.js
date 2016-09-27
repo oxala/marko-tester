@@ -5,7 +5,7 @@ var tester = require('../');
 tester.configure({
   components: [
     'test/*/index.js',
-    'test/*/widget.js',
+    'test/*/widget.js'
   ],
 
   taglibExcludeDirs: [

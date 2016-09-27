@@ -1,0 +1,36 @@
+{
+  "extends": "ebay/legacy",
+  "globals": {
+    "expect": true,
+    "Promise": true,
+    "widget": true,
+    "sinon": true
+  },
+  "rules": {
+    "indent": ["error", 2],
+    "space-before-function-paren": ["error", { "anonymous": "always", "named": "never" }],
+    "no-unused-expressions": 1,
+    "quotes": ["error", "single"],
+    "no-param-reassign": 1,
+    "consistent-return": 0,
+    "operator-linebreak": ["error", "none"],
+    "one-var-declaration-per-line": ["error", "always"],
+    "one-var": ["error", "never"],
+    "object-property-newline": ["error", { "allowMultiplePropertiesPerLine": true }],
+    "no-trailing-spaces": "error",
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "no-inline-comments": "error",
+    "newline-per-chained-call": ["error", { "ignoreChainWithDepth": 2 }],
+    "newline-before-return": "error",
+    "newline-after-var": ["error", "always"],
+    "max-lines": ["error", 500],
+    "lines-around-directive": ["error", "always"],
+    "eol-last": ["error", "always"],
+    "block-spacing": "error",
+    "no-multi-str": "error",
+    "dot-location": ["error", "property"],
+    "no-unexpected-multiline": "error",
+    "no-console": "error",
+    "no-constant-condition": "error"
+  }
+}

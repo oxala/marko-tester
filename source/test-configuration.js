@@ -46,54 +46,6 @@ lasso.configure({
   bundlingEnabled: false
 });
 
-module.exports.onInit = function onInit() {};
-
-module.exports.onDestroy = function onDestroy() {};
-
-module.exports.configure = function testConfigure(config) {
-  buildDependencies(config);
-  excludeMarkoData(config);
-  addHooks(config);
-  global.withCoverage && setupCoverage(config);
-
-  process.on('exit', function () {
-    require('child_process').exec('rm -rf $(find ' + rootPath + ' -name "*.marko.js")');
-  });
-
-  module.exports.buildPage = new Promise(function (resolve, reject) {
-    var htmlPath = path.join(outputPath, 'component-tests.html');
-    var out = fs.createWriteStream(htmlPath, 'utf8');
-
-    require('./test-scaffold.marko')
-      .render({}, out)
-      .on('finish', generateDom);
-
-    function generateDom() {
-      global.withCoverage && configureBrowserCoverage(config);
-
-      jsdom.env(
-        htmlPath, [], {
-          features: {
-            FetchExternalResources: ['script']
-          }
-        },
-        function (err, window) {
-          if (err) {
-            return reject(err);
-          }
-
-          global.window = window;
-          global.document = window.document;
-          global.$ = window.jQuery;
-          window.console = console;
-
-          resolve(window);
-        }
-      );
-    }
-  });
-};
-
 function buildDependencies(config) {
   var dependencies = [
     'mocha/mocha.js',
@@ -107,9 +59,9 @@ function buildDependencies(config) {
   ];
 
   (config.components || []).forEach(function (component) {
-    component = path.relative(__dirname, rootPath + '/' + component);
+    var componentPath = path.relative(__dirname, rootPath + '/' + component);
 
-    dependencies.push('require: ' + component);
+    dependencies.push('require: ' + componentPath);
   });
 
   dependencies.push('require-run: ./mocha-runner');
@@ -123,9 +75,9 @@ function buildDependencies(config) {
 
 function excludeMarkoData(config) {
   (config.taglibExcludeDirs || []).forEach(function (dirPath) {
-    dirPath = path.resolve(rootPath, dirPath);
+    var absoluteDirPath = path.resolve(rootPath, dirPath);
 
-    markoCompiler.taglibFinder.excludeDir(dirPath);
+    markoCompiler.taglibFinder.excludeDir(absoluteDirPath);
   });
 
   (config.taglibExcludePackages || []).forEach(function (packageName) {
@@ -133,9 +85,7 @@ function excludeMarkoData(config) {
   });
 
   (config.excludedAttributes || []).forEach(function (attr) {
-    attr = attr.toLowerCase();
-
-    testFixtures.excludeAttribute(attr);
+    testFixtures.excludeAttribute(attr.toLowerCase());
   });
 }
 
@@ -158,6 +108,7 @@ function setupCoverage(config) {
 
   coverageFiles.forEach(function (filePath) {
     var fileContent = fs.readFileSync(filePath, 'utf8');
+
     instrumenter.instrumentSync(fileContent, filePath);
 
     global.__coverage__[filePath] = instrumenter.lastFileCoverage();
@@ -220,5 +171,50 @@ function configureBrowserCoverage(config) {
 
     fs.writeFileSync(filePath, fileContent, 'utf8');
   });
-
 }
+
+module.exports.onInit = function onInit() {};
+module.exports.onDestroy = function onDestroy() {};
+module.exports.configure = function testConfigure(config) {
+  buildDependencies(config);
+  excludeMarkoData(config);
+  addHooks(config);
+  global.withCoverage && setupCoverage(config);
+
+  process.on('exit', function () {
+    require('child_process').exec('rm -rf $(find ' + rootPath + ' -name "*.marko.js")');
+  });
+
+  module.exports.buildPage = new Promise(function (resolve, reject) {
+    var htmlPath = path.join(outputPath, 'component-tests.html');
+    var out = fs.createWriteStream(htmlPath, 'utf8');
+
+    function generateDom() {
+      global.withCoverage && configureBrowserCoverage(config);
+
+      jsdom.env(
+        htmlPath, [], {
+          features: {
+            FetchExternalResources: ['script']
+          }
+        },
+        function (err, window) {
+          if (err) {
+            return reject(err);
+          }
+
+          global.window = window;
+          global.document = window.document;
+          global.$ = window.jQuery;
+          global.window.console = console;
+
+          resolve(window);
+        }
+      );
+    }
+
+    require('./test-scaffold.marko')
+      .render({}, out)
+      .on('finish', generateDom);
+  });
+};

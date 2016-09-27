@@ -94,26 +94,18 @@ npm run unit-test -- --coverage
 
 Bundle comes with additional tools to raise (or keep) your code quality.
 
-### JSHint
+### eslint
 
-`JSHint` comes as part of the package to lint the `marko-tester` itself, but of course it could be easily used to test your app. Just add a `.jshintrc` configuration file to the root of the project (you can copy the one from here, it's quit stict, but we shouldn't be soft when it comes down to code quality). And point to `JSHint` binary that comes with `marko-tester` with folders to search for `JS` files:
+As an addition to our weaponry to fight bad code we can (read as should) add a `eslint` to be sure that our code is more readable and consistent.
 
-```
-"scripts": {
-    ...
-    "lint": "./node_modules/marko-tester/node_modules/.bin/jshint source test",
-    ...
-}
-```
 
-### JSCS
-
-As an addition to our weaponry to fight bad code we can (read as should) add a `JSCS` to be sure that our code is more readable and consistent. The procedure is the same as for `JSHint`: add a `.jscsrc` file that you can just copy from this project to yours. And have a command in your `package.json` file that will use `jscs` binary from `marko-tester` and point to folders you want to check:
+`eslint` comes as part of the package to lint the `marko-tester` itself, but of course it could be easily used to test your app. Just add a `.eslintrc` configuration file to the root of the project (you can copy the one from here. It uses eslint-ebay-config as a baseline and makes it more strict. We shouldn't be soft when it comes down to code quality). Use `.eslintignore` to add ignored paths. Finally, point in your `package.json` to `eslint` binary that comes with `marko-tester` where first argument will be folders to search for `JS` files:
 
 ```
 "scripts": {
     ...
-    "jscs": "./node_modules/marko-tester/node_modules/.bin/jscs source test",
+    "eslint": "./node_modules/marko-tester/node_modules/.bin/eslint source test",
+    "test": "npm run eslint && npm run unit-test"
     ...
 }
 ```
