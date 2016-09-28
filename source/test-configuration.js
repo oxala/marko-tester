@@ -18,6 +18,7 @@ var staticDir = 'static';
 var rootPath = process.cwd();
 
 require('marko/node-require').install();
+require('marko/compiler').defaultOptions.writeToDisk = false;
 require('app-module-path').addPath(rootPath);
 
 global.expect = chai.expect;
@@ -180,10 +181,6 @@ module.exports.configure = function testConfigure(config) {
   excludeMarkoData(config);
   addHooks(config);
   global.withCoverage && setupCoverage(config);
-
-  process.on('exit', function () {
-    require('child_process').exec('rm -rf $(find ' + rootPath + ' -name "*.marko.js")');
-  });
 
   module.exports.buildPage = new Promise(function (resolve, reject) {
     var htmlPath = path.join(outputPath, 'component-tests.html');

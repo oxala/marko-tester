@@ -1,6 +1,6 @@
 {
   "name": "marko-tester",
-  "version": "5.3.1",
+  "version": "5.4.0",
   "description": "Assist Marko components unit/client testing",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
     "test": "npm run eslint && npm run unit-test -- --coverage",
     "eslint": "./node_modules/.bin/eslint source test",
     "unit-test": "./node_modules/.bin/mocha test/marko-tester.config.js $(find test -name '*.spec.js') --ui bdd --reporter spec --check-leaks --timeout 6000",
-    "clean": "rm -rf .beans .cache source/generated-tests",
+    "clean": "rm -rf .beans .cache source/generated-tests $(find source -name '*.marko.js') $(find test -name '*.marko.js')",
     "bump": "sh ./tasks/bump.sh"
   },
   "precommit": [
