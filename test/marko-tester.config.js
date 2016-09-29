@@ -18,9 +18,9 @@ tester.configure({
   onDestroy: function () {},
   coverage: {
     reporters: [
-      'text-summary',
-      'html',
-      'json-summary'
+      // 'text-summary',
+      // 'html',
+      // 'json-summary'
     ],
     dest: '.coverage',
     base: 'source',
