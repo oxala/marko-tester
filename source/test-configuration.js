@@ -174,8 +174,6 @@ function configureBrowserCoverage(config) {
   });
 }
 
-module.exports.onInit = function onInit() {};
-module.exports.onDestroy = function onDestroy() {};
 module.exports.configure = function testConfigure(config) {
   buildDependencies(config);
   excludeMarkoData(config);

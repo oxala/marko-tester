@@ -37,7 +37,7 @@ function buildComponent(settings) {
         if (widgetPath) {
           global.widget = window.$_mod.require(widgetPath);
 
-          testConfiguration.onInit();
+          testConfiguration.onInit && testConfiguration.onInit();
 
           done();
         }
@@ -48,7 +48,7 @@ function buildComponent(settings) {
   });
 
   afterEach(function () {
-    testConfiguration.onDestroy();
+    testConfiguration.onDestroy && testConfiguration.onDestroy();
 
     global.widget && global.widget.destroy && global.widget.destroy();
   });
