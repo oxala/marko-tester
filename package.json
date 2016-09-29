@@ -11,7 +11,7 @@
     "test": "npm run eslint && npm run coverage",
     "eslint": "./node_modules/.bin/eslint source test",
     "unit-test": "./node_modules/.bin/_mocha test/marko-tester.config.js $(find test -name '*.spec.js') --ui bdd --reporter spec --check-leaks --timeout 6000",
-    "coverage": "istanbul cover ./node_modules/.bin/_mocha test/marko-tester.config.js $(find test -name '*.spec.js') -- --coverage",
+    "coverage": "istanbul cover ./node_modules/.bin/_mocha test/marko-tester.config.js $(find test -name '*.spec.js') -- --timeout 6000 --coverage",
     "clean": "rm -rf .beans .cache source/generated-tests $(find source -name '*.marko.js') $(find test -name '*.marko.js')",
     "bump": "sh ./tasks/bump.sh"
   },
