@@ -60,9 +60,13 @@ function buildDependencies(config) {
   ];
 
   (config.components || []).forEach(function (component) {
-    var componentPath = path.relative(__dirname, rootPath + '/' + component);
+    if (global._.isObject(component)) {
+      dependencies.push(component);
+    } else {
+      var componentPath = path.relative(__dirname, rootPath + '/' + component);
 
-    dependencies.push('require: ' + componentPath);
+      dependencies.push('require: ' + componentPath);
+    }
   });
 
   dependencies.push('require-run: ./mocha-runner');
