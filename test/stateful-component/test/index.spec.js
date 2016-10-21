@@ -1,26 +1,27 @@
 'use strict';
 
 var tester = require('../../../');
-var component = require('../');
 
-var testCasesPath = __dirname + '/fixtures';
+tester('stateful-component', function (expect, sinon) {
+  this.testFixtures();
 
-describe('stateful component test', function () {
-  tester.testFixtures(component, testCasesPath);
+  this.buildComponent(function () {
+    beforeEach(function () {
+      sinon.spy(document.location, 'replace');
+    });
 
-  var viewModel = require('./fixtures/html-content');
-  var settings = {
-    renderer: component.renderer,
-    fixture: viewModel
-  };
+    afterEach(function () {
+      document.location.replace.restore();
+    });
 
-  tester.buildComponent(settings);
+    this.buildWidget(function () {
+      it('should redirect', function () {
+        expect(document.location.replace).to.be.calledWith('/');
+      });
 
-  describe('When widget is rendered', function () {
-    tester.buildWidget();
-
-    it('should store the state in the widget', function () {
-      expect(widget.state).to.eql(viewModel);
+      it('should store the state in the widget', function () {
+        expect(this.widget.state).to.deep.equal(this.fixtures.default);
+      });
     });
   });
 });

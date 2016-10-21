@@ -7,4 +7,8 @@ chai.use(sinonChai);
 
 window.expect = chai.expect;
 
-window.mochaPhantomJS ? window.mochaPhantomJS.run() : window.mocha.run();
+if (window.mochaPhantomJS) {
+  window.mochaPhantomJS.run();
+} else {
+  window.mocha.run();
+}

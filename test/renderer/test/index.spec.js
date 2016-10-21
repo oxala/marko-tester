@@ -1,21 +1,11 @@
 'use strict';
 
 var tester = require('../../../');
-var component = require('../renderer');
 
-var testCasesPath = __dirname + '/fixtures';
+tester('renderer', function (sinon, expect) {
+  this.testFixtures();
 
-describe('renderer test', function () {
-  tester.testFixtures(component, testCasesPath);
-
-  var settings = {
-    renderer: component,
-    fixture: require('./fixtures/html-content')
-  };
-
-  tester.buildComponent(settings);
-
-  describe('When widget is rendered', function () {
+  this.buildComponent(function () {
     beforeEach(function () {
       sinon.stub(document.location, 'replace');
     });
@@ -24,10 +14,10 @@ describe('renderer test', function () {
       document.location.replace.restore();
     });
 
-    tester.buildWidget();
-
-    it('should alert the user', function () {
-      expect(document.location.replace).to.be.called;
+    this.buildWidget(function () {
+      it('should alert the user', function () {
+        expect(document.location.replace).to.be.called;
+      });
     });
   });
 });

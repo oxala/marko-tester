@@ -4,6 +4,9 @@ var fs = require('fs');
 var path = require('path');
 var Normalizer = require('html-normalizer');
 var _ = require('lodash');
+var chai = require('chai');
+var Promise = require('bluebird');
+var expect = chai.expect;
 var excludedAttributes = [];
 
 function excludeAttribute(attr) {
@@ -22,52 +25,60 @@ function normalizer() {
 }
 
 function cleanRenderedHtml(html) {
-  html = html.trim();
-
-  return (html ? normalizer().domString(html) : '');
+  return (html ? normalizer().domString(html.trim()) : '');
 }
 
-function renderedHtmlFor(_testCase_) {
-  var testCase = _testCase_;
-
-  return new Promise(function (resolve, reject) {
-    var callback = function (error, html) {
+function renderHtml(renderer, fixture) {
+  return new Promise(function promiseRenderedHtml(resolve, reject) {
+    var callback = function parseComponentRenderedHtml(error, result) {
       if (error) {
-        return reject(new Error('Failed to render html'));
+        return reject('TestFixtures: Failed to render component html.');
       }
 
-      if (_.isObject(html)) {
-        html = html.html;
+      var html = result;
+
+      if (_.isObject(result)) {
+        html = result.html;
       }
 
-      resolve(cleanRenderedHtml(html));
+      return resolve(cleanRenderedHtml(html));
     };
 
-    if (!testCase.component.renderer) {
-      testCase.component.renderer = testCase.component.render;
-    }
-
     callback.global = {};
-    testCase.component.renderer(testCase.fixture, callback);
+    renderer(fixture, callback);
   });
 }
 
-function createTest(testCase) {
-  describe('When component is rendered in "' + testCase.name + '" case', function () {
-    it('should render component with a specified html', function () {
-      var actualHtml = renderedHtmlFor(testCase);
-      var expectedHtml = cleanRenderedHtml(testCase.expectedHtml);
+function createTest(context, testCase) {
+  it('should render component using ' + testCase.name + ' input', function compareRenderedHtml() {
+    var actualHtml = renderHtml(context.renderer, testCase.fixture)
+      .catch(function onFailedComponentRender(error) {
+        throw new Error(error);
+      });
+    var expectedHtml = cleanRenderedHtml(testCase.expectedHtml);
 
-      return expect(actualHtml).to.eventually.equal(expectedHtml);
-    });
+    return expect(actualHtml).to.eventually.equal(expectedHtml);
   });
 }
 
-module.exports = function testFixtures(component, testCasesDirectory) {
+function testFixtures(context) {
+  if (!context.renderer) {
+    throw new Error('TestFixtures: Cannot automatically locate renderer, please specify one.');
+  }
+
+  /* eslint global-require: 0 */
   var testCases = [];
+  var fixtures = {};
+  var dirsToCheck = [
+    'fixtures'
+  ];
 
-  function buildCases(file) {
-    var absPath = path.join(testCasesDirectory, file);
+  if (context.options.fixturesPath) {
+    dirsToCheck = [context.options.fixturesPath];
+  }
+
+  function buildCases(fixturesPath, file) {
+    var absPath = path.join(fixturesPath, file);
     var extension = path.extname(absPath);
     var testName = path.basename(absPath, '.html');
 
@@ -75,18 +86,36 @@ module.exports = function testFixtures(component, testCasesDirectory) {
       var fixture = require(absPath.replace(/.html$/, ''));
       var expectedHtml = fs.readFileSync(absPath, 'utf-8');
 
+      fixtures[testName] = fixture;
+
       testCases.push({
         name: testName,
         fixture: fixture,
-        expectedHtml: expectedHtml,
-        component: component
+        expectedHtml: expectedHtml
       });
     }
   }
 
-  fs.readdirSync(testCasesDirectory).forEach(buildCases);
+  dirsToCheck.forEach(function getFixturePairs(dirToCheck) {
+    var fixturesPath = path.join(context.testPath, dirToCheck);
 
-  testCases.forEach(createTest);
-};
+    try {
+      fs.readdirSync(fixturesPath).forEach(buildCases.bind(null, fixturesPath));
+    } catch (error) {
+      throw new Error('TestFixtures: Cannot read fixtures folder.', error);
+    }
+  });
 
+  Object.assign(context.fixtures, fixtures);
+
+  if (context.options.fixturesPath && !testCases.length) {
+    throw new Error('TestFixtures: No fixtures found in specified location');
+  }
+
+  describe('Given specific input data', function givenSpecificInputData() {
+    testCases.forEach(createTest.bind(null, context));
+  });
+}
+
+module.exports = testFixtures;
 module.exports.excludeAttribute = excludeAttribute;

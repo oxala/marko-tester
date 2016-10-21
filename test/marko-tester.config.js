@@ -3,10 +3,6 @@
 var tester = require('../');
 
 tester.configure({
-  components: [
-    'test/*/index.js',
-    'test/*/widget.js'
-  ],
   taglibExcludeDirs: [
     'test'
   ],
@@ -14,8 +10,8 @@ tester.configure({
     'excluded-component'
   ],
   excludedAttributes: ['data-widget'],
-  onInit: function () {},
-  onDestroy: function () {},
+  onInit: function onInit() {},
+  onDestroy: function onDestroy() {},
   coverage: {
     reporters: [
       // 'text-summary',

@@ -1,6 +1,5 @@
 {
   "dependencies": [
-    "../excluded-component",
-    "require: ./"
+    "../excluded-component"
   ]
 }

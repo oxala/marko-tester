@@ -1,6 +1,0 @@
-{
-    "preset": "airbnb",
-    "excludeFiles": ["source/generated-tests/**", "**/*.marko.js"],
-    "requireTrailingComma": false,
-    "validateIndentation": 2
-}
