@@ -17,7 +17,6 @@ module.exports = {
       // 'json-summary'
     ],
     dest: '.coverage',
-    base: 'src',
     excludes: [
       '**/*.marko.js'
     ]

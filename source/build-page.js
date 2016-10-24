@@ -5,15 +5,13 @@ var fs = require('fs-extra');
 var glob = require('glob');
 var jsdom = require('jsdom');
 var i18nEbay = require('i18n-ebay/optimizer/plugin');
-// var lassoMarko = require('lasso-marko');
+var lasso = require('lasso');
+var lassoMarko = require('lasso-marko');
 var lassoLess = require('lasso-less');
-var rootPath = process.cwd();
-var packageInfo = require(rootPath + '/package');
 var Promise = require('bluebird');
 var istanbul = require('istanbul');
 var utils = require('./utils');
-var lasso = require(path.join(utils.getHelpers().rootPath, 'node_modules/lasso'));
-var lassoMarko = require(path.join(utils.getHelpers().rootPath, 'node_modules/lasso-marko'));
+var packageInfo = require(utils.getHelpers().rootPath + '/package');
 var pagePrepared;
 var instrumenter = new istanbul.Instrumenter({
   noCompact: true
@@ -78,33 +76,37 @@ function buildDependencies() {
 function configureBrowserCoverage(coverageConfig) {
   var bundleBasePath = 'generated-tests/static/source';
   var bundlePath = bundleBasePath + '/' + packageInfo.name + '$' + packageInfo.version;
-  var generatedSrcPath = path.resolve(__dirname, bundlePath, coverageConfig.base);
+  var sourcePaths = utils.getSourcePaths();
 
-  var files = glob.sync(path.resolve(generatedSrcPath, '**/*.js'), {
-    ignore: coverageConfig.excludes
-  });
+  sourcePaths.forEach(function gatherCoverageFilesFromSource(sourcePath) {
+    var generatedSrcPath = path.resolve(__dirname, bundlePath, sourcePath);
 
-  function instrumentFile(filePath) {
-    var fileContent = fs.readFileSync(filePath, 'utf8');
-    var coveragePath = path.resolve(rootPath, coverageConfig.base);
-    var realPath = filePath.replace(generatedSrcPath, coveragePath);
-    var moduleBody = fileContent;
+    var files = glob.sync(path.resolve(generatedSrcPath, '**/*.js'), {
+      ignore: coverageConfig.excludes
+    });
 
-    if (fileContent.substring(0, 10) === '$_mod.def(') {
-      var startIndex = fileContent.indexOf('{') + 1;
-      var endIndex = fileContent.lastIndexOf('}');
+    function instrumentFile(filePath) {
+      var fileContent = fs.readFileSync(filePath, 'utf8');
+      var coveragePath = path.resolve(utils.getHelpers().rootPath, sourcePath);
+      var realPath = filePath.replace(generatedSrcPath, coveragePath);
+      var moduleBody = fileContent;
 
-      moduleBody = fileContent.substring(startIndex, endIndex);
+      if (fileContent.substring(0, 10) === '$_mod.def(') {
+        var startIndex = fileContent.indexOf('{') + 1;
+        var endIndex = fileContent.lastIndexOf('}');
+
+        moduleBody = fileContent.substring(startIndex, endIndex);
+      }
+
+      var instrumentedModuleBody = instrumenter.instrumentSync(moduleBody, realPath);
+
+      fileContent = fileContent.replace(moduleBody, instrumentedModuleBody);
+
+      fs.writeFileSync(filePath, fileContent, 'utf8');
     }
 
-    var instrumentedModuleBody = instrumenter.instrumentSync(moduleBody, realPath);
-
-    fileContent = fileContent.replace(moduleBody, instrumentedModuleBody);
-
-    fs.writeFileSync(filePath, fileContent, 'utf8');
-  }
-
-  files.forEach(instrumentFile);
+    files.forEach(instrumentFile);
+  });
 }
 
 function createDom(htmlPath, resolve, reject) {

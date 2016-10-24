@@ -51,12 +51,18 @@ function addHooks(config) {
   }
 }
 
-function setupCoverage(config) {
+function setupCoverage() {
   global.__coverage__ = {};
   global.__coverage__browser = {};
 
-  var coverageFiles = glob.sync(path.resolve(utils.getHelpers().rootPath, config.coverage.base, '**/*.js'), {
-    ignore: config.coverage.excludes
+  var config = utils.getHelpers().config;
+  var sourcePaths = utils.getSourcePaths();
+  var coverageFiles = [];
+
+  sourcePaths.forEach(function gatherCoverageFilesFromSource(sourcePath) {
+    coverageFiles = coverageFiles.concat(glob.sync(path.resolve(utils.getHelpers().rootPath, sourcePath, '**/*.js'), {
+      ignore: config.coverage.excludes
+    }));
   });
 
   coverageFiles.forEach(function instrumentFile(filePath) {
@@ -102,7 +108,7 @@ function testConfigure(config) {
   addHooks(config);
 
   if (utils.getHelpers().withCoverage) {
-    setupCoverage(config);
+    setupCoverage();
   }
 }
 

@@ -7,6 +7,7 @@ var stackTrace = require('stack-trace');
 var args = require('optimist').argv;
 var rootPath = process.cwd();
 var _ = require('lodash');
+var markoTesterConfig = require('../.marko-tester.js');
 var helpers;
 
 function mapSourceToTestPath(sourcePath) {
@@ -37,7 +38,7 @@ module.exports = {
         withCoverage: process.argv.indexOf('--no-coverage') === -1,
         withLint: process.argv.indexOf('--no-lint') === -1,
         withMocha: process.argv.indexOf('--no-mocha') === -1,
-        config: {}
+        config: markoTesterConfig
       };
     }
 
@@ -47,7 +48,7 @@ module.exports = {
   setHelpers: function setHelpers(key, value) {
     helpers = this.getHelpers() || {};
 
-    helpers[key] = value;
+    helpers[key] = _.extend(helpers[key], value);
   },
 
   generateBrowserDependencies: function generateBrowserDependencies(dependencies) {

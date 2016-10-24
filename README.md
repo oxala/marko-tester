@@ -2,26 +2,104 @@
 
 ===
 
-Test library to assist with testing marko-widget UI components.
+Test library to assist with testing marko-widget UI components and more.
 
 ## Usage
 
-#### Start using marko-tester with:
+### Start using marko-tester with:
 
 ```
 npm install --save-dev marko-tester
 ```
 
-See `/test` for an example using this test library.
+### CLI
 
-There are two things you can test:
+Once you've installed marko-tester, you can start using the `markotester` alias with the path to your source folder. There are 3 arguments you can pass if needed: `--no-coverage` if you don't want to generate coverage report; `--no-mocha` if you want to execute only eslint check; `--no-lint` if you don't want eslint checks.
 
-### Template rendering given specific input;
+```
+markotester source --no-coverage
+markotester source --no-coverage --no-lint
+```
 
-The rendering test works by giving the Marko template the input to use for rendering, and by comparing the generated HTML with the expected HTML.
+### File structure;
 
+```
+app
+|- source
+|  |- components
+|  |  |- phone-frame
+|  |  |  +- test
+|  |  |     |- fixtures
+|  |  |     |  |- default.json
+|  |  |     |  |- default.html
+|  |  |     |  |- empty.js
+|  |  |     |  +- empty.html
+|  |  |     +- index.spec.js
+|  |  |- browser.json
+|  |  |- index.js
+|  |  +- template.marko
+|  +- pages
+|     +- mobile-preview
+|        |- test
+|           +- index.spec.js
+|        |- browser.json
+|        |- index.js
+|        +- template.marko
++- .marko-tester.js
+```
 
-The test works with the following naming conventions required for the input JSON file and the expected HTML file that define a test case:
+### Configuration file;
+
+You can find an example configuration file in the root folder of `marko-tester`;
+
+```
+'use strict';
+
+module.exports = {
+  taglibExcludeDirs: [
+    'test'
+  ],
+  taglibExcludePackages: [
+    'excluded-component'
+  ],
+  excludedAttributes: ['data-widget'],
+  onInit: function onInit() {},
+  onDestroy: function onDestroy() {},
+  coverage: {
+    reporters: [
+      'text-summary',
+      'html',
+      'json-summary'
+    ],
+    dest: '.coverage',
+    excludes: [
+      '**/*.marko.js'
+    ]
+  }
+};
+```
+
+* **components** - An array of patterns where to search for components that should be loaded into jsdom page.
+* **taglibExcludeDirs** - An array of paths relative to the root of your project folders that contain `marko.json`. This is used to isolate your tests so the nested components won't be renderer.
+* **taglibExcludePackages** - An array of module names. This is used to isolate your tests so the nested components won't be renderer.
+* **excludedAttributes** - An array of HTML attributes that can be different every test execution (e.g `data-widget` which marko dynamically changes based on package version).
+* **onInit** - A hook that will be executed before every `it` when the widget needs to be instantiated.
+* **onDestroy** - A hook that will be executed after every `it` when the widget needs to be destroyed.
+* **coverage.reporters** - An array of reporters for istanbul to use.
+* **coverage.dest** - The target destination folder where reports will be written.
+* **coverage.excludes** - An array of file patterns to exclude from istanbul reports.
+
+### Automatic component/fixtures search
+
+Marko-tester will try to automatically find your component renderer and/or fixtures to test. For the renderer, marko-tester will go up one level from your spec file and search for either `index.js` or `renderer.js`. 
+
+Fixtures will be automatically found if they are inside the `fixtures` folder on the same level as your spec file.
+
+### Render comparison based on specific input
+
+The rendering test works by giving your template the input to use for rendering and then comparing output with the specified HTML.
+
+The JSON file and HTML file comprising a test should follow the pattern below (check the `fixtures` folder in File Structure section):
 
 ```
 {test-case}.json
@@ -30,98 +108,56 @@ The test works with the following naming conventions required for the input JSON
 {another-test-case}.html
 ```
 
-### Rendered template client testing;
-
-The client test works by instanstiating a marko-widget and testing the functionality against it.
-
-You need to create a file in which you can pass settings for client-testing, see example in:
+Your test file will have to invoke the `testFixtures` function. Below you can find an example of how your spec might look:
 
 ```
-/test/marko-tester.config.js
-```
+'use strict';
 
-This file should be targeted first by mocha.
+var tester = require('marko-tester');
 
-## Coverage
-
-Having tests is awesome, but we should also know how much we tested already and how much of code still left to cover. That's why i've implemented Istanbul coverage tool to gather that data for you. Long story short, after a little bit of setup istanbul will gather test coverage from server-side fixture rendering, combine it with client-side marko-widget code coverage and report it in the way you need.
-
-### Configuration:
-
-In the initial marko-tester configuration file mentioned earlier you need to add `coverage` attribute:
-
-```
-tester.configure({
-    ...
-    coverage: {
-        // Type of reporters you want your coverage be printed out.
-        reporters: [
-            'text-summary',
-            'html',
-            'json-summary'
-        ],
-        // Base of your project, in which the JS files should be tested.
-        base: 'src',
-        // Exclude file patterns and should not be covered.
-        excludes: [
-            '**/*.marko.js',
-            '**/test/**'
-        ]
-    }
+tester('source/components/phone-frame', function() {
+  this.testFixtures();
 });
 ```
 
-### Usage:
+### Component client-side testing
 
-Imagine you have this command (possible in package.json) to run the unit-tests:
+The client test works by instantiating a marko-widget and testing the functionality against it. For that browser environment is needed, for those purposes marko-tester uses jsdom to render the lasso-generated page and expose window object.
 
-``` 
-"scripts": {
-    "lint": "./node_modules/marko-tester/node_modules/.bin/jshint source",
-    "unit-test": "./node_modules/marko-tester/node_modules/.bin/mocha test/marko-tester.config.js $(find source -name '*.spec.js') --ui bdd --reporter spec --check-leaks --timeout 6000",
-    "test": "npm run lint && npm run unit-test",
-}
-```
+During client testing, `marko-tester` gives you a few methods to utilize:
 
-You can see the coverage by simply passing `--coverage` argument to that script:
+* **buildPage** - Will create an empty page, giving you access to window and document objects. This method is available right after test case declaration. 
+* **buildComponent** - Used to build the page with the component constructor in it. At this point, the `Widget` attribute will be exposed to the mocha context giving you access to your Widget's prototype. This method is available right after test case declaration. 
+* **buildWidget** - Will instantiate the widget on the page and expose the `widget` attibute to the mocha context with the instance of your widget. This method is available within *buildComponent* context. 
 
 ```
-npm run unit-test -- --coverage
-// ./node_modules/marko-tester/node_modules/.bin/mocha test/marko-tester.config.js $(find source -name '*.spec.js') --ui bdd --reporter spec --check-leaks --timeout 6000 --coverage
+'use strict';
+
+tester('source/components/phone-frame', function(expect, sinon) { // you can request `sinon` or `expect` just by adding the respective param;
+
+  // this.buildPage - is available here;
+  // this.fixtures - will give you a list of attached test fixtures to this component;  
+
+  this.buildComponent(function() {
+    var mockHello = 'world';
+    
+    beforeEach(function() {
+      this.Widget.prototype.hello = mockHello;
+    });
+    
+    afterEach(function() {
+      delete this.Widget.prototype.hello;
+    });
+    
+    this.buildWidget(function() {
+      it('should have hello attribute', function() {
+        expect(this.widget.hello).to.be.equal(mockHello);
+      });
+    });
+  });
+});
 ```
 
-## Code style
+## Code style (eslint)
 
-Bundle comes with additional tools to raise (or keep) your code quality.
-
-### eslint
-
-As an addition to our weaponry to fight bad code we can (read as should) add a `eslint` to be sure that our code is more readable and consistent.
-
-
-`eslint` comes as part of the package to lint the `marko-tester` itself, but of course it could be easily used to test your app. Just add a `.eslintrc` configuration file to the root of the project (you can copy the one from here. It uses eslint-ebay-config as a baseline and makes it more strict. We shouldn't be soft when it comes down to code quality). Use `.eslintignore` to add ignored paths. Finally, point in your `package.json` to `eslint` binary that comes with `marko-tester` where first argument will be folders to search for `JS` files:
-
-```
-"scripts": {
-    ...
-    "eslint": "./node_modules/marko-tester/node_modules/.bin/eslint source test",
-    "test": "npm run eslint && npm run unit-test"
-    ...
-}
-```
-
-And you all done, happy code style linting!
-
-## Contribution
-
-#### Build marko-tester with:
-
-```
-npm install
-```
-
-#### Lint & Test marko-tester with:
-
-```
-npm test
-```
+Apart from testing, consistent styling is another important part of keeping high quality code. For that particular reason, `marko-tester` comes with an `eslint` check built-in. It will check the style of your code when you execute the `markotester` command.
