@@ -1,2 +1,2 @@
-source/generated-tests/**
-**/*.marko.js"
+**/*.marko.js
+**/generated-tests

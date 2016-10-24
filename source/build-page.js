@@ -2,20 +2,23 @@
 
 var path = require('path');
 var fs = require('fs-extra');
-var lasso = require('lasso');
 var glob = require('glob');
 var jsdom = require('jsdom');
 var i18nEbay = require('i18n-ebay/optimizer/plugin');
-var lassoMarko = require('lasso-marko');
+// var lassoMarko = require('lasso-marko');
 var lassoLess = require('lasso-less');
-var testScaffold = require('./test-scaffold.marko');
 var rootPath = process.cwd();
 var packageInfo = require(rootPath + '/package');
 var Promise = require('bluebird');
 var istanbul = require('istanbul');
+var utils = require('./utils');
+var lasso = require(path.join(utils.getHelpers().rootPath, 'node_modules/lasso'));
+var lassoMarko = require(path.join(utils.getHelpers().rootPath, 'node_modules/lasso-marko'));
+var pagePrepared;
 var instrumenter = new istanbul.Instrumenter({
   noCompact: true
 });
+var testScaffold = require(path.resolve(__dirname, './test-scaffold.marko'));
 
 function buildPage(context, opts, cb) {
   var callback = cb || opts;
@@ -61,7 +64,7 @@ function buildDependencies() {
     }
   ];
 
-  dependencies = dependencies.concat(global.markoTesterHelpers.rendererPaths);
+  dependencies = dependencies.concat(utils.getHelpers().rendererPaths);
 
   dependencies.push('require-run: ./mocha-runner');
 
@@ -72,18 +75,18 @@ function buildDependencies() {
   fs.writeFileSync(path.resolve(__dirname, './browser.json'), JSON.stringify(browserJSON));
 }
 
-function configureBrowserCoverage(config) {
+function configureBrowserCoverage(coverageConfig) {
   var bundleBasePath = 'generated-tests/static/source';
   var bundlePath = bundleBasePath + '/' + packageInfo.name + '$' + packageInfo.version;
-  var generatedSrcPath = path.resolve(__dirname, bundlePath, config.coverage.base);
+  var generatedSrcPath = path.resolve(__dirname, bundlePath, coverageConfig.base);
 
   var files = glob.sync(path.resolve(generatedSrcPath, '**/*.js'), {
-    ignore: config.coverage.excludes
+    ignore: coverageConfig.excludes
   });
 
   function instrumentFile(filePath) {
     var fileContent = fs.readFileSync(filePath, 'utf8');
-    var coveragePath = path.resolve(rootPath, config.coverage.base);
+    var coveragePath = path.resolve(rootPath, coverageConfig.base);
     var realPath = filePath.replace(generatedSrcPath, coveragePath);
     var moduleBody = fileContent;
 
@@ -104,60 +107,70 @@ function configureBrowserCoverage(config) {
   files.forEach(instrumentFile);
 }
 
+function createDom(htmlPath, resolve, reject) {
+  jsdom.env(
+    htmlPath, [], {
+      features: {
+        FetchExternalResources: ['script']
+      }
+    },
+    function injectBrowserGlobals(err, window) {
+      if (err) {
+        return reject(err);
+      }
+
+      global.window = window;
+      global.document = window.document;
+      global.window.console = console;
+
+      pagePrepared = true;
+
+      return resolve();
+    }
+  );
+}
+
 function prepare() {
   var staticPath = path.join(
-    global.markoTesterHelpers.outputPath,
-    global.markoTesterHelpers.staticDir
+    utils.getHelpers().outputPath,
+    utils.getHelpers().staticDir
   );
 
-  fs.ensureDirSync(global.markoTesterHelpers.outputPath);
+  fs.ensureDirSync(utils.getHelpers().outputPath);
 
   lasso.configure({
     outputDir: staticPath,
     plugins: [i18nEbay, lassoMarko, lassoLess],
-    urlPrefix: './' + global.markoTesterHelpers.staticDir,
+    urlPrefix: './' + utils.getHelpers().staticDir,
     fingerprintsEnabled: false,
     bundlingEnabled: false
   });
 
   return new Promise(function promisePage(resolve, reject) {
-    var htmlPath = path.join(global.markoTesterHelpers.outputPath, 'component-tests.html');
+    var htmlPath = path.join(utils.getHelpers().outputPath, 'component-tests.html');
+
+    if (pagePrepared) {
+      return createDom(htmlPath, resolve, reject);
+    }
+
     var out = fs.createWriteStream(htmlPath, 'utf8');
 
     function generateDom() {
-      if (global.markoTesterHelpers.withCoverage) {
-        configureBrowserCoverage(global.markoTesterHelpers.config);
+      if (utils.getHelpers().withCoverage) {
+        configureBrowserCoverage(utils.getHelpers().config.coverage);
       }
 
-      jsdom.env(
-        htmlPath, [], {
-          features: {
-            FetchExternalResources: ['script']
-          }
-        },
-        function injectBrowserGlobals(err, window) {
-          if (err) {
-            return reject(err);
-          }
-
-          global.window = window;
-          global.document = window.document;
-          global.window.console = console;
-
-          return resolve();
-        }
-      );
+      createDom(htmlPath, resolve, reject);
     }
 
     buildDependencies();
 
-    testScaffold
+    return testScaffold
       .render({}, out)
       .on('finish', generateDom);
   });
 }
 
-module.exports = buildPage;
 module.exports = buildPage;
 module.exports.only = buildPageWithMochaOperation.bind(null, 'only');
 module.exports.skip = buildPageWithMochaOperation.bind(null, 'skip');

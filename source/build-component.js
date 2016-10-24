@@ -1,18 +1,21 @@
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
 var _ = require('lodash');
 var testConfiguration = require('./test-configuration');
 var buildWidget = require('./build-widget');
+var utils = require('./utils');
 
 function buildComponent(context, opts, cb) {
+  /* eslint global-require: 0 */
+
   var callback = cb || opts;
   var options = cb ? opts : {};
   var fixture = options.fixture;
+  var renderer = context.renderer || utils.getRenderer();
 
-  if (!context.renderer) {
+  if (!renderer) {
     throw new Error('BuildComponent: Cannot automatically locate renderer, please specify one.');
   }
 
@@ -20,18 +23,16 @@ function buildComponent(context, opts, cb) {
     var fixturePath;
 
     if (!fixture) {
+      if (!context.fixtures.default) {
+        utils.getFixtures(context);
+      }
+
       fixture = context.fixtures.default;
     } else {
       fixturePath = glob.sync(path.resolve(context.testPath, fixture + '?(.json|.js)'));
 
       if (fixturePath && fixturePath.length > 0) {
-        fixture = fs.readFileSync(fixturePath[0], 'utf-8');
-
-        try {
-          fixture = JSON.parse(fixture);
-        } catch (error) {
-          throw new Error('BuildComponent: Specified fixture cannot be parsed.', error);
-        }
+        fixture = require(fixturePath[0]);
       }
     }
 
@@ -57,7 +58,7 @@ function buildComponent(context, opts, cb) {
       function buildDom() {
         var Widget;
 
-        context.renderer(fixture, function onComponentRender(err, result) {
+        renderer(fixture, function onComponentRender(err, result) {
           var html = result;
 
           if (_.isObject(result)) {
@@ -110,6 +111,13 @@ function buildComponent(context, opts, cb) {
     afterEach(function buildComponentAfterEach() {
       if (testConfiguration.onDestroy) {
         testConfiguration.onDestroy();
+      }
+    });
+
+    after(function buildComponentAfter() {
+      /* eslint no-underscore-dangle: 0 */
+      if (global.__coverage__browser) {
+        Object.assign(global.__coverage__browser, global.window.__coverage__);
       }
 
       delete global.window;

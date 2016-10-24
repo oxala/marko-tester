@@ -1,11 +1,10 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
 var Normalizer = require('html-normalizer');
 var _ = require('lodash');
 var chai = require('chai');
 var Promise = require('bluebird');
+var utils = require('./utils');
 var expect = chai.expect;
 var excludedAttributes = [];
 
@@ -63,50 +62,26 @@ function createTest(context, testCase) {
 
 function testFixtures(context) {
   if (!context.renderer) {
+    Object.assign(context, {
+      renderer: utils.getRenderer()
+    });
+  }
+
+  if (!context.renderer) {
     throw new Error('TestFixtures: Cannot automatically locate renderer, please specify one.');
   }
 
-  /* eslint global-require: 0 */
   var testCases = [];
-  var fixtures = {};
-  var dirsToCheck = [
-    'fixtures'
-  ];
 
-  if (context.options.fixturesPath) {
-    dirsToCheck = [context.options.fixturesPath];
-  }
+  var fixtures = utils.getFixtures(context);
 
-  function buildCases(fixturesPath, file) {
-    var absPath = path.join(fixturesPath, file);
-    var extension = path.extname(absPath);
-    var testName = path.basename(absPath, '.html');
-
-    if (extension === '.html') {
-      var fixture = require(absPath.replace(/.html$/, ''));
-      var expectedHtml = fs.readFileSync(absPath, 'utf-8');
-
-      fixtures[testName] = fixture;
-
-      testCases.push({
-        name: testName,
-        fixture: fixture,
-        expectedHtml: expectedHtml
-      });
-    }
-  }
-
-  dirsToCheck.forEach(function getFixturePairs(dirToCheck) {
-    var fixturesPath = path.join(context.testPath, dirToCheck);
-
-    try {
-      fs.readdirSync(fixturesPath).forEach(buildCases.bind(null, fixturesPath));
-    } catch (error) {
-      throw new Error('TestFixtures: Cannot read fixtures folder.', error);
-    }
+  fixtures.forEach(function createTestCases(fixture) {
+    testCases.push({
+      name: fixture.testName,
+      fixture: fixture.data,
+      expectedHtml: fixture.expectedHtml
+    });
   });
-
-  Object.assign(context.fixtures, fixtures);
 
   if (context.options.fixturesPath && !testCases.length) {
     throw new Error('TestFixtures: No fixtures found in specified location');

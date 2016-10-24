@@ -1,8 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var path = require('path');
-var glob = require('glob');
 var chai = require('chai');
 var sinon = require('sinon');
 var buildPage = require('./build-page');
@@ -11,58 +9,33 @@ var testFixtures = require('./test-fixtures');
 var utils = require('./utils');
 var expect = chai.expect;
 
-function buildMarko(testString, opts, cb) {
+function buildTester(testString, opts, cb) {
   /* eslint global-require: 0 */
   var callback = cb || opts;
   var options = cb ? opts : {};
 
   if (!_.isString(testString)) {
-    throw new Error('BuildMarko: Description should be a string.');
+    throw new Error('buildTester: Description should be a string.');
   }
 
   if (!_.isFunction(callback)) {
-    throw new Error('BuildMarko: Callback should be a function.');
+    throw new Error('buildTester: Callback should be a function.');
   }
 
   var operation = options.mochaOperation ? describe[options.mochaOperation] : describe;
 
   operation(testString, function startTestCase() {
-    var testPath = utils.getTestPath();
-    var renderer = options.renderer;
-
-    if (!renderer || _.isString(renderer)) {
-      var rendererPath;
-
-      if (!renderer) {
-        rendererPath = path.join(testPath, '..');
-        rendererPath = glob.sync(path.resolve(rendererPath, '?(index|renderer).js'));
-      } else {
-        rendererPath = glob.sync(path.resolve(testPath, renderer));
-      }
-
-      if (rendererPath && rendererPath.length > 0) {
-        renderer = rendererPath[0];
-      }
-
-      if (renderer) {
-        /* eslint no-shadow: 0 */
-        utils.generateBrowserDependencies(renderer);
-        renderer = require(renderer);
-      } else {
-        renderer = {
-          render: null
-        };
-      }
-    }
-
-    renderer = renderer.render || renderer;
+    /* eslint no-shadow: 0 */
 
     var context = {
-      testPath: testPath,
-      renderer: renderer,
+      testPath: utils.getTestPath(),
       options: options,
       fixtures: {}
     };
+
+    if (options.renderer) {
+      context.renderer = utils.getRenderer(options);
+    }
 
     context.preparePage = buildPage.prepare.bind(this, context);
     context.testFixtures = testFixtures.bind(this, context);
@@ -82,15 +55,15 @@ function buildMarko(testString, opts, cb) {
   });
 }
 
-function buildMarkoWithMochaOperation(mochaOperation, testString, opts, cb) {
+function buildTesterWithMochaOperation(mochaOperation, testString, opts, cb) {
   var callback = cb || opts;
   var options = cb ? opts : {};
 
   options.mochaOperation = mochaOperation;
 
-  buildMarko(testString, options, callback);
+  buildTester(testString, options, callback);
 }
 
-module.exports = buildMarko;
-module.exports.only = buildMarkoWithMochaOperation.bind(null, 'only');
-module.exports.skip = buildMarkoWithMochaOperation.bind(null, 'skip');
+module.exports = buildTester;
+module.exports.only = buildTesterWithMochaOperation.bind(null, 'only');
+module.exports.skip = buildTesterWithMochaOperation.bind(null, 'skip');

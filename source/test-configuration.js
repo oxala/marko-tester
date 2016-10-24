@@ -2,32 +2,32 @@
 
 /* eslint no-underscore-dangle: 0 */
 
-require('marko/node-require').install();
-require('marko/compiler').defaultOptions.writeToDisk = false;
-
 var path = require('path');
+var utils = require('./utils');
+
+require('app-module-path').addPath(utils.getHelpers().rootPath);
+require(path.join(utils.getHelpers().rootPath, 'node_modules/marko/node-require')).install();
+
 var fs = require('fs-extra');
 var glob = require('glob');
 var chai = require('chai');
-var markoCompiler = require.main.require('marko/compiler');
+var markoCompiler = require(path.join(utils.getHelpers().rootPath, 'node_modules/marko/compiler'));
 var sinonChai = require('sinon-chai');
 var chaiAsPromised = require('chai-as-promised');
-var testFixtures = require('./test-fixtures');
-var rootPath = process.cwd();
-var utils = require('./utils');
 var istanbul = require('istanbul');
+var testFixtures = require('./test-fixtures');
 var instrumenter = new istanbul.Instrumenter({
   noCompact: true
 });
 
-require('app-module-path').addPath(rootPath);
+markoCompiler.defaultOptions.writeToDisk = false;
 
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
 function excludeMarkoData(config) {
   (config.taglibExcludeDirs || []).forEach(function excludeDir(dirPath) {
-    var absoluteDirPath = path.resolve(rootPath, dirPath);
+    var absoluteDirPath = path.resolve(utils.getHelpers().rootPath, dirPath);
 
     markoCompiler.taglibFinder.excludeDir(absoluteDirPath);
   });
@@ -53,8 +53,9 @@ function addHooks(config) {
 
 function setupCoverage(config) {
   global.__coverage__ = {};
+  global.__coverage__browser = {};
 
-  var coverageFiles = glob.sync(path.resolve(rootPath, config.coverage.base, '**/*.js'), {
+  var coverageFiles = glob.sync(path.resolve(utils.getHelpers().rootPath, config.coverage.base, '**/*.js'), {
     ignore: config.coverage.excludes
   });
 
@@ -83,13 +84,8 @@ function setupCoverage(config) {
     var dest = config.coverage.dest || '.coverage';
     var collector = new istanbul.Collector();
 
-    if (global.window && global.window.__coverage__) {
-      collector.add(window.__coverage__);
-    }
-
-    if (global && global.__coverage__) {
-      collector.add(global.__coverage__);
-    }
+    collector.add(global.__coverage__);
+    collector.add(global.__coverage__browser);
 
     reporters.forEach(function createReport(reporter) {
       istanbul.Report.create(reporter, {
@@ -100,15 +96,14 @@ function setupCoverage(config) {
 }
 
 function testConfigure(config) {
-  global.markoTesterHelpers.config = config;
-
+  utils.setHelpers('config', config);
   utils.generateBrowserDependencies(config.components);
   excludeMarkoData(config);
   addHooks(config);
 
-  if (global.markoTesterHelpers.withCoverage) {
+  if (utils.getHelpers().withCoverage) {
     setupCoverage(config);
   }
 }
 
-module.exports.configure = testConfigure;
+module.exports = testConfigure;
