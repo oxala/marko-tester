@@ -15,7 +15,7 @@
     "eslint": "./node_modules/.bin/eslint source",
     "unit-test": "markotester test --no-coverage",
     "coverage": "istanbul cover ./node_modules/.bin/_mocha test/marko-tester.config.js $(find test -name '*.spec.js')",
-    "clean": "rm -rf .beans .cache source/generated-tests",
+    "clean": "rm -rf .beans .cache source/generated-tests source/browser.json",
     "bump": "sh ./tasks/bump.sh"
   },
   "precommit": [

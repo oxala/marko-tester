@@ -16,7 +16,6 @@ var pagePrepared;
 var instrumenter = new istanbul.Instrumenter({
   noCompact: true
 });
-var testScaffold = require(path.resolve(__dirname, './test-scaffold.marko'));
 
 function buildPage(context, opts, cb) {
   var callback = cb || opts;
@@ -61,6 +60,7 @@ function buildDependencies() {
       'mask-define': true
     }
   ];
+  var browserJSONPath = path.resolve(__dirname, 'browser.json');
 
   dependencies = dependencies.concat(utils.getHelpers().rendererPaths);
 
@@ -70,7 +70,8 @@ function buildDependencies() {
     dependencies: dependencies
   };
 
-  fs.writeFileSync(path.resolve(__dirname, './browser.json'), JSON.stringify(browserJSON));
+  fs.ensureFileSync(browserJSONPath);
+  fs.writeFileSync(browserJSONPath, JSON.stringify(browserJSON));
 }
 
 function configureBrowserCoverage(coverageConfig) {
@@ -149,6 +150,8 @@ function prepare() {
   });
 
   return new Promise(function promisePage(resolve, reject) {
+    /* eslint global-require: 0 */
+
     var htmlPath = path.join(utils.getHelpers().outputPath, 'component-tests.html');
 
     if (pagePrepared) {
@@ -167,7 +170,7 @@ function prepare() {
 
     buildDependencies();
 
-    return testScaffold
+    return require(path.resolve(__dirname, './test-scaffold.marko'))
       .render({}, out)
       .on('finish', generateDom);
   });
