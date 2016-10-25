@@ -6,12 +6,10 @@ var path = require('path');
 var utils = require('./utils');
 
 require('app-module-path').addPath(utils.getHelpers().rootPath);
-require(path.join(utils.getHelpers().rootPath, 'node_modules/marko/node-require')).install();
 
 var fs = require('fs-extra');
 var glob = require('glob');
 var chai = require('chai');
-var markoCompiler = require(path.join(utils.getHelpers().rootPath, 'node_modules/marko/compiler'));
 var sinonChai = require('sinon-chai');
 var chaiAsPromised = require('chai-as-promised');
 var istanbul = require('istanbul');
@@ -19,6 +17,16 @@ var testFixtures = require('./test-fixtures');
 var instrumenter = new istanbul.Instrumenter({
   noCompact: true
 });
+var markoCompiler;
+
+try {
+  markoCompiler = require(path.join(utils.getHelpers().rootPath, 'node_modules/marko/compiler'));
+  require(path.join(utils.getHelpers().rootPath, 'node_modules/marko/node-require')).install();
+} catch (e) {
+  /* eslint global-require: 0 */
+  markoCompiler = require('marko/compiler');
+  require('marko/node-require').install();
+}
 
 markoCompiler.defaultOptions.writeToDisk = false;
 

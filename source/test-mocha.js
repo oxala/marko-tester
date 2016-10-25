@@ -12,7 +12,8 @@ var mocha = new Mocha({
   ui: 'bdd',
   reporter: 'spec',
   grep: args.grep,
-  ignoreLeaks: false
+  ignoreLeaks: false,
+  globals: ['document', 'window', 'GLOBAL_LASSO']
 });
 
 function testMocha() {
