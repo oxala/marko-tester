@@ -16,11 +16,15 @@ function getReport(config, paths) {
 }
 
 function testEslint() {
+  /* eslint no-console: 0 */
   var sourcePaths = utils.getSourcePaths();
   var testPaths = utils.getTestPaths();
   var commonConfig = {
     baseConfig: eslintConfig,
-    allowInlineConfig: false
+    allowInlineConfig: false,
+    ignorePattern: [
+      '**/*.marko.js'
+    ]
   };
   var reportTest = getReport(_.extend(commonConfig, {
     plugins: [
@@ -46,7 +50,10 @@ function testEslint() {
     }
   }), testPaths);
   var report = getReport(_.extend(commonConfig, {
-    ignorePattern: '**/test'
+    ignorePattern: [
+      '**/test',
+      '**/*.marko.js'
+    ]
   }), sourcePaths);
 
   report.results = report.results.concat(reportTest.results);
@@ -54,7 +61,7 @@ function testEslint() {
   report.warningCount += reportTest.warningCount;
 
   if (report.errorCount + report.warningCount > 0) {
-    process.stdin.write(CLI.getFormatter()(report.results));
+    console.log(CLI.getFormatter()(report.results));
 
     if (report.errorCount > 0) {
       throw new Error('ESLint failed, please fix your code.');
