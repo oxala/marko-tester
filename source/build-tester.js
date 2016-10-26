@@ -39,6 +39,8 @@ function buildTester(testString, opts, cb) {
 
     context.preparePage = buildPage.prepare.bind(this, context);
     context.testFixtures = testFixtures.bind(this, context);
+    context.testFixtures.only = testFixtures.only.bind(this, context);
+    context.testFixtures.skip = testFixtures.skip.bind(this, context);
     context.buildComponent = buildComponent.bind(this, context);
     context.buildComponent.only = buildComponent.only.bind(this, context);
     context.buildComponent.skip = buildComponent.skip.bind(this, context);

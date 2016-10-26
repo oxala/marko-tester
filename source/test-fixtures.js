@@ -60,7 +60,9 @@ function createTest(context, testCase) {
   });
 }
 
-function testFixtures(context) {
+function testFixtures(context, opts) {
+  var options = opts || {};
+
   if (!context.renderer) {
     Object.assign(context, {
       renderer: utils.getRenderer()
@@ -87,10 +89,23 @@ function testFixtures(context) {
     throw new Error('TestFixtures: No fixtures found in specified location');
   }
 
-  describe('Given specific input data', function givenSpecificInputData() {
+  var operation = options.mochaOperation ? describe[options.mochaOperation] : describe;
+
+  operation('Given specific input data', function givenSpecificInputData() {
     testCases.forEach(createTest.bind(null, context));
   });
 }
 
+function testFixturesWithMochaOperation(mochaOperation, context, opts, cb) {
+  var callback = cb || opts;
+  var options = cb ? opts : {};
+
+  options.mochaOperation = mochaOperation;
+
+  testFixtures(context, options, callback);
+}
+
 module.exports = testFixtures;
+module.exports.only = testFixturesWithMochaOperation.bind(null, 'only');
+module.exports.skip = testFixturesWithMochaOperation.bind(null, 'skip');
 module.exports.excludeAttribute = excludeAttribute;
