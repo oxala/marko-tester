@@ -1,0 +1,14 @@
+<var viewModel=data.viewModel/>
+<var config=data.config/>
+
+<div id=viewModel.placement class="mock-component" if(viewModel) w-bind>
+    <h1>${data.content.get('title')}</h1>
+    <p>${viewModel.content}</p>
+    <div if(config)>
+        <a _sp="${data.tracking.spTag().moduleId(8242).linkId(8243)}">${config.url}</a>
+        <p>${config.locale}</p>
+        <p>${config.timeout}</p>
+        <p>$!{config.isDev}</p>
+    </div>
+    <excluded-component/>
+</div>
