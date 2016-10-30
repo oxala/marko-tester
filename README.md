@@ -21,7 +21,7 @@ markotester source --no-coverage
 markotester source --no-coverage --no-lint
 ```
 
-### File structure;
+### File structure
 
 ```
 app
@@ -41,16 +41,18 @@ app
 |  +- pages
 |     +- mobile-preview
 |        |- test
-|           +- index.spec.js
+|        |  |- renderer.spec.js
+|        |  +- widget.spec.js
 |        |- browser.json
-|        |- index.js
-|        +- template.marko
+|        |- renderer.js
+|        |- template.marko
+|        +- widget.js
 +- .marko-tester.js
 ```
 
-### Configuration file;
+### Configuration file
 
-You can find an example configuration file in the root folder of `marko-tester`;
+You can find an example configuration file in the root folder of `marko-tester`:
 
 ```
 'use strict';
@@ -63,6 +65,7 @@ module.exports = {
     'excluded-component'
   ],
   excludedAttributes: ['data-widget'],
+  lassoPlugins: [],
   onInit: function onInit() {},
   onDestroy: function onDestroy() {},
   coverage: {
@@ -83,6 +86,7 @@ module.exports = {
 * **taglibExcludeDirs** - An array of paths relative to the root of your project folders that contain `marko.json`. This is used to isolate your tests so the nested components won't be renderer.
 * **taglibExcludePackages** - An array of module names. This is used to isolate your tests so the nested components won't be renderer.
 * **excludedAttributes** - An array of HTML attributes that can be different every test execution (e.g `data-widget` which marko dynamically changes based on package version).
+* **lassoPlugins** - An array of lasso plugins to require and attach to lasso configuration during client test execution.
 * **onInit** - A hook that will be executed before every `it` when the widget needs to be instantiated.
 * **onDestroy** - A hook that will be executed after every `it` when the widget needs to be destroyed.
 * **coverage.reporters** - An array of reporters for istanbul to use.
@@ -156,6 +160,21 @@ tester('source/components/phone-frame', function(expect, sinon) { // you can req
     });
   });
 });
+```
+
+### Few additional features
+
+1. `tester`, `buildComponent`, `buildPage` and `buildWidget` commands will create a mocha's `describe` function. That's why the `only` and `skip` operators can be used with these commands the same way as with `describe` (e.g `this.buildComponent.only(...)`, `tester.skip(...)`).
+
+2. `tester` command on callback along with `sinon` and/or `expect` can expose `rewire` and `mockRequire` functions for you in order to rewire or mock necessary module you using in your implementation. Note: that only will work during server-side testing.
+
+3. If you want to mock require during client-side testing - you can do that using options for `buildComponent` method. There as a key you can pass relative path to the necessary file that will be required. And the mock of that file as a value. Keep in mind that mocked require will only exist within this `buildComponent`.<br>
+```
+this.buildComponent({
+  mockRequire: {
+    '../dep': { hello: 'world'}
+  },
+}, function() { ... });
 ```
 
 ## Code style (eslint)

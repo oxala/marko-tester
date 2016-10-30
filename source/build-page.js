@@ -4,7 +4,6 @@ var path = require('path');
 var fs = require('fs-extra');
 var glob = require('glob');
 var jsdom = require('jsdom');
-var i18nEbay = require('i18n-ebay/optimizer/plugin');
 var lasso = require('lasso');
 var lassoMarko = require('lasso-marko');
 var lassoLess = require('lasso-less');
@@ -142,9 +141,24 @@ function prepare() {
 
   fs.ensureDirSync(utils.getHelpers().outputPath);
 
+  var lassoPluginPaths = utils.getHelpers().config.lassoPlugins || [];
+  var lassoPlugins = lassoPluginPaths.map(function requireLassoPlugin(pluginPath) {
+    var plugin;
+
+    try {
+      plugin = require(path.join(utils.getHelpers().rootPath, 'node_modules', pluginPath));
+    } catch (e) {
+      throw new Error('BuildPage: Unable to require specified Lasso Plugin - ' + pluginPath);
+    }
+
+    return plugin;
+  });
+
+  lassoPlugins = lassoPlugins.concat([lassoLess, lassoMarko]);
+
   lasso.configure({
     outputDir: staticPath,
-    plugins: [i18nEbay, lassoMarko, lassoLess],
+    plugins: lassoPlugins,
     urlPrefix: './' + utils.getHelpers().staticDir,
     fingerprintsEnabled: false,
     bundlingEnabled: false

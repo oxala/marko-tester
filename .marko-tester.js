@@ -8,6 +8,7 @@ module.exports = {
     'excluded-component'
   ],
   excludedAttributes: ['data-widget'],
+  lassoPlugins: [],
   onInit: function onInit() {},
   onDestroy: function onDestroy() {},
   coverage: {
