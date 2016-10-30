@@ -1,5 +1,6 @@
 'use strict';
 
+var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
 var _ = require('lodash');
@@ -63,24 +64,34 @@ function buildComponent(context, opts, cb) {
             var mock = options.mockRequire[filePath];
             var file = filePath;
             var packageInfo;
+            var isAbsolute = path.isAbsolute(file);
 
-            try {
-              require.resolve(file);
-              packageInfo = require(path.join(file.split('/')[0] + '/package'));
-              // file =
-            } catch (e) {
-              packageInfo = require(path.join(utils.getHelpers().rootPath, '/package'));
-
-              var absPath = path.resolve(context.testPath, file).replace(utils.getHelpers().rootPath, '');
-
-              packageInfo = [
-                packageInfo.name,
-                '$',
-                packageInfo.version
-              ].join('');
-
-              window.$_mod.def('/' + path.join(packageInfo, absPath), mock);
+            if (!isAbsolute && file[0] !== '.') {
+              try {
+                var fileArray = file.split('/');
+                var modulePath = path.resolve(utils.getHelpers().rootPath, 'node_modules', fileArray[0]);
+                fs.lstatSync(modulePath);
+                packageInfo = require(path.join(modulePath, 'package'));
+                file = fileArray.splice(1).join('/');
+              } catch (e) {
+                /* eslint no-console: 0 */
+                console.error('BuildComponent: Cannot resolve module to mock require for - ' + filePath);
+              }
+            } else if (!isAbsolute) {
+              file = path.resolve(context.testPath, file).replace(utils.getHelpers().rootPath, '');
             }
+
+            if (!packageInfo) {
+              packageInfo = require(path.join(utils.getHelpers().rootPath, '/package'));
+            }
+
+            packageInfo = [
+              packageInfo.name,
+              '$',
+              packageInfo.version
+            ].join('');
+
+            window.$_mod.def('/' + path.join(packageInfo, file), mock);
           });
         }
 
@@ -120,7 +131,7 @@ function buildComponent(context, opts, cb) {
           }
 
           if (!Widget) {
-            done(new Error('Cannot find any attached widgets for the template. Make sure you used `w-bind` in your template.'));
+            done(new Error('BuildComponent: Cannot find any attached widgets for the template. Make sure you used `w-bind` in your template.'));
           } else {
             ctx.Widget = Widget;
 
