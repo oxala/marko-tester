@@ -52,6 +52,7 @@ function buildPageWithMochaOperation(mochaOperation, context, opts, cb) {
 function buildDependencies() {
   var dependencies = [
     'mocha/mocha.js',
+    'mock-require/index.js',
     'require-run: ./mocha-setup', {
       path: 'jquery/dist/jquery.js',
       'mask-define': true

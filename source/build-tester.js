@@ -1,8 +1,11 @@
 'use strict';
 
 var _ = require('lodash');
+var path = require('path');
 var chai = require('chai');
 var sinon = require('sinon');
+var mockRequire = require('mock-require');
+var rewire = require('rewire');
 var buildPage = require('./build-page');
 var buildComponent = require('./build-component');
 var testFixtures = require('./test-fixtures');
@@ -37,6 +40,18 @@ function buildTester(testString, opts, cb) {
       context.renderer = utils.getRenderer(options);
     }
 
+    function patchRewire(filePath) {
+      var file = filePath;
+
+      try {
+        require.resolve(file);
+      } catch (e) {
+        file = path.resolve(context.testPath, file);
+      }
+
+      return rewire(file);
+    }
+
     context.preparePage = buildPage.prepare.bind(this, context);
     context.testFixtures = testFixtures.bind(this, context);
     context.testFixtures.only = testFixtures.only.bind(this, context);
@@ -52,7 +67,9 @@ function buildTester(testString, opts, cb) {
 
     callback.apply(this, utils.getParamsToApply(callback, {
       expect: expect,
-      sinon: sinon
+      sinon: sinon,
+      rewire: patchRewire,
+      mockRequire: mockRequire
     }));
   });
 }

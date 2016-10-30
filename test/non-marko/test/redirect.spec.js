@@ -3,7 +3,7 @@
 var tester = require('../../../');
 var redirect = require('../redirect');
 
-tester('non-marko-jquery', function (expect, sinon) {
+tester('non-marko/redirect', function (expect, sinon) {
   this.buildPage(function () {
     beforeEach(function () {
       sinon.stub(document.location, 'replace');

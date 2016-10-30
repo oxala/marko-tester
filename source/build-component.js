@@ -58,6 +58,32 @@ function buildComponent(context, opts, cb) {
       function buildDom() {
         var Widget;
 
+        if (options.mockRequire) {
+          Object.keys(options.mockRequire).forEach(function mockRequire(filePath) {
+            var mock = options.mockRequire[filePath];
+            var file = filePath;
+            var packageInfo;
+
+            try {
+              require.resolve(file);
+              packageInfo = require(path.join(file.split('/')[0] + '/package'));
+              // file =
+            } catch (e) {
+              packageInfo = require(path.join(utils.getHelpers().rootPath, '/package'));
+
+              var absPath = path.resolve(context.testPath, file).replace(utils.getHelpers().rootPath, '');
+
+              packageInfo = [
+                packageInfo.name,
+                '$',
+                packageInfo.version
+              ].join('');
+
+              window.$_mod.def('/' + path.join(packageInfo, absPath), mock);
+            }
+          });
+        }
+
         renderer(fixture, function onComponentRender(err, result) {
           var html = result;
 

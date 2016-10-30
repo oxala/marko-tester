@@ -34,6 +34,7 @@ function testEslint() {
       'func-names': 0,
       'no-unused-expressions': 0,
       'no-underscore-dangle': 0,
+      'global-require': 0,
       'mocha/no-exclusive-tests': 'error',
       'mocha/no-skipped-tests': 'error',
       'mocha/no-pending-tests': 'error',

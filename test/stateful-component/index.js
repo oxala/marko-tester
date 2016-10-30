@@ -1,6 +1,7 @@
 'use strict';
 
 var template = require('./template.marko');
+var dep = require('./dep');
 
 module.exports = require('marko-widgets').defineComponent({
   template: template,
@@ -10,6 +11,6 @@ module.exports = require('marko-widgets').defineComponent({
   },
 
   init: function init() {
-    document.location.replace('/');
+    document.location.replace(dep.url);
   }
 });
