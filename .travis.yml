@@ -23,3 +23,7 @@ before_install:
       llvm-$LLVM_VERSION/bin/llvm-config --version;
       export LLVM_CONFIG="llvm-$LLVM_VERSION/bin/llvm-config";
     fi
+deploy:
+  on:
+    tags: true
+    branch: master

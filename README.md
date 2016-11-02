@@ -1,4 +1,4 @@
-#marko-tester
+#marko-tester [![Build Status](https://travis-ci.org/oxala/marko-tester.svg?branch=master)](https://travis-ci.org/oxala/marko-tester)
 
 ===
 
