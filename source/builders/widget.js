@@ -1,11 +1,12 @@
 'use strict';
 
+var utils = require('../utils');
+
 function buildWidget(context, opts, cb) {
   var callback = cb || opts;
   var options = cb ? opts : {};
-  var operation = options.mochaOperation ? describe[options.mochaOperation] : describe;
 
-  operation('When widget is being rendered', function whenWidgetIsBeingRendered() {
+  options.mochaOperation('When widget is being rendered', function whenWidgetIsBeingRendered() {
     beforeEach(function buildWidgetBeforeEach() {
       var widgetContainers = window['component-container'].querySelectorAll('[data-widget]');
       var widgetId = widgetContainers[0].id;
@@ -25,15 +26,7 @@ function buildWidget(context, opts, cb) {
   });
 }
 
-function buildWidgetWithMochaOperation(mochaOperation, context, opts, cb) {
-  var callback = cb || opts;
-  var options = cb ? opts : {};
 
-  options.mochaOperation = mochaOperation;
-
-  buildWidget(context, options, callback);
-}
-
-module.exports = buildWidget;
-module.exports.only = buildWidgetWithMochaOperation.bind(null, 'only');
-module.exports.skip = buildWidgetWithMochaOperation.bind(null, 'skip');
+module.exports = utils.runWithMochaOperation.bind(null, null, buildWidget);
+module.exports.only = utils.runWithMochaOperation.bind(null, 'only', buildWidget);
+module.exports.skip = utils.runWithMochaOperation.bind(null, 'skip', buildWidget);

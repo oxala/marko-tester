@@ -25,9 +25,7 @@ function buildTester(testString, opts, cb) {
     throw new Error('buildTester: Callback should be a function.');
   }
 
-  var operation = options.mochaOperation ? describe[options.mochaOperation] : describe;
-
-  operation(testString, function startTestCase() {
+  options.mochaOperation(testString, function startTestCase() {
     /* eslint no-shadow: 0 */
 
     var context = {
@@ -74,15 +72,6 @@ function buildTester(testString, opts, cb) {
   });
 }
 
-function buildTesterWithMochaOperation(mochaOperation, testString, opts, cb) {
-  var callback = cb || opts;
-  var options = cb ? opts : {};
-
-  options.mochaOperation = mochaOperation;
-
-  buildTester(testString, options, callback);
-}
-
-module.exports = buildTester;
-module.exports.only = buildTesterWithMochaOperation.bind(null, 'only');
-module.exports.skip = buildTesterWithMochaOperation.bind(null, 'skip');
+module.exports = utils.runWithMochaOperation.bind(null, null, buildTester);
+module.exports.only = utils.runWithMochaOperation.bind(null, 'only', buildTester);
+module.exports.skip = utils.runWithMochaOperation.bind(null, 'skip', buildTester);

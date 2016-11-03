@@ -8,17 +8,8 @@ var testConfiguration = require('../configure');
 var buildWidget = require('./widget');
 var utils = require('../utils');
 
-function buildComponent(context, opts, cb) {
-  /* eslint global-require: 0 */
-
-  var callback = cb || opts;
-  var options = cb ? opts : {};
-  var fixture = options.fixture;
-  var renderer = context.renderer || utils.getRenderer();
-
-  if (!renderer) {
-    throw new Error('BuildComponent: Cannot automatically locate renderer, please specify one.');
-  }
+function getFixture(context, currentFixture) {
+  var fixture = currentFixture;
 
   if (!fixture || _.isString(fixture)) {
     var fixturePath;
@@ -42,9 +33,23 @@ function buildComponent(context, opts, cb) {
     }
   }
 
-  var operation = options.mochaOperation ? describe[options.mochaOperation] : describe;
+  return fixture;
+}
 
-  operation('When component is being built', function whenComponentIsBeingBuilt() {
+function buildComponent(context, opts, cb) {
+  /* eslint global-require: 0 */
+
+  var callback = cb || opts;
+  var options = cb ? opts : {};
+  var renderer = context.renderer || utils.getRenderer();
+
+  if (!renderer) {
+    throw new Error('BuildComponent: Cannot automatically locate renderer, please specify one.');
+  }
+
+  var fixture = getFixture(context, options.fixture);
+
+  options.mochaOperation('When component is being built', function whenComponentIsBeingBuilt() {
     this.buildWidget = buildWidget.bind(this, context);
     this.buildWidget.only = buildWidget.only.bind(this, context);
     this.buildWidget.skip = buildWidget.skip.bind(this, context);
@@ -163,15 +168,6 @@ function buildComponent(context, opts, cb) {
   });
 }
 
-function buildComponentWithMochaOperation(mochaOperation, context, opts, cb) {
-  var callback = cb || opts;
-  var options = cb ? opts : {};
-
-  options.mochaOperation = mochaOperation;
-
-  buildComponent(context, options, callback);
-}
-
-module.exports = buildComponent;
-module.exports.only = buildComponentWithMochaOperation.bind(null, 'only');
-module.exports.skip = buildComponentWithMochaOperation.bind(null, 'skip');
+module.exports = utils.runWithMochaOperation.bind(null, null, buildComponent);
+module.exports.only = utils.runWithMochaOperation.bind(null, 'only', buildComponent);
+module.exports.skip = utils.runWithMochaOperation.bind(null, 'skip', buildComponent);

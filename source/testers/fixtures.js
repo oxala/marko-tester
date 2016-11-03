@@ -89,23 +89,13 @@ function testFixtures(context, opts) {
     throw new Error('TestFixtures: No fixtures found in specified location');
   }
 
-  var operation = options.mochaOperation ? describe[options.mochaOperation] : describe;
-
-  operation('Given specific input data', function givenSpecificInputData() {
+  options.mochaOperation('Given specific input data', function givenSpecificInputData() {
     testCases.forEach(createTest.bind(null, context));
   });
 }
 
-function testFixturesWithMochaOperation(mochaOperation, context, opts, cb) {
-  var callback = cb || opts;
-  var options = cb ? opts : {};
+module.exports = utils.runWithMochaOperation.bind(null, null, testFixtures);
+module.exports.only = utils.runWithMochaOperation.bind(null, 'only', testFixtures);
+module.exports.skip = utils.runWithMochaOperation.bind(null, 'skip', testFixtures);
 
-  options.mochaOperation = mochaOperation;
-
-  testFixtures(context, options, callback);
-}
-
-module.exports = testFixtures;
-module.exports.only = testFixturesWithMochaOperation.bind(null, 'only');
-module.exports.skip = testFixturesWithMochaOperation.bind(null, 'skip');
 module.exports.excludeAttribute = excludeAttribute;

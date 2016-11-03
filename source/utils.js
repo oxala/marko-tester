@@ -192,5 +192,14 @@ module.exports = {
     }
 
     return renderer.render || renderer;
+  },
+
+  runWithMochaOperation: function runWithMochaOperation(mochaOperation, func, context, opts, cb) {
+    var callback = cb || opts;
+    var options = cb ? opts : {};
+
+    options.mochaOperation = mochaOperation ? describe[mochaOperation] : describe;
+
+    func(context, options, callback);
   }
 };

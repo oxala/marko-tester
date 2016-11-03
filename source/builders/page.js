@@ -14,9 +14,8 @@ var pagePrepared;
 function buildPage(context, opts, cb) {
   var callback = cb || opts;
   var options = cb ? opts : {};
-  var operation = options.mochaOperation ? describe[options.mochaOperation] : describe;
 
-  operation('When page is ready', function whenPageIsReady() {
+  options.mochaOperation('When page is ready', function whenPageIsReady() {
     beforeEach(function buildPageBeforeEach(done) {
       function buildDom() {
         done();
@@ -32,15 +31,6 @@ function buildPage(context, opts, cb) {
       delete global.document;
     });
   });
-}
-
-function buildPageWithMochaOperation(mochaOperation, context, opts, cb) {
-  var callback = cb || opts;
-  var options = cb ? opts : {};
-
-  options.mochaOperation = mochaOperation;
-
-  buildPage(context, options, callback);
 }
 
 function buildDependencies() {
@@ -136,7 +126,9 @@ function prepare() {
   });
 }
 
-module.exports = buildPage;
-module.exports.only = buildPageWithMochaOperation.bind(null, 'only');
-module.exports.skip = buildPageWithMochaOperation.bind(null, 'skip');
+
+module.exports = utils.runWithMochaOperation.bind(null, null, buildPage);
+module.exports.only = utils.runWithMochaOperation.bind(null, 'only', buildPage);
+module.exports.skip = utils.runWithMochaOperation.bind(null, 'skip', buildPage);
 module.exports.prepare = prepare;
+

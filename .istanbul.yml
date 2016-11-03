@@ -1,7 +1,5 @@
 instrumentation:
     root: source
-    excludes:
-      - "generated-tests/**"
     include-all-sources: true
 reporting:
     print: summary
