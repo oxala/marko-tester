@@ -1,7 +1,5 @@
 #marko-tester [![Build Status](https://travis-ci.org/oxala/marko-tester.svg?branch=master)](https://travis-ci.org/oxala/marko-tester)
 
-===
-
 Test library to assist with testing marko-widget UI components and more.
 
 ## Usage
@@ -95,7 +93,7 @@ module.exports = {
 
 ### Automatic component/fixtures search
 
-Marko-tester will try to automatically find your component renderer and/or fixtures to test. For the renderer, marko-tester will go up one level from your spec file and search for either `index.js` or `renderer.js`. 
+Marko-tester will try to automatically find your component renderer and/or fixtures to test. For the renderer, marko-tester will go up one level from your spec file and search for either `index.js` or `renderer.js`.
 
 Fixtures will be automatically found if they are inside the `fixtures` folder on the same level as your spec file.
 
@@ -130,9 +128,9 @@ The client test works by instantiating a marko-widget and testing the functional
 
 During client testing, `marko-tester` gives you a few methods to utilize:
 
-* **buildPage** - Will create an empty page, giving you access to window and document objects. This method is available right after test case declaration. 
-* **buildComponent** - Used to build the page with the component constructor in it. At this point, the `Widget` attribute will be exposed to the mocha context giving you access to your Widget's prototype. This method is available right after test case declaration. 
-* **buildWidget** - Will instantiate the widget on the page and expose the `widget` attibute to the mocha context with the instance of your widget. This method is available within *buildComponent* context. 
+* **buildPage** - Will create an empty page, giving you access to window and document objects. This method is available right after test case declaration.
+* **buildComponent** - Used to build the page with the component constructor in it. At this point, the `Widget` attribute will be exposed to the mocha context giving you access to your Widget's prototype. This method is available right after test case declaration.
+* **buildWidget** - Will instantiate the widget on the page and expose the `widget` attibute to the mocha context with the instance of your widget. This method is available within *buildComponent* context.
 
 ```
 'use strict';
@@ -140,19 +138,19 @@ During client testing, `marko-tester` gives you a few methods to utilize:
 tester('source/components/phone-frame', function(expect, sinon) { // you can request `sinon` or `expect` just by adding the respective param;
 
   // this.buildPage - is available here;
-  // this.fixtures - will give you a list of attached test fixtures to this component;  
+  // this.fixtures - will give you a list of attached test fixtures to this component;
 
   this.buildComponent(function() {
     var mockHello = 'world';
-    
+
     beforeEach(function() {
       this.Widget.prototype.hello = mockHello;
     });
-    
+
     afterEach(function() {
       delete this.Widget.prototype.hello;
     });
-    
+
     this.buildWidget(function() {
       it('should have hello attribute', function() {
         expect(this.widget.hello).to.be.equal(mockHello);

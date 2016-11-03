@@ -2,19 +2,14 @@
 
 var path = require('path');
 var fs = require('fs-extra');
-var glob = require('glob');
 var jsdom = require('jsdom');
 var lasso = require('lasso');
 var lassoMarko = require('lasso-marko');
 var lassoLess = require('lasso-less');
 var Promise = require('bluebird');
-var istanbul = require('istanbul');
 var utils = require('../utils');
-var packageInfo = require(utils.getHelpers().rootPath + '/package');
+var coverage = require('../testers/coverage');
 var pagePrepared;
-var instrumenter = new istanbul.Instrumenter({
-  noCompact: true
-});
 
 function buildPage(context, opts, cb) {
   var callback = cb || opts;
@@ -63,42 +58,6 @@ function buildDependencies() {
 
   fs.ensureFileSync(browserJSONPath);
   fs.writeFileSync(browserJSONPath, JSON.stringify(browserJSON));
-}
-
-function configureBrowserCoverage(coverageConfig) {
-  var bundleBasePath = path.resolve(utils.getHelpers().outputPath, 'source');
-  var bundlePath = path.resolve(bundleBasePath, packageInfo.name + '$' + packageInfo.version);
-  var sourcePaths = utils.getSourcePaths();
-
-  sourcePaths.forEach(function gatherCoverageFilesFromSource(sourcePath) {
-    var generatedSrcPath = path.resolve(bundlePath, sourcePath);
-
-    var files = glob.sync(path.resolve(generatedSrcPath, '**/*.js'), {
-      ignore: coverageConfig.excludes
-    });
-
-    function instrumentFile(filePath) {
-      var fileContent = fs.readFileSync(filePath, 'utf8');
-      var coveragePath = path.resolve(utils.getHelpers().rootPath, sourcePath);
-      var realPath = filePath.replace(generatedSrcPath, coveragePath);
-      var moduleBody = fileContent;
-
-      if (fileContent.substring(0, 10) === '$_mod.def(') {
-        var startIndex = fileContent.indexOf('{') + 1;
-        var endIndex = fileContent.lastIndexOf('}');
-
-        moduleBody = fileContent.substring(startIndex, endIndex);
-      }
-
-      var instrumentedModuleBody = instrumenter.instrumentSync(moduleBody, realPath);
-
-      fileContent = fileContent.replace(moduleBody, instrumentedModuleBody);
-
-      fs.writeFileSync(filePath, fileContent, 'utf8');
-    }
-
-    files.forEach(instrumentFile);
-  });
 }
 
 function createDom(htmlPath, resolve, reject) {
@@ -163,7 +122,7 @@ function prepare() {
 
     function generateDom() {
       if (utils.getHelpers().withCoverage) {
-        configureBrowserCoverage(utils.getHelpers().config.coverage);
+        coverage.initializeBrowser();
       }
 
       createDom(htmlPath, resolve, reject);

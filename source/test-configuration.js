@@ -1,22 +1,15 @@
 'use strict';
 
-/* eslint no-underscore-dangle: 0 */
-
 var path = require('path');
 var utils = require('./utils');
 
 require('app-module-path').addPath(utils.getHelpers().rootPath);
 
-var fs = require('fs-extra');
-var glob = require('glob');
 var chai = require('chai');
 var sinonChai = require('sinon-chai');
 var chaiAsPromised = require('chai-as-promised');
-var istanbul = require('istanbul');
 var testFixtures = require('./testers/fixtures');
-var instrumenter = new istanbul.Instrumenter({
-  noCompact: true
-});
+var coverage = require('./testers/coverage');
 var markoCompiler;
 
 try {
@@ -59,56 +52,6 @@ function addHooks(config) {
   }
 }
 
-function setupCoverage() {
-  global.__coverage__ = {};
-  global.__coverage__browser = {};
-
-  var config = utils.getHelpers().config;
-  var sourcePaths = utils.getSourcePaths();
-  var coverageFiles = [];
-
-  sourcePaths.forEach(function gatherCoverageFilesFromSource(sourcePath) {
-    coverageFiles = coverageFiles.concat(glob.sync(path.resolve(utils.getHelpers().rootPath, sourcePath, '**/*.js'), {
-      ignore: config.coverage.excludes
-    }));
-  });
-
-  coverageFiles.forEach(function instrumentFile(filePath) {
-    var fileContent = fs.readFileSync(filePath, 'utf8');
-
-    instrumenter.instrumentSync(fileContent, filePath);
-
-    global.__coverage__[filePath] = instrumenter.lastFileCoverage();
-  });
-
-  istanbul.hook.hookRequire(
-    function checkRequiredName(requirePath) {
-      return coverageFiles.indexOf(requirePath) > -1;
-    },
-
-    function replaceRequiredContent(code, requirePath) {
-      var instrumentedfileContent = instrumenter.instrumentSync(code, requirePath);
-
-      return instrumentedfileContent;
-    }
-  );
-
-  process.on('exit', function createCoverage() {
-    var reporters = config.coverage.reporters || 'text-summary';
-    var dest = config.coverage.dest || '.coverage';
-    var collector = new istanbul.Collector();
-
-    collector.add(global.__coverage__);
-    collector.add(global.__coverage__browser);
-
-    reporters.forEach(function createReport(reporter) {
-      istanbul.Report.create(reporter, {
-        dir: dest + '/' + reporter
-      }).writeReport(collector, true);
-    });
-  });
-}
-
 function testConfigure(config) {
   utils.setHelpers('config', config);
   utils.generateBrowserDependencies(config.components);
@@ -116,7 +59,7 @@ function testConfigure(config) {
   addHooks(config);
 
   if (utils.getHelpers().withCoverage) {
-    setupCoverage();
+    coverage.initialize();
   }
 }
 
