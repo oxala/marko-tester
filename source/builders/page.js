@@ -49,16 +49,10 @@ function buildPageWithMochaOperation(mochaOperation, context, opts, cb) {
 }
 
 function buildDependencies() {
-  var dependencies = [
-    'mocha/mocha.js',
-    'mock-require/index.js', {
-      path: 'jquery/dist/jquery.js',
-      'mask-define': true
-    }, {
-      path: 'sinon/pkg/sinon.js',
-      'mask-define': true
-    }
-  ];
+  var dependencies = [{
+    path: 'jquery/dist/jquery.js',
+    'mask-define': true
+  }];
   var browserJSONPath = path.resolve(utils.getHelpers().outputPath, 'browser.json');
 
   dependencies = dependencies.concat(utils.getHelpers().rendererPaths);
