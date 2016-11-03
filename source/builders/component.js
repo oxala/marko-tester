@@ -4,9 +4,9 @@ var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
 var _ = require('lodash');
-var testConfiguration = require('./test-configuration');
-var buildWidget = require('./build-widget');
-var utils = require('./utils');
+var testConfiguration = require('../test-configuration');
+var buildWidget = require('./widget');
+var utils = require('../utils');
 
 function buildComponent(context, opts, cb) {
   /* eslint global-require: 0 */

@@ -4,7 +4,7 @@ var Normalizer = require('html-normalizer');
 var _ = require('lodash');
 var chai = require('chai');
 var Promise = require('bluebird');
-var utils = require('./utils');
+var utils = require('../utils');
 var expect = chai.expect;
 var excludedAttributes = [];
 

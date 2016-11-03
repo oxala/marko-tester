@@ -6,10 +6,10 @@ var chai = require('chai');
 var sinon = require('sinon');
 var mockRequire = require('mock-require');
 var rewire = require('rewire');
-var buildPage = require('./build-page');
-var buildComponent = require('./build-component');
-var testFixtures = require('./test-fixtures');
-var utils = require('./utils');
+var buildPage = require('./page');
+var buildComponent = require('./component');
+var testFixtures = require('../testers/fixtures');
+var utils = require('../utils');
 var expect = chai.expect;
 
 function buildTester(testString, opts, cb) {

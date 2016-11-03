@@ -3,8 +3,8 @@
 var path = require('path');
 var _ = require('lodash');
 var CLI = require('eslint').CLIEngine;
-var utils = require('./utils');
-var eslintConfig = require(path.join(__dirname, '..', '.eslintrc'));
+var utils = require('../utils');
+var eslintConfig = require(path.join(__dirname, '..', '..', '.eslintrc'));
 
 function getReport(config, paths) {
   var cli = new CLI(config);

@@ -9,7 +9,7 @@ var lassoMarko = require('lasso-marko');
 var lassoLess = require('lasso-less');
 var Promise = require('bluebird');
 var istanbul = require('istanbul');
-var utils = require('./utils');
+var utils = require('../utils');
 var packageInfo = require(utils.getHelpers().rootPath + '/package');
 var pagePrepared;
 var instrumenter = new istanbul.Instrumenter({
@@ -51,8 +51,7 @@ function buildPageWithMochaOperation(mochaOperation, context, opts, cb) {
 function buildDependencies() {
   var dependencies = [
     'mocha/mocha.js',
-    'mock-require/index.js',
-    'require-run: ./mocha-setup', {
+    'mock-require/index.js', {
       path: 'jquery/dist/jquery.js',
       'mask-define': true
     }, {
@@ -60,11 +59,9 @@ function buildDependencies() {
       'mask-define': true
     }
   ];
-  var browserJSONPath = path.resolve(__dirname, 'browser.json');
+  var browserJSONPath = path.resolve(utils.getHelpers().outputPath, 'browser.json');
 
   dependencies = dependencies.concat(utils.getHelpers().rendererPaths);
-
-  dependencies.push('require-run: ./mocha-runner');
 
   var browserJSON = {
     dependencies: dependencies
@@ -75,12 +72,12 @@ function buildDependencies() {
 }
 
 function configureBrowserCoverage(coverageConfig) {
-  var bundleBasePath = 'generated-tests/static/source';
-  var bundlePath = bundleBasePath + '/' + packageInfo.name + '$' + packageInfo.version;
+  var bundleBasePath = path.resolve(utils.getHelpers().outputPath, 'source');
+  var bundlePath = path.resolve(bundleBasePath, packageInfo.name + '$' + packageInfo.version);
   var sourcePaths = utils.getSourcePaths();
 
   sourcePaths.forEach(function gatherCoverageFilesFromSource(sourcePath) {
-    var generatedSrcPath = path.resolve(__dirname, bundlePath, sourcePath);
+    var generatedSrcPath = path.resolve(bundlePath, sourcePath);
 
     var files = glob.sync(path.resolve(generatedSrcPath, '**/*.js'), {
       ignore: coverageConfig.excludes
@@ -134,11 +131,6 @@ function createDom(htmlPath, resolve, reject) {
 }
 
 function prepare() {
-  var staticPath = path.join(
-    utils.getHelpers().outputPath,
-    utils.getHelpers().staticDir
-  );
-
   fs.ensureDirSync(utils.getHelpers().outputPath);
 
   var lassoPluginPaths = utils.getHelpers().config.lassoPlugins || [];
@@ -157,9 +149,9 @@ function prepare() {
   lassoPlugins = lassoPlugins.concat([lassoLess, lassoMarko]);
 
   lasso.configure({
-    outputDir: staticPath,
+    outputDir: utils.getHelpers().outputPath,
     plugins: lassoPlugins,
-    urlPrefix: './' + utils.getHelpers().staticDir,
+    urlPrefix: './',
     fingerprintsEnabled: false,
     bundlingEnabled: false
   });
@@ -185,7 +177,7 @@ function prepare() {
 
     buildDependencies();
 
-    return require(path.resolve(__dirname, './test-scaffold.marko'))
+    return require(path.resolve(__dirname, '../test-scaffold.marko'))
       .render({}, out)
       .on('finish', generateDom);
   });

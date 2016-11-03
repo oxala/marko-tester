@@ -33,8 +33,7 @@ module.exports = {
       helpers = {
         rootPath: process.cwd(),
         rendererPaths: [],
-        outputPath: path.join(__dirname, 'generated-tests'),
-        staticDir: 'static',
+        outputPath: path.join(__dirname, '..', 'static'),
         withCoverage: process.argv.indexOf('--no-coverage') === -1,
         withLint: process.argv.indexOf('--no-lint') === -1,
         withMocha: process.argv.indexOf('--no-mocha') === -1,

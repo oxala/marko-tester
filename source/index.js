@@ -1,8 +1,8 @@
 'use strict';
 
 var testConfiguration = require('./test-configuration');
-var buildTester = require('./build-tester');
-var testEslint = require('./test-eslint');
+var buildTester = require('./builders/tester');
+var testEslint = require('./testers/eslint');
 
 module.exports = buildTester;
 module.exports.only = buildTester.only;

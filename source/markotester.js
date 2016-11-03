@@ -2,8 +2,8 @@
 
 'use strict';
 
-var testEslint = require('./test-eslint');
-var testMocha = require('./test-mocha');
+var testEslint = require('./testers/eslint');
+var testMocha = require('./testers/mocha');
 var utils = require('./utils');
 
 if (utils.getHelpers().withLint) {

@@ -13,7 +13,7 @@ var chai = require('chai');
 var sinonChai = require('sinon-chai');
 var chaiAsPromised = require('chai-as-promised');
 var istanbul = require('istanbul');
-var testFixtures = require('./test-fixtures');
+var testFixtures = require('./testers/fixtures');
 var instrumenter = new istanbul.Instrumenter({
   noCompact: true
 });

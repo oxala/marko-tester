@@ -13,9 +13,9 @@
   "scripts": {
     "test": "npm run eslint && npm run coverage",
     "eslint": "./node_modules/.bin/eslint source",
-    "unit-test": "markotester test --no-coverage",
+    "unit-test": "markotester test --no-coverage --no-lint",
     "coverage": "istanbul cover ./node_modules/.bin/_mocha test/marko-tester.config.js $(find test -name '*.spec.js')",
-    "clean": "rm -rf .beans .cache source/generated-tests source/browser.json $(find test -name '*.marko.js') $(find source -name '*.marko.js')",
+    "clean": "rm -rf .beans .cache static source/browser.json $(find test -name '*.marko.js') $(find source -name '*.marko.js')",
     "bump": "sh ./tasks/bump.sh"
   },
   "precommit": [
