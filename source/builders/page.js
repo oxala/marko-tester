@@ -130,7 +130,7 @@ function prepare() {
 
     buildDependencies();
 
-    return require(path.resolve(__dirname, '../test-scaffold.marko'))
+    return require(path.resolve(__dirname, '../page.marko'))
       .render({}, out)
       .on('finish', generateDom);
   });

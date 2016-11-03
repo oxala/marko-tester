@@ -4,7 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
 var _ = require('lodash');
-var testConfiguration = require('../test-configuration');
+var testConfiguration = require('../configure');
 var buildWidget = require('./widget');
 var utils = require('../utils');
 
