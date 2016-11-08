@@ -58,7 +58,9 @@
     "rewire": "^2.5.2",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
-    "stack-trace": "0.0.9"
+    "stack-trace": "0.0.9",
+    "stylelint": "^7.5.0",
+    "stylelint-config-standard": "^14.0.0"
   },
   "devDependencies": {
     "pre-commit": "^1.1.3"
