@@ -2,19 +2,18 @@
 
 'use strict';
 
+var async = require('async');
 var testLint = require('./testers/lint');
 var testMocha = require('./testers/mocha');
 var utils = require('./utils');
-var lintStep;
+var steps = [];
 
 if (utils.getHelpers().withLint) {
-  lintStep = testLint();
+  steps.push(testLint);
 }
 
 if (utils.getHelpers().withMocha) {
-  if (lintStep) {
-    lintStep.then(testMocha);
-  } else {
-    testMocha();
-  }
+  steps.push(testMocha);
 }
+
+async.waterfall(steps);

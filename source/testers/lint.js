@@ -21,7 +21,7 @@ function getLessGlob(sourcePath) {
   return path.resolve(utils.getHelpers().rootPath, sourcePath, '**/*.?(less|css|scss)');
 }
 
-function testLint() {
+function testLint(done) {
   /* eslint no-console: 0 */
   var sourcePaths = utils.getSourcePaths();
   var testPaths = utils.getTestPaths();
@@ -87,6 +87,8 @@ function testLint() {
     } else if (report.errorCount === 0) {
       console.log('No ESLint errors detected!');
     }
+
+    done();
   }
 
   return stylelint
