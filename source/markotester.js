@@ -5,11 +5,16 @@
 var testLint = require('./testers/lint');
 var testMocha = require('./testers/mocha');
 var utils = require('./utils');
+var lintStep;
 
 if (utils.getHelpers().withLint) {
-  testLint();
+  lintStep = testLint();
 }
 
 if (utils.getHelpers().withMocha) {
-  testMocha();
+  if (lintStep) {
+    lintStep.then(testMocha);
+  } else {
+    testMocha();
+  }
 }

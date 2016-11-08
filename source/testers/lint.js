@@ -37,6 +37,8 @@ function testLint() {
     if (data.errored) {
       console.log(data.output);
       process.exit(1);
+    } else {
+      console.log('No Stylelint errors detected!');
     }
   }
 
@@ -82,10 +84,12 @@ function testLint() {
       if (report.errorCount > 0) {
         process.exit(1);
       }
+    } else if (report.errorCount === 0) {
+      console.log('No ESLint errors detected!');
     }
   }
 
-  stylelint
+  return stylelint
     .lint({
       files: sourcePaths.map(getLessGlob),
       config: stylelintConfig,
