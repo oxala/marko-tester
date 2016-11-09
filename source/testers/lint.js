@@ -6,7 +6,7 @@ var stylelint = require('stylelint');
 var CLI = require('eslint').CLIEngine;
 var utils = require('../utils');
 var eslintConfig = require(path.join(__dirname, '..', '..', '.eslintrc'));
-var stylelintConfig = require(path.join(__dirname, '..', '..', '.stylelintrc'));
+var stylelintConfig = require('stylelint-config-standard');
 
 function getReport(config, paths) {
   var cli = new CLI(config);
@@ -82,12 +82,13 @@ function testLint(done) {
       console.log(CLI.getFormatter()(report.results));
 
       if (report.errorCount > 0) {
-        done(1);
+        return done(1);
       }
     } else if (report.errorCount === 0) {
       console.log('No ESLint errors detected!');
-      done();
     }
+
+    return done();
   }
 
   return stylelint
