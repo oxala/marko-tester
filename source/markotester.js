@@ -16,4 +16,6 @@ if (utils.getHelpers().withMocha) {
   steps.push(testMocha);
 }
 
-async.waterfall(steps);
+async.waterfall(steps, function exit(err) {
+  process.exit(err);
+});

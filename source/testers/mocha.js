@@ -16,7 +16,7 @@ var mocha = new Mocha({
   globals: ['document', 'window', 'GLOBAL_LASSO']
 });
 
-function testMocha() {
+function testMocha(done) {
   var sourcePaths = utils.getSourcePaths();
 
   function searchPathForTests(sourcePath) {
@@ -31,7 +31,7 @@ function testMocha() {
   sourcePaths.forEach(searchPathForTests);
 
   mocha.run(function exitMarkoTester(failures) {
-    process.exit(failures);
+    done(failures);
   });
 }
 

@@ -36,7 +36,7 @@ function testLint(done) {
   function parseStylelintData(data) {
     if (data.errored) {
       console.log(data.output);
-      process.exit(1);
+      done(1);
     } else {
       console.log('No Stylelint errors detected!');
     }
@@ -82,13 +82,12 @@ function testLint(done) {
       console.log(CLI.getFormatter()(report.results));
 
       if (report.errorCount > 0) {
-        process.exit(1);
+        done(1);
       }
     } else if (report.errorCount === 0) {
       console.log('No ESLint errors detected!');
+      done();
     }
-
-    done();
   }
 
   return stylelint
