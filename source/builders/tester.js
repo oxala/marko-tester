@@ -38,13 +38,21 @@ function buildTester(testString, opts, cb) {
       context.renderer = utils.getRenderer(options);
     }
 
+    function resolveLocalFile(filePath) {
+      return path.resolve(context.testPath, filePath);
+    }
+
     function patchRewire(filePath) {
       var file = filePath;
 
-      try {
-        require.resolve(file);
-      } catch (e) {
-        file = path.resolve(context.testPath, file);
+      if (file[0] !== '.') {
+        try {
+          require.resolve(file);
+        } catch (e) {
+          file = resolveLocalFile(file);
+        }
+      } else {
+        file = resolveLocalFile(file);
       }
 
       return rewire(file);
