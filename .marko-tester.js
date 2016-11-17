@@ -2,10 +2,10 @@
 
 module.exports = {
   taglibExcludeDirs: [
-    'test'
+    // 'test'
   ],
   taglibExcludePackages: [
-    'excluded-component'
+    // 'excluded-component'
   ],
   excludedAttributes: ['data-widget'],
   lassoPlugins: [],
@@ -13,13 +13,19 @@ module.exports = {
   onDestroy: function onDestroy() {},
   coverage: {
     reporters: [
-      // 'text-summary',
-      // 'html',
-      // 'json-summary'
+      'text-summary',
+      'html',
+      'json-summary'
     ],
     dest: '.coverage',
     excludes: [
       '**/*.marko.js'
     ]
+  },
+  acceptance: {
+    baseUrl: 'localhost:8080',
+    startCommand: 'npm start',
+    stopCommand: 'npm stop',
+    startTimeout: 10000
   }
 };

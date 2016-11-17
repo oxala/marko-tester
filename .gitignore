@@ -20,6 +20,4 @@ jshint.xml
 jshint.html
 mocha.xunit
 *.marko.js
-source/generated-tests
-source/browser.json
 .coverage

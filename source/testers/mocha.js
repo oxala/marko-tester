@@ -5,9 +5,6 @@ var glob = require('glob');
 var Mocha = require('mocha');
 var args = require('optimist').argv;
 var utils = require('../utils');
-var testConfiguration = require('../configure');
-var configurationPath = path.join(utils.getHelpers().rootPath, '.marko-tester');
-var configuration = require(configurationPath);
 var mocha = new Mocha({
   ui: 'bdd',
   reporter: 'spec',
@@ -19,6 +16,8 @@ var mocha = new Mocha({
 function testMocha(done) {
   var sourcePaths = utils.getSourcePaths();
 
+  utils.loadConfiguration();
+
   function searchPathForTests(sourcePath) {
     var testFiles = glob.sync(path.resolve(utils.getHelpers().rootPath, sourcePath, '**/*.spec.js'));
 
@@ -27,7 +26,6 @@ function testMocha(done) {
     });
   }
 
-  testConfiguration(configuration);
   sourcePaths.forEach(searchPathForTests);
 
   mocha.run(function exitMarkoTester(failures) {

@@ -34,9 +34,10 @@ module.exports = {
         rootPath: process.cwd(),
         rendererPaths: [],
         outputPath: path.join(__dirname, '..', 'static'),
-        withCoverage: process.argv.indexOf('--no-coverage') === -1,
+        withCoverage: process.argv.indexOf('--with-acceptance') === -1 && process.argv.indexOf('--no-coverage') === -1,
         withLint: process.argv.indexOf('--no-lint') === -1,
-        withMocha: process.argv.indexOf('--no-mocha') === -1,
+        withMocha: process.argv.indexOf('--with-acceptance') === -1 && process.argv.indexOf('--no-mocha') === -1,
+        withAcceptance: process.argv.indexOf('--with-acceptance') > -1,
         config: markoTesterConfig
       };
     }
@@ -47,7 +48,7 @@ module.exports = {
   setHelpers: function setHelpers(key, value) {
     helpers = this.getHelpers() || {};
 
-    helpers[key] = _.extend(helpers[key], value);
+    helpers[key] = _.merge(helpers[key], value);
   },
 
   generateBrowserDependencies: function generateBrowserDependencies(dependencies) {
@@ -201,5 +202,22 @@ module.exports = {
     options.mochaOperation = mochaOperation ? describe[mochaOperation] : describe;
 
     func(context, options, callback);
+  },
+
+  loadConfiguration: function loadConfiguration() {
+    /* eslint global-require: 0 */
+
+    var configurationPath = path.join(this.getHelpers().rootPath, '.marko-tester');
+    var configuration;
+
+    try {
+      configuration = require(configurationPath);
+    } catch (e) {
+      configuration = {};
+    }
+
+    require('./configure')(configuration);
+
+    return helpers.config;
   }
 };

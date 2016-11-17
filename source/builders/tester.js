@@ -8,6 +8,7 @@ var mockRequire = require('mock-require');
 var rewire = require('rewire');
 var buildPage = require('./page');
 var buildComponent = require('./component');
+var buildAcceptance = require('./acceptance');
 var testFixtures = require('../testers/fixtures');
 var utils = require('../utils');
 var expect = chai.expect;
@@ -28,11 +29,20 @@ function buildTester(testString, opts, cb) {
   options.mochaOperation(testString, function startTestCase() {
     /* eslint no-shadow: 0 */
 
+    this.timeout(60000);
+
     var context = {
       testPath: utils.getTestPath(),
       options: options,
       fixtures: {}
     };
+
+    if (utils.getHelpers().withAcceptance) {
+      this.timeout(30000);
+
+      before(buildAcceptance.setup);
+      after(buildAcceptance.teardown);
+    }
 
     if (options.renderer) {
       context.renderer = utils.getRenderer(options);
@@ -75,7 +85,8 @@ function buildTester(testString, opts, cb) {
       expect: expect,
       sinon: sinon,
       rewire: patchRewire,
-      mockRequire: mockRequire
+      mockRequire: mockRequire,
+      browser: buildAcceptance
     }));
   });
 }

@@ -12,11 +12,12 @@ npm install --save-dev marko-tester
 
 ### CLI
 
-Once you've installed marko-tester, you can start using the `markotester` alias with the path to your source folder. There are 3 arguments you can pass if needed: `--no-coverage` if you don't want to generate coverage report; `--no-mocha` if you want to execute only eslint check; `--no-lint` if you don't want eslint checks.
+Once you've installed marko-tester, you can start using the `markotester` alias with the path to your source folder. There are few arguments you can pass if needed: `--no-coverage` if you don't want to generate coverage report; `--no-mocha` if you want to execute only linting; `--no-lint` if you don't want lint checks. Also you can try out `--with-acceptance` for running acceptance tests (keep in mind, with this flag in place unit-tests won't be executed).
 
 ```
 markotester source --no-coverage
 markotester source --no-coverage --no-lint
+markotester source --with-acceptance
 ```
 
 ### File structure
@@ -39,6 +40,7 @@ app
 |  +- pages
 |     +- mobile-preview
 |        |- test
+|        |  |- acceptance.js
 |        |  |- renderer.spec.js
 |        |  +- widget.spec.js
 |        |- browser.json
@@ -76,6 +78,12 @@ module.exports = {
     excludes: [
       '**/*.marko.js'
     ]
+  },
+  acceptance: {
+    baseUrl: 'localhost:8080',
+    startCommand: 'npm start',
+    stopCommand: 'npm stop',
+    startTimeout: 10000
   }
 };
 ```
@@ -83,13 +91,17 @@ module.exports = {
 * **components** - An array of patterns where to search for components that should be loaded into jsdom page.
 * **taglibExcludeDirs** - An array of paths relative to the root of your project folders that contain `marko.json`. This is used to isolate your tests so the nested components won't be renderer.
 * **taglibExcludePackages** - An array of module names. This is used to isolate your tests so the nested components won't be renderer.
-* **excludedAttributes** - An array of HTML attributes that can be different every test execution (e.g `data-widget` which marko dynamically changes based on package version).
+* **excludedAttributes** - An array of HTML attributes that can be different every test execution (e.g `data-widget` which marko dynamically changes based on package version). *(Default: `['data-widget']`)*
 * **lassoPlugins** - An array of lasso plugins to require and attach to lasso configuration during client test execution.
 * **onInit** - A hook that will be executed before every `it` when the widget needs to be instantiated.
 * **onDestroy** - A hook that will be executed after every `it` when the widget needs to be destroyed.
-* **coverage.reporters** - An array of reporters for istanbul to use.
-* **coverage.dest** - The target destination folder where reports will be written.
-* **coverage.excludes** - An array of file patterns to exclude from istanbul reports.
+* **coverage.reporters** - An array of reporters for istanbul to use. *(Default: `['text-summary', 'html', 'json-summary']`)*
+* **coverage.dest** - The target destination folder where reports will be written. *(Default: `.coverage`)*
+* **coverage.excludes** - An array of file patterns to exclude from istanbul reports. *(Default: `['**/*.marko.js']`)*
+* **acceptance.baseUrl** - An URL to load when browser starts. *(Default: `localhost:8080`)*
+* **acceptance.startCommand** - A command to execute before starting selenium server. *(Default: `npm start`)*
+* **acceptance.stopCommand** - A command to execute after stopping selenium server. *(Default: `npm stop`)*
+* **acceptance.startTimeout** - An amount of milliseconds to wait before starting selenium server. *(Default: `10000`)*
 
 ### Automatic component/fixtures search
 
@@ -175,6 +187,12 @@ this.buildComponent({
 }, function() { ... });
 ```
 
-## Code style (eslint)
+## Code style (linting)
 
-Apart from testing, consistent styling is another important part of keeping high quality code. For that particular reason, `marko-tester` comes with an `eslint` check built-in. It will check the style of your code when you execute the `markotester` command.
+Apart from testing, consistent styling is another important part of keeping high quality code. For that particular reason, `marko-tester` comes with an `eslint` and `stylelint` checks built-in. It will check the style of your code when you execute the `markotester` command.
+
+It uses legacy (es5) **airbnb** configuration for ESLint and **standard** configuration for Stylelint (checkine both *less* and *css* files).
+
+
+## Acceptance tests
+
