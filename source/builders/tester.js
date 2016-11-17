@@ -29,8 +29,6 @@ function buildTester(testString, opts, cb) {
   options.mochaOperation(testString, function startTestCase() {
     /* eslint no-shadow: 0 */
 
-    this.timeout(60000);
-
     var context = {
       testPath: utils.getTestPath(),
       options: options,
@@ -38,7 +36,7 @@ function buildTester(testString, opts, cb) {
     };
 
     if (utils.getHelpers().withAcceptance) {
-      this.timeout(30000);
+      this.timeout(60000);
 
       before(buildAcceptance.setup);
       after(buildAcceptance.teardown);

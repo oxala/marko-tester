@@ -147,6 +147,8 @@ During client testing, `marko-tester` gives you a few methods to utilize:
 ```
 'use strict';
 
+var tester = require('marko-tester');
+
 tester('source/components/phone-frame', function(expect, sinon) { // you can request `sinon` or `expect` just by adding the respective param;
 
   // this.buildPage - is available here;
@@ -196,3 +198,38 @@ It uses legacy (es5) **airbnb** configuration for ESLint and **standard** config
 
 ## Acceptance tests
 
+Thanks to [webdriverio](http://webdriver.io) and [selenium-standalone](https://github.com/vvo/selenium-standalone), we have a possibility to easily write acceptance tests in the same manner that we do our unit ones.
+
+To do that, we have a small configuration within out `.marko-tester.json` file under `acceptance` key. Configure it for your project, if needed. Create a file with test-case in your test folder, should have name `acceptance.js`. The syntax remains the same as with unit-tests, only difference is that you will have `browser` argument available to you in the `tester` method callback. Tha argument will give you a configured webdriver, as soon as you execute it.
+
+```
+'use strict';
+
+var tester = require('marko-tester');
+
+tester('source/pages/index', function(expect, browser) {
+  var page;
+
+  before(function () {
+    page = browser().url('/hello-world');
+  });
+  
+  it('should have a title', function (done) {
+    expect(page.getTitle()).to.eventually.be.equal('hello world').and.notify(done);
+  });
+});
+```
+
+## References
+
+* [Mocha](https://mochajs.org/)
+* [Sinon](http://sinonjs.org/docs/)
+* [Expect](http://chaijs.com/api/bdd/)
+* [rewire](https://github.com/jhnns/rewire)
+* [mock-require](https://github.com/boblauer/mock-require)
+* [ESLint](http://eslint.org/)
+* [eslint-airbnb-config](https://github.com/airbnb/javascript/tree/es5-deprecated/es5)
+* [stylelint-config-standard](https://github.com/stylelint/stylelint-config-standard)
+* [Istanbul](https://github.com/gotwarlost/istanbul)
+* [Webdriverio](http://webdriver.io)
+* [Selenium-standalone](https://github.com/vvo/selenium-standalone)
