@@ -198,9 +198,9 @@ It uses legacy (es5) **airbnb** configuration for ESLint and **standard** config
 
 ## Acceptance tests
 
-Thanks to [webdriverio](http://webdriver.io) and [selenium-standalone](https://github.com/vvo/selenium-standalone), we have a possibility to easily write acceptance tests in the same manner that we do our unit ones.
+Thanks to [webdriverio](http://webdriver.io) and [selenium-standalone](https://github.com/vvo/selenium-standalone), we have the ability to easily write acceptance tests in the same manner that we do our unit tests.
 
-To do that, we have a small configuration within out `.marko-tester.json` file under `acceptance` key. Configure it for your project, if needed. Create a file with test-case in your test folder, should have name `acceptance.js`. The syntax remains the same as with unit-tests, only difference is that you will have `browser` argument available to you in the `tester` method callback. Tha argument will give you a configured webdriver, as soon as you execute it.
+To do that, we have a small configuration within our `.marko-tester.json` file under the `acceptance` key. Configure it for your project, if needed. Create a file called `acceptance.js` with test cases in your test folder. The syntax remains the same as with unit-tests. The only difference is that you will have the `browser` argument available to you in the `tester` method callback. Tha argument will give you a configured webdriver, as soon as you execute it.
 
 ```
 'use strict';
