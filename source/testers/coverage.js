@@ -12,6 +12,10 @@ var instrumenter = new istanbul.Instrumenter({
   noCompact: true
 });
 
+function preparePathForIgnore(prependPath, ignoredPath) {
+  return path.resolve(prependPath, ignoredPath, '**');
+}
+
 function initialize() {
   global.__coverage__ = {};
   global.__coverage__browser = {};
@@ -22,7 +26,7 @@ function initialize() {
 
   sourcePaths.forEach(function gatherCoverageFilesFromSource(sourcePath) {
     coverageFiles = coverageFiles.concat(glob.sync(path.resolve(utils.getHelpers().rootPath, sourcePath, '**/*.js'), {
-      ignore: config.excludes
+      ignore: config.excludes.map(preparePathForIgnore.bind(this, utils.getHelpers().rootPath))
     }));
   });
 
@@ -65,13 +69,14 @@ function initialize() {
 function initializeBrowser() {
   var bundleBasePath = path.resolve(utils.getHelpers().outputPath, 'source');
   var bundlePath = path.resolve(bundleBasePath, packageInfo.name + '$' + packageInfo.version);
+  var config = utils.getHelpers().config.coverage;
   var sourcePaths = utils.getSourcePaths();
 
   sourcePaths.forEach(function gatherCoverageFilesFromSource(sourcePath) {
     var generatedSrcPath = path.resolve(bundlePath, sourcePath);
 
     var files = glob.sync(path.resolve(generatedSrcPath, '**/*.js'), {
-      ignore: utils.getHelpers().config.coverage.excludes
+      ignore: config.excludes.map(preparePathForIgnore.bind(this, bundlePath))
     });
 
     function instrumentFile(filePath) {
