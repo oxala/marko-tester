@@ -154,14 +154,14 @@ function buildComponent(context, opts, cb) {
       if (testConfiguration.onDestroy) {
         testConfiguration.onDestroy();
       }
+
+      /* eslint no-underscore-dangle: 0 */
+      if (global.__coverage__browser && global.window.__coverage__) {
+        global.__coverage__browser.push(global.window.__coverage__);
+      }
     });
 
     after(function buildComponentAfter() {
-      /* eslint no-underscore-dangle: 0 */
-      if (global.__coverage__browser) {
-        Object.assign(global.__coverage__browser, global.window.__coverage__);
-      }
-
       delete global.window;
       delete global.document;
     });

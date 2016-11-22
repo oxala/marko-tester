@@ -18,7 +18,7 @@ function preparePathForIgnore(prependPath, ignoredPath) {
 
 function initialize() {
   global.__coverage__ = {};
-  global.__coverage__browser = {};
+  global.__coverage__browser = [];
 
   var config = utils.getHelpers().config.coverage;
   var sourcePaths = utils.getSourcePaths();
@@ -56,7 +56,9 @@ function initialize() {
     var collector = new istanbul.Collector();
 
     collector.add(global.__coverage__);
-    collector.add(global.__coverage__browser);
+    global.__coverage__browser.forEach(function addCoverage(coverage) {
+      collector.add(coverage);
+    });
 
     reporters.forEach(function createReport(reporter) {
       istanbul.Report.create(reporter, {
