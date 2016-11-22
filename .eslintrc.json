@@ -2,9 +2,11 @@
   "extends": "airbnb-base/legacy",
   "env": {
     "mocha": true,
-    "node": true
+    "node": true,
+    "jquery": true
   },
   "rules": {
-    "vars-on-top": 0
+    "vars-on-top": 0,
+    "no-param-reassign": 0
   }
 }
