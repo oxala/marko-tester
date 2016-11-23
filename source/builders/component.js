@@ -16,15 +16,13 @@ function getFixture(context, currentFixture) {
 
     if (!fixture) {
       fixture = context.fixtures.default;
+    } else if (context.fixtures[fixture]) {
+      fixture = context.fixtures[fixture];
     } else {
-      if (context.fixtures[fixture]) {
-        fixture = context.fixtures[fixture];
-      } else {
-        fixturePath = glob.sync(path.resolve(context.testPath, fixture + '?(.json|.js)'));
+      fixturePath = glob.sync(path.resolve(context.testPath, fixture + '?(.json|.js)'));
 
-        if (fixturePath && fixturePath.length > 0) {
-          fixture = require(fixturePath[0]);
-        }
+      if (fixturePath && fixturePath.length > 0) {
+        fixture = require(fixturePath[0]);
       }
     }
 
