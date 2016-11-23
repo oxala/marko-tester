@@ -2,13 +2,14 @@
 
 module.exports = {
   taglibExcludeDirs: [
-    // 'test'
+    'test'
   ],
   taglibExcludePackages: [
-    // 'excluded-component'
+    'excluded-component'
   ],
   excludedAttributes: ['data-widget'],
   lassoPlugins: [],
+  componentTimeout: 10000,
   onInit: function onInit() {},
   onDestroy: function onDestroy() {},
   coverage: {

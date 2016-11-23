@@ -35,6 +35,8 @@ function buildTester(testString, opts, cb) {
       fixtures: {}
     };
 
+    utils.getFixtures(context);
+
     if (utils.getHelpers().withAcceptance) {
       this.timeout(60000);
 

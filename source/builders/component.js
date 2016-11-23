@@ -15,16 +15,16 @@ function getFixture(context, currentFixture) {
     var fixturePath;
 
     if (!fixture) {
-      if (!context.fixtures.default) {
-        utils.getFixtures(context);
-      }
-
       fixture = context.fixtures.default;
     } else {
-      fixturePath = glob.sync(path.resolve(context.testPath, fixture + '?(.json|.js)'));
+      if (context.fixtures[fixture]) {
+        fixture = context.fixtures[fixture];
+      } else {
+        fixturePath = glob.sync(path.resolve(context.testPath, fixture + '?(.json|.js)'));
 
-      if (fixturePath && fixturePath.length > 0) {
-        fixture = require(fixturePath[0]);
+        if (fixturePath && fixturePath.length > 0) {
+          fixture = require(fixturePath[0]);
+        }
       }
     }
 
@@ -55,7 +55,7 @@ function buildComponent(context, opts, cb) {
     this.buildWidget.skip = buildWidget.skip.bind(this, context);
 
     beforeEach(function buildComponentBeforeEach(done) {
-      this.timeout(10000);
+      this.timeout(utils.getHelpers().config.componentTimeout);
 
       var ctx = this;
 

@@ -74,7 +74,6 @@ function testFixtures(context, opts) {
   }
 
   var testCases = [];
-
   var fixtures = utils.getFixtures(context);
 
   fixtures.forEach(function createTestCases(fixture) {

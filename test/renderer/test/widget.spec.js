@@ -3,9 +3,9 @@
 var tester = require('../../../');
 
 tester('renderer', function (sinon, expect) {
-  this.testFixtures();
-
-  this.buildComponent(function () {
+  this.buildComponent({
+    fixture: 'main'
+  }, function () {
     beforeEach(function () {
       sinon.stub(document.location, 'replace');
     });
