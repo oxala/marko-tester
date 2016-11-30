@@ -9,10 +9,18 @@ tester('stateful-component', function (expect, sinon, helpers) {
   var mockDep = {
     url: mockUrl
   };
+  var mockAsync = {
+    hello: 'world'
+  };
+  var mockMerge = function () {
+    return mockUrl;
+  };
 
   this.buildComponent({
     mockRequire: {
-      '../dep': mockDep
+      '../dep': mockDep,
+      'async': mockAsync,
+      'lodash/merge': mockMerge
     }
   }, function () {
     beforeEach(function () {
@@ -31,6 +39,14 @@ tester('stateful-component', function (expect, sinon, helpers) {
       it('should store the state in the widget', function () {
         expect(this.widget.state).to.deep.equal(this.fixtures.default);
       });
+
+      it('should mock the modules methods', function () {
+        expect(this.widget.async).to.deep.equal(mockAsync);
+      });
+
+      it('should mock the merge function', function () {
+        expect(this.widget.merge).to.deep.equal(mockMerge);
+      });
     });
   });
 
@@ -46,6 +62,14 @@ tester('stateful-component', function (expect, sinon, helpers) {
     this.buildWidget(function () {
       it('should redirect', function () {
         expect(document.location.replace).to.be.calledWith('hello-world');
+      });
+
+      it('should not mock the modules methods', function () {
+        expect(this.widget.async).not.to.deep.equal(mockAsync);
+      });
+
+      it('should not mock the merge function', function () {
+        expect(this.widget.merge).not.to.deep.equal(mockMerge);
       });
     });
   });
