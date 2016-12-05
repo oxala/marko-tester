@@ -106,15 +106,19 @@ function buildComponent(context, opts, cb) {
 
             if (widgets) {
               Widget = widgets.widgets[0];
-              var widgetId = Widget.id;
-
-              window.$markoWidgetsState = {};
-              window.$markoWidgetsState[widgetId] = Widget.state;
-
-              window.$markoWidgetsConfig = {};
-              window.$markoWidgetsConfig[widgetId] = Widget.config;
-
               html = result.html;
+            }
+
+            var widgetsById = result.context.global.widgets.widgetsById;
+
+            if (widgetsById) {
+              window.$markoWidgetsState = {};
+              window.$markoWidgetsConfig = {};
+
+              Object.keys(widgetsById).forEach(function forEachWidgetId(widgetId) {
+                window.$markoWidgetsState[widgetId] = widgetsById[widgetId].state;
+                window.$markoWidgetsConfig[widgetId] = widgetsById[widgetId].config;
+              });
             }
           }
 
@@ -152,6 +156,9 @@ function buildComponent(context, opts, cb) {
       if (testConfiguration.onDestroy) {
         testConfiguration.onDestroy();
       }
+
+      delete window.$markoWidgetsState;
+      delete window.$markoWidgetsConfig;
 
       /* eslint no-underscore-dangle: 0 */
       if (global.__coverage__browser && global.window.__coverage__) {

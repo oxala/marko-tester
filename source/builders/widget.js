@@ -9,15 +9,15 @@ function buildWidget(context, opts, cb) {
   options.mochaOperation('When widget is being rendered', function whenWidgetIsBeingRendered() {
     beforeEach(function buildWidgetBeforeEach() {
       var widgetContainers = window['component-container'].querySelectorAll('[data-widget]');
+      var lastWidgetIndex = widgetContainers.length - 1;
       var widgetIds = [];
 
-      for (var i = 0, wLen = widgetContainers.length; i < wLen; i += 1) {
+      for (var i = lastWidgetIndex; i >= 0; i -= 1) {
         widgetIds.push(widgetContainers[i].id);
       }
 
       window.$MARKO_WIDGETS.initWidgets(widgetIds.join(','));
-
-      this.widget = window.$MARKO_WIDGETS.getWidgetForEl(widgetIds[0]);
+      this.widget = window.$MARKO_WIDGETS.getWidgetForEl(widgetIds[lastWidgetIndex]);
     });
 
     afterEach(function buildWidgetAfterEach() {

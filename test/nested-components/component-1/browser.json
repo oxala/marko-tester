@@ -1,0 +1,6 @@
+{
+  "dependencies": [
+    "../component-2",
+    "require: ./"
+  ]
+}
