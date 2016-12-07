@@ -70,15 +70,21 @@ function buildComponent(context, opts, cb) {
             var isAbsolute = path.isAbsolute(file);
 
             if (!isAbsolute && file[0] !== '.') {
+              var fileArray = file.split('/');
+
               try {
-                var fileArray = file.split('/');
                 var modulePath = path.resolve(utils.getHelpers().rootPath, 'node_modules', fileArray[0]);
                 fs.lstatSync(modulePath);
                 packageInfo = require(path.join(modulePath, 'package'));
                 file = fileArray.splice(1).join('/') || packageInfo.main.split('.')[0];
               } catch (e) {
-                /* eslint no-console: 0 */
-                console.error('BuildComponent: Cannot resolve module to mock require for - ' + filePath);
+                try {
+                  var modulePath = path.resolve(utils.getHelpers().rootPath, fileArray[0]);
+                  fs.lstatSync(modulePath);
+                } catch (e) {
+                  /* eslint no-console: 0 */
+                  console.error('BuildComponent: Cannot resolve module to mock require for - ' + filePath);
+                }
               }
             } else if (!isAbsolute) {
               file = path.resolve(context.testPath, file).replace(utils.getHelpers().rootPath, '');

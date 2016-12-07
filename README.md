@@ -174,6 +174,16 @@ tester('source/components/phone-frame', function(expect, sinon) { // you can req
 });
 ```
 
+By default, running `this.buildComponent` will build the component using the `default` fixture (if there is one). If you wish to build the component using a different fixture, you can pass an option to do that before the callback:
+
+```
+this.buildComponent({
+  fixture: {}
+  // It can be either a fixture object or a string with a relative path to the fixture.
+  // Do not forget that you can also utilize the "this.fixtures" data.
+}, function () {});
+```
+
 ### Few additional features
 
 1. `tester`, `buildComponent`, `buildPage` and `buildWidget` commands will create a mocha's `describe` function. That's why the `only` and `skip` operators can be used with these commands the same way as with `describe` (e.g `this.buildComponent.only(...)`, `tester.skip(...)`).
@@ -229,6 +239,7 @@ tester('source/pages/index', function(expect, browser) {
 * [mock-require](https://github.com/boblauer/mock-require)
 * [ESLint](http://eslint.org/)
 * [eslint-airbnb-config](https://github.com/airbnb/javascript/tree/es5-deprecated/es5)
+* [Stylelint](https://github.com/stylelint/stylelint)
 * [stylelint-config-standard](https://github.com/stylelint/stylelint-config-standard)
 * [Istanbul](https://github.com/gotwarlost/istanbul)
 * [Webdriverio](http://webdriver.io)
