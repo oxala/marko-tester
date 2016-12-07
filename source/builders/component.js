@@ -77,11 +77,11 @@ function buildComponent(context, opts, cb) {
                 fs.lstatSync(modulePath);
                 packageInfo = require(path.join(modulePath, 'package'));
                 file = fileArray.splice(1).join('/') || packageInfo.main.split('.')[0];
-              } catch (e) {
+              } catch (errorNodeModule) {
                 try {
-                  var modulePath = path.resolve(utils.getHelpers().rootPath, fileArray[0]);
-                  fs.lstatSync(modulePath);
-                } catch (e) {
+                  var moduleFilePath = path.resolve(utils.getHelpers().rootPath, fileArray[0]);
+                  fs.lstatSync(moduleFilePath);
+                } catch (errorFile) {
                   /* eslint no-console: 0 */
                   console.error('BuildComponent: Cannot resolve module to mock require for - ' + filePath);
                 }
