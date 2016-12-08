@@ -24,7 +24,7 @@ function normalizer() {
 }
 
 function cleanRenderedHtml(html) {
-  return (html ? normalizer().domString(html.trim()) : '');
+  return (html.trim() ? normalizer().domString(html.trim()) : '');
 }
 
 function renderHtml(renderer, fixture) {
