@@ -17,6 +17,8 @@ function buildPage(context, opts, cb) {
 
   options.mochaOperation('When page is ready', function whenPageIsReady() {
     beforeEach(function buildPageBeforeEach(done) {
+      this.timeout(utils.getHelpers().config.componentTimeout);
+
       function buildDom() {
         done();
       }
@@ -27,6 +29,8 @@ function buildPage(context, opts, cb) {
     callback.call(this);
 
     afterEach(function buildPageAfterEach() {
+      utils.gatherBrowserCoverage();
+
       delete global.window;
       delete global.document;
     });
@@ -131,4 +135,3 @@ module.exports = utils.runWithMochaOperation.bind(null, null, buildPage);
 module.exports.only = utils.runWithMochaOperation.bind(null, 'only', buildPage);
 module.exports.skip = utils.runWithMochaOperation.bind(null, 'skip', buildPage);
 module.exports.prepare = prepare;
-

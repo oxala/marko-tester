@@ -5,9 +5,10 @@ var path = require('path');
 var glob = require('glob');
 var stackTrace = require('stack-trace');
 var args = require('optimist').argv;
-var rootPath = process.cwd();
 var _ = require('lodash');
 var markoTesterConfig = require('../.marko-tester.js');
+var rootPath = process.cwd();
+var packageInfo = require(rootPath + '/package');
 var helpers;
 
 function mapSourceToTestPath(sourcePath) {
@@ -38,7 +39,8 @@ module.exports = {
         withLint: process.argv.indexOf('--no-lint') === -1,
         withMocha: process.argv.indexOf('--with-acceptance') === -1 && process.argv.indexOf('--no-mocha') === -1,
         withAcceptance: process.argv.indexOf('--with-acceptance') > -1,
-        config: markoTesterConfig
+        config: markoTesterConfig,
+        bundleName: packageInfo.name + '$' + packageInfo.version
       };
     }
 
@@ -219,5 +221,12 @@ module.exports = {
     require('./configure')(configuration);
 
     return helpers.config;
+  },
+
+  gatherBrowserCoverage: function gatherBrowserCoverage() {
+    /* eslint no-underscore-dangle: 0 */
+    if (global.__coverage__browser && global.window.__coverage__) {
+      global.__coverage__browser.push(global.window.__coverage__);
+    }
   }
 };

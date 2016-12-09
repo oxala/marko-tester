@@ -7,7 +7,6 @@ var path = require('path');
 var glob = require('glob');
 var istanbul = require('istanbul');
 var utils = require('../utils');
-var packageInfo = require(utils.getHelpers().rootPath + '/package');
 var instrumenter = new istanbul.Instrumenter({
   noCompact: true
 });
@@ -70,7 +69,7 @@ function initialize() {
 
 function initializeBrowser() {
   var bundleBasePath = path.resolve(utils.getHelpers().outputPath, 'source');
-  var bundlePath = path.resolve(bundleBasePath, packageInfo.name + '$' + packageInfo.version);
+  var bundlePath = path.resolve(bundleBasePath, utils.getHelpers().bundleName);
   var config = utils.getHelpers().config.coverage;
   var sourcePaths = utils.getSourcePaths();
 

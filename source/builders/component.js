@@ -166,10 +166,7 @@ function buildComponent(context, opts, cb) {
       delete window.$markoWidgetsState;
       delete window.$markoWidgetsConfig;
 
-      /* eslint no-underscore-dangle: 0 */
-      if (global.__coverage__browser && global.window.__coverage__) {
-        global.__coverage__browser.push(global.window.__coverage__);
-      }
+      utils.gatherBrowserCoverage();
     });
 
     after(function buildComponentAfter() {
