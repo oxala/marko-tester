@@ -190,7 +190,22 @@ this.buildComponent({
 
 2. `tester` command on callback along with `sinon` and/or `expect` can expose `rewire` and `mockRequire` functions for you in order to rewire or mock necessary module you using in your implementation. Note: that only will work during server-side testing.
 
-3. If you want to mock require during client-side testing - you can do that using options for `buildComponent` method. There as a key you can pass relative path to the necessary file that will be required. And the mock of that file as a value. Keep in mind that mocked require will only exist within this `buildComponent`.<br>
+3. Another thing you can utilize from `tester` callback is `modRequire`. You can require files that were compiled by lasso, so it is only available when page was constructed (after execution of `buildComponent` and/or `buildPage`):<br>
+```
+tester('util', function (modRequire) {
+  this.buildPage(function () {
+    var util;
+
+    beforeEach(function () {
+      util = modRequire('src/util');
+    });
+
+    ...
+  });
+});
+```
+
+4. If you want to mock require during client-side testing - you can do that using options for `buildComponent` method. There as a key you can pass relative path to the necessary file that will be required. And the mock of that file as a value. Keep in mind that mocked require will only exist within this `buildComponent`.<br>
 ```
 this.buildComponent({
   mockRequire: {
@@ -223,7 +238,7 @@ tester('source/pages/index', function(expect, browser) {
   before(function () {
     page = browser().url('/hello-world');
   });
-  
+
   it('should have a title', function (done) {
     expect(page.getTitle()).to.eventually.be.equal('hello world').and.notify(done);
   });
