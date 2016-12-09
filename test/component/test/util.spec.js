@@ -2,7 +2,7 @@
 
 var tester = require('../../../');
 
-tester.only('util', function (expect, sinon, modRequire) {
+tester('util', function (expect, sinon, modRequire) {
   this.buildPage(function () {
     var util;
 
