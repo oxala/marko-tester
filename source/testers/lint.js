@@ -91,6 +91,12 @@ function testLint(done) {
     return done();
   }
 
+  stylelintConfig = _.extend(stylelintConfig, {
+    rules: {
+      'selector-type-no-unknown': null
+    }
+  });
+
   return stylelint
     .lint({
       files: sourcePaths.map(getLessGlob),
