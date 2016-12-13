@@ -95,8 +95,7 @@ function testLint(done) {
     .lint({
       files: sourcePaths.map(getLessGlob),
       config: stylelintConfig,
-      formatter: 'string',
-      ignoreDisables: true
+      formatter: 'string'
     })
     .then(parseStylelintData)
     .catch(function handleStylelintError(err) {
