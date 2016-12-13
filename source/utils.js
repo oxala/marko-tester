@@ -36,6 +36,7 @@ module.exports = {
         outputPath: path.join(__dirname, '..', 'static'),
         withCoverage: process.argv.indexOf('--with-acceptance') === -1 && process.argv.indexOf('--no-coverage') === -1,
         withLint: process.argv.indexOf('--no-lint') === -1,
+        withFix: process.argv.indexOf('--fix-lint') > -1,
         withMocha: process.argv.indexOf('--with-acceptance') === -1 && process.argv.indexOf('--no-mocha') === -1,
         withAcceptance: process.argv.indexOf('--with-acceptance') > -1,
         config: markoTesterConfig
