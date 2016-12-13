@@ -1,15 +1,19 @@
 'use strict';
 
 var path = require('path');
+var fs = require('fs-extra');
 var _ = require('lodash');
 var stylelint = require('stylelint');
 var CLI = require('eslint').CLIEngine;
 var utils = require('../utils');
 var eslintConfig = require(path.join(__dirname, '..', '..', '.eslintrc'));
 var stylelintConfig = require('stylelint-config-standard');
+var enableAutoFixing = utils.getHelpers().withFix;
 
 function getReport(config, paths) {
-  var cli = new CLI(config);
+  var cli = new CLI(_.extend({
+    fix: enableAutoFixing
+  }, config));
   var lintPaths = paths.map(function mapPathToRoot(filesPath) {
     return path.join(utils.getHelpers().rootPath, filesPath);
   });
@@ -40,6 +44,12 @@ function testLint(done) {
     } else {
       console.log('No Stylelint errors detected!');
     }
+  }
+
+  function persistFixes(report) {
+    report.results.forEach(function forEachResult(result) {
+      fs.writeFileSync(result.filePath, result.output);
+    });
   }
 
   function lintES() {
@@ -77,6 +87,10 @@ function testLint(done) {
     report.results = report.results.concat(reportTest.results);
     report.errorCount += reportTest.errorCount;
     report.warningCount += reportTest.warningCount;
+
+    if (enableAutoFixing) {
+      persistFixes(report);
+    }
 
     if (report.errorCount + report.warningCount > 0) {
       console.log(CLI.getFormatter()(report.results));

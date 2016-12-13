@@ -12,12 +12,19 @@ npm install --save-dev marko-tester
 
 ### CLI
 
-Once you've installed marko-tester, you can start using the `markotester` alias with the path to your source folder. There are few arguments you can pass if needed: `--no-coverage` if you don't want to generate coverage report; `--no-mocha` if you want to execute only linting; `--no-lint` if you don't want lint checks. Also you can try out `--with-acceptance` for running acceptance tests (keep in mind, with this flag in place unit-tests won't be executed).
+Once you've installed marko-tester, you can start using the `markotester` alias with the path to your source folder. There are few arguments you can pass if needed:
+
+- `--no-coverage` if you don't want to generate coverage report
+- `--no-mocha` if you want to execute only linting
+- `--no-lint` if you don't want lint checks
+- `--fix-lint` if you want to automatically fix your linting issues
+- `--with-acceptance` for running acceptance tests (keep in mind, with this flag in place unit-tests won't be executed)
 
 ```
 markotester source --no-coverage
 markotester source --no-coverage --no-lint
 markotester source --with-acceptance
+markotester source --fix-lint
 ```
 
 ### File structure
