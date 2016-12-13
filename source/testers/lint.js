@@ -47,7 +47,9 @@ function testLint(done) {
   }
 
   function persistFixes(report) {
-    report.results.forEach(function forEachResult(result) {
+    report.results.filter(function filterEmptyResult(result) {
+      return !!result.output;
+    }).forEach(function forEachResult(result) {
       fs.writeFileSync(result.filePath, result.output);
     });
   }
