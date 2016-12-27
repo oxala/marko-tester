@@ -24,9 +24,9 @@ function normalizer() {
 }
 
 function cleanRenderedHtml(html) {
-  html = html.trim();
+  var trimmedHtml = (html || '').trim();
 
-  return (html ? normalizer().domString(html) : '');
+  return trimmedHtml && normalizer().domString(trimmedHtml);
 }
 
 function renderHtml(renderer, fixture) {
@@ -36,11 +36,7 @@ function renderHtml(renderer, fixture) {
         return reject('TestFixtures: Failed to render component html.');
       }
 
-      var html = result;
-
-      if (_.isObject(result)) {
-        html = result.html;
-      }
+      var html = _.isObject(result) ? result.html : result;
 
       return resolve(cleanRenderedHtml(html));
     };

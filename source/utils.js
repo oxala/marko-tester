@@ -31,15 +31,18 @@ function mapSourceToTestPath(sourcePath) {
 module.exports = {
   getHelpers: function getHelpers() {
     if (!helpers) {
+      var argv = process.argv;
+
       helpers = {
         rootPath: process.cwd(),
         rendererPaths: [],
         outputPath: path.join(__dirname, '..', 'static'),
-        withCoverage: process.argv.indexOf('--with-acceptance') === -1 && process.argv.indexOf('--no-coverage') === -1,
-        withLint: process.argv.indexOf('--no-lint') === -1,
-        withFix: process.argv.indexOf('--fix-lint') > -1,
-        withMocha: process.argv.indexOf('--with-acceptance') === -1 && process.argv.indexOf('--no-mocha') === -1,
-        withAcceptance: process.argv.indexOf('--with-acceptance') > -1,
+        withCoverage: argv.indexOf('--with-acceptance') === -1 && argv.indexOf('--no-coverage') === -1,
+        withLint: argv.indexOf('--no-lint') === -1,
+        withNode4Lint: argv.indexOf('--lint-es6') > -1,
+        withFix: argv.indexOf('--fix-lint') > -1,
+        withMocha: argv.indexOf('--with-acceptance') === -1 && argv.indexOf('--no-mocha') === -1,
+        withAcceptance: argv.indexOf('--with-acceptance') > -1,
         config: markoTesterConfig,
         bundleName: packageInfo.name + '$' + packageInfo.version
       };
