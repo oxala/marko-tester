@@ -17,6 +17,7 @@ try {
   require(path.join(utils.getHelpers().rootPath, 'node_modules/marko/node-require')).install();
 } catch (e) {
   /* eslint global-require: 0 */
+
   markoCompiler = require('marko/compiler');
   require('marko/node-require').install();
 }
@@ -26,20 +27,24 @@ markoCompiler.defaultOptions.writeToDisk = false;
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
+function excludeDir(dirPath) {
+  var absoluteDirPath = path.resolve(utils.getHelpers().rootPath, dirPath);
+
+  markoCompiler.taglibFinder.excludeDir(absoluteDirPath);
+}
+
+function excludePackage(packageName) {
+  markoCompiler.taglibFinder.excludePackage(packageName);
+}
+
+function excludeAttr(attr) {
+  testFixtures.excludeAttribute(attr.toLowerCase());
+}
+
 function excludeMarkoData(config) {
-  (config.taglibExcludeDirs || []).forEach(function excludeDir(dirPath) {
-    var absoluteDirPath = path.resolve(utils.getHelpers().rootPath, dirPath);
-
-    markoCompiler.taglibFinder.excludeDir(absoluteDirPath);
-  });
-
-  (config.taglibExcludePackages || []).forEach(function excludePackage(packageName) {
-    markoCompiler.taglibFinder.excludePackage(packageName);
-  });
-
-  (config.excludedAttributes || []).forEach(function excludeAttr(attr) {
-    testFixtures.excludeAttribute(attr.toLowerCase());
-  });
+  (config.taglibExcludeDirs || []).forEach(excludeDir);
+  (config.taglibExcludePackages || []).forEach(excludePackage);
+  (config.excludedAttributes || []).forEach(excludeAttr);
 }
 
 function addHooks(config) {
