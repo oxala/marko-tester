@@ -35,13 +35,14 @@ function buildTester(testString, opts, cb) {
       fixtures: {}
     };
 
-    utils.getFixtures(context);
 
     if (utils.getHelpers().withAcceptance) {
       this.timeout(60000);
 
       before(buildAcceptance.setup);
       after(buildAcceptance.teardown);
+    } else {
+      utils.getFixtures(context);
     }
 
     if (options.renderer) {

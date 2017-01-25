@@ -20,6 +20,10 @@ function buildPage(context, opts, cb) {
       this.timeout(utils.getHelpers().config.componentTimeout);
 
       function buildDom() {
+        if (options.mockRequire) {
+          utils.mockRequire(options.mockRequire, context.testPath);
+        }
+
         done();
       }
 

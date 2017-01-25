@@ -229,5 +229,47 @@ module.exports = {
     if (global.__coverage__browser && global.window.__coverage__) {
       global.__coverage__browser.push(global.window.__coverage__);
     }
+  },
+
+  mockRequire: function mockRequire(mockRequirePaths, testPath) {
+    Object.keys(mockRequirePaths).forEach(function mockRequirePath(filePath) {
+      var mock = mockRequirePaths[filePath];
+      var file = filePath;
+      var pkgInfo;
+      var isAbsolute = path.isAbsolute(file);
+
+      if (!isAbsolute && file[0] !== '.') {
+        var fileArray = file.split('/');
+
+        try {
+          var modulePath = path.resolve(rootPath, 'node_modules', fileArray[0]);
+          fs.lstatSync(modulePath);
+          pkgInfo = require(path.join(modulePath, 'package'));
+          file = fileArray.splice(1).join('/') || pkgInfo.main.split('.')[0];
+        } catch (errorNodeModule) {
+          try {
+            var moduleFilePath = path.resolve(rootPath, fileArray[0]);
+            fs.lstatSync(moduleFilePath);
+          } catch (errorFile) {
+            /* eslint no-console: 0 */
+            console.error('BuildComponent: Cannot resolve module to mock require for - ' + filePath);
+          }
+        }
+      } else if (!isAbsolute) {
+        file = path.resolve(testPath, file).replace(rootPath, '');
+      }
+
+      if (!pkgInfo) {
+        pkgInfo = require(path.join(rootPath, '/package'));
+      }
+
+      pkgInfo = [
+        pkgInfo.name,
+        '$',
+        pkgInfo.version
+      ].join('');
+
+      window.$_mod.def('/' + path.join(pkgInfo, file), mock);
+    });
   }
 };

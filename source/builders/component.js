@@ -1,6 +1,5 @@
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
 var _ = require('lodash');
@@ -63,45 +62,7 @@ function buildComponent(context, opts, cb) {
         var Widget;
 
         if (options.mockRequire) {
-          Object.keys(options.mockRequire).forEach(function mockRequire(filePath) {
-            var mock = options.mockRequire[filePath];
-            var file = filePath;
-            var packageInfo;
-            var isAbsolute = path.isAbsolute(file);
-
-            if (!isAbsolute && file[0] !== '.') {
-              var fileArray = file.split('/');
-
-              try {
-                var modulePath = path.resolve(utils.getHelpers().rootPath, 'node_modules', fileArray[0]);
-                fs.lstatSync(modulePath);
-                packageInfo = require(path.join(modulePath, 'package'));
-                file = fileArray.splice(1).join('/') || packageInfo.main.split('.')[0];
-              } catch (errorNodeModule) {
-                try {
-                  var moduleFilePath = path.resolve(utils.getHelpers().rootPath, fileArray[0]);
-                  fs.lstatSync(moduleFilePath);
-                } catch (errorFile) {
-                  /* eslint no-console: 0 */
-                  console.error('BuildComponent: Cannot resolve module to mock require for - ' + filePath);
-                }
-              }
-            } else if (!isAbsolute) {
-              file = path.resolve(context.testPath, file).replace(utils.getHelpers().rootPath, '');
-            }
-
-            if (!packageInfo) {
-              packageInfo = require(path.join(utils.getHelpers().rootPath, '/package'));
-            }
-
-            packageInfo = [
-              packageInfo.name,
-              '$',
-              packageInfo.version
-            ].join('');
-
-            window.$_mod.def('/' + path.join(packageInfo, file), mock);
-          });
+          utils.mockRequire(options.mockRequire, context.testPath);
         }
 
         renderer(fixture, function onComponentRender(err, result) {
