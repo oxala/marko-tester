@@ -52,6 +52,8 @@ function renderHtml(renderer, fixture) {
 
 function createTest(context, testCase) {
   it('should render component using ' + testCase.name + ' input', function compareRenderedHtml() {
+    this.timeout(utils.getHelpers().config.componentTimeout);
+
     var actualHtml = renderHtml(context.renderer, testCase.fixture)
       .catch(function onFailedComponentRender(error) {
         throw new Error(error);
