@@ -16,9 +16,9 @@ function buildPage(context, opts, cb) {
   var options = cb ? opts : {};
 
   options.mochaOperation('When page is ready', function whenPageIsReady() {
-    beforeEach(function buildPageBeforeEach(done) {
-      this.timeout(utils.getHelpers().config.componentTimeout);
+    this.timeout(utils.getHelpers().config.componentTimeout);
 
+    beforeEach(function buildPageBeforeEach(done) {
       function buildDom() {
         if (options.mockRequire) {
           utils.mockRequire(options.mockRequire, context.testPath);

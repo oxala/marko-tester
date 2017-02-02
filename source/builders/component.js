@@ -50,10 +50,9 @@ function buildComponent(context, opts, cb) {
     this.buildWidget = buildWidget.bind(this, context);
     this.buildWidget.only = buildWidget.only.bind(this, context);
     this.buildWidget.skip = buildWidget.skip.bind(this, context);
+    this.timeout(utils.getHelpers().config.componentTimeout);
 
     beforeEach(function buildComponentBeforeEach(done) {
-      this.timeout(utils.getHelpers().config.componentTimeout);
-
       var ctx = this;
 
       ctx.fixtures = context.fixtures;
