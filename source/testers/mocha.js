@@ -8,6 +8,7 @@ var utils = require('../utils');
 var mocha = new Mocha({
   ui: 'bdd',
   reporter: 'spec',
+  useInlineDiffs: true,
   grep: args.grep,
   ignoreLeaks: false,
   globals: ['document', 'window', 'GLOBAL_LASSO']
