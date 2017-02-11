@@ -69,18 +69,6 @@ function buildTester(testString, opts, cb) {
       return rewire(file);
     }
 
-    function modRequire(modPath) {
-      var mod = path.join(utils.getHelpers().bundleName, modPath);
-
-      try {
-        mod = window.$_mod.require('/' + mod);
-      } catch (e) {
-        throw e;
-      }
-
-      return mod;
-    }
-
     context.preparePage = buildPage.prepare.bind(this, context);
     context.testFixtures = testFixtures.bind(this, context);
     context.testFixtures.only = testFixtures.only.bind(this, context);
@@ -99,7 +87,7 @@ function buildTester(testString, opts, cb) {
       sinon: sinon,
       rewire: patchRewire,
       mockRequire: mockRequire,
-      modRequire: modRequire,
+      modRequire: utils.modRequire.bind(utils),
       browser: buildAcceptance
     }));
   });
