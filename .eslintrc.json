@@ -7,6 +7,7 @@
   },
   "rules": {
     "vars-on-top": 0,
-    "no-param-reassign": 0
+    "no-param-reassign": 0,
+    "func-names": 0
   }
 }
