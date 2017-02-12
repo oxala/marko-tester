@@ -18,7 +18,7 @@ function buildPage(context, opts, cb) {
   options.mochaOperation('When page is ready', function whenPageIsReady() {
     this.timeout(utils.getHelpers().config.componentTimeout);
 
-    beforeEach(function buildPageBeforeEach(done) {
+    before(function buildPageBeforeEach(done) {
       function buildDom() {
         if (options.mockRequire) {
           utils.mockRequire(options.mockRequire, context.testPath);
@@ -32,7 +32,7 @@ function buildPage(context, opts, cb) {
 
     callback.call(this);
 
-    afterEach(function buildPageAfterEach() {
+    after(function buildPageAfterEach() {
       utils.gatherBrowserCoverage();
 
       delete global.window;

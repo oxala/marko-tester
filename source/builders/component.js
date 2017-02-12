@@ -52,68 +52,71 @@ function buildComponent(context, opts, cb) {
     this.buildWidget.skip = buildWidget.skip.bind(this, context);
     this.timeout(utils.getHelpers().config.componentTimeout);
 
-    beforeEach(function buildComponentBeforeEach(done) {
-      var ctx = this;
-
-      ctx.fixtures = context.fixtures;
-
+    before(function buildComponentBeforeEach(done) {
       function buildDom() {
-        var Widget;
-
         if (options.mockRequire) {
           utils.mockRequire(options.mockRequire, context.testPath);
         }
 
-        renderer(fixture, function onComponentRender(err, result) {
-          var html = result;
-
-          if (_.isObject(result)) {
-            var widgets = result.context.attributes.widgets;
-
-            if (widgets) {
-              Widget = widgets.widgets[0];
-              html = result.html;
-            }
-
-            var widgetsById = result.context.global.widgets.widgetsById;
-
-            if (widgetsById) {
-              window.$markoWidgetsState = {};
-              window.$markoWidgetsConfig = {};
-
-              Object.keys(widgetsById).forEach(function forEachWidgetId(widgetId) {
-                window.$markoWidgetsState[widgetId] = widgetsById[widgetId].state;
-                window.$markoWidgetsConfig[widgetId] = widgetsById[widgetId].config;
-              });
-            }
-          }
-
-          if (Widget) {
-            var componentContainer = window['component-container'];
-
-            componentContainer.innerHTML = html;
-
-            var widgetEl = componentContainer.querySelector('[data-widget]');
-            var widgetPath = widgetEl.getAttribute('data-widget');
-
-            Widget = window.$_mod.require(widgetPath);
-          }
-
-          if (testConfiguration.onInit) {
-            testConfiguration.onInit();
-          }
-
-          if (!Widget) {
-            done(new Error('BuildComponent: Cannot find any attached widgets for the template. Make sure you used `w-bind` in your template.'));
-          } else {
-            ctx.Widget = Widget;
-
-            done();
-          }
-        });
+        done();
       }
 
       context.preparePage().then(buildDom);
+    });
+
+    beforeEach(function (done) {
+      var Widget;
+      var ctx = this;
+
+      ctx.fixtures = context.fixtures;
+
+      renderer(fixture, function onComponentRender(err, result) {
+        var html = result;
+
+        if (_.isObject(result)) {
+          var widgets = result.context.attributes.widgets;
+
+          if (widgets) {
+            Widget = widgets.widgets[0];
+            html = result.html;
+          }
+
+          var widgetsById = result.context.global.widgets.widgetsById;
+
+          if (widgetsById) {
+            window.$markoWidgetsState = {};
+            window.$markoWidgetsConfig = {};
+
+            Object.keys(widgetsById).forEach(function forEachWidgetId(widgetId) {
+              window.$markoWidgetsState[widgetId] = widgetsById[widgetId].state;
+              window.$markoWidgetsConfig[widgetId] = widgetsById[widgetId].config;
+            });
+          }
+        }
+
+        if (Widget) {
+          var componentContainer = window['component-container'];
+
+          componentContainer.innerHTML = html;
+
+          var widgetEl = componentContainer.querySelector('[data-widget]');
+          var widgetPath = widgetEl.getAttribute('data-widget');
+
+          Widget = window.$_mod.require(widgetPath);
+        }
+
+        if (testConfiguration.onInit) {
+          testConfiguration.onInit();
+        }
+
+        if (!Widget) {
+          done(new Error('BuildComponent: Cannot find any attached widgets for the template. Make sure you used `w-bind` in your template.'));
+        } else {
+          ctx.Widget = Widget;
+
+          done();
+        }
+      });
     });
 
     callback.call(this);
