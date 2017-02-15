@@ -6,9 +6,11 @@ var _ = require('lodash');
 var stylelint = require('stylelint');
 var CLI = require('eslint').CLIEngine;
 var utils = require('../utils');
-var eslintConfig = require(path.join(__dirname, '..', '..', '.eslintrc'));
+var eslintLegacyConfig = require(path.join(__dirname, '..', '..', 'eslintrc-legacy'));
+var eslintEs6Config = require(path.join(__dirname, '..', '..', 'eslintrc-es6'));
 var stylelintConfig = require('stylelint-config-standard');
 var enableAutoFixing = utils.getHelpers().withFix;
+var supportEs6 = utils.getHelpers().withEs6Lint;
 
 function getReport(config, paths) {
   var cli = new CLI(_.extend({
@@ -29,8 +31,8 @@ function testLint(done) {
   /* eslint no-console: 0 */
   var sourcePaths = utils.getSourcePaths();
   var testPaths = utils.getTestPaths();
-  var commonEslintConfig = {
-    baseConfig: eslintConfig,
+  var eslintConfig = {
+    baseConfig: supportEs6 ? eslintEs6Config : eslintLegacyConfig,
     allowInlineConfig: false,
     ignorePattern: [
       '**/*.marko.js'
@@ -39,69 +41,36 @@ function testLint(done) {
 
   function parseStylelintData(data) {
     if (data.errored) {
-      console.log(data.output);
+      console.error(data.output);
       done(1);
     } else {
-      console.log('No Stylelint errors detected!');
+      process.stdout.write('No Stylelint errors detected!');
     }
   }
 
   function persistFixes(report) {
-    report.results.filter(function filterEmptyResult(result) {
+    report.results.filter(function nonEmptyResult(result) {
       return !!result.output;
-    }).forEach(function forEachResult(result) {
+    }).forEach(function persistResult(result) {
       fs.writeFileSync(result.filePath, result.output);
     });
   }
 
   function lintES() {
-    var reportTest = getReport(_.extend(commonEslintConfig, {
-      plugins: [
-        'mocha'
-      ],
-      rules: {
-        'func-names': 0,
-        'no-unused-expressions': 0,
-        'no-underscore-dangle': 0,
-        'global-require': 0,
-        'mocha/no-exclusive-tests': 'error',
-        'mocha/no-skipped-tests': 'error',
-        'mocha/no-pending-tests': 'error',
-        'mocha/handle-done-callback': 'error',
-        'mocha/no-global-tests': 'error',
-        'mocha/no-return-and-callback': 'error',
-        'mocha/valid-test-description': 'error',
-        'mocha/valid-suite-description': 'error',
-        'mocha/no-sibling-hooks': 'error',
-        'mocha/no-mocha-arrows': 'error',
-        'mocha/no-identical-title': 'error',
-        'mocha/max-top-level-suites': 0,
-        'mocha/no-nested-tests': 'error'
-      }
-    }), testPaths);
-    var report = getReport(_.extend(commonEslintConfig, {
-      ignorePattern: [
-        '**/test',
-        '**/*.marko.js'
-      ]
-    }), sourcePaths);
-
-    report.results = report.results.concat(reportTest.results);
-    report.errorCount += reportTest.errorCount;
-    report.warningCount += reportTest.warningCount;
+    var report = getReport(eslintConfig, sourcePaths.concat(testPaths));
 
     if (enableAutoFixing) {
       persistFixes(report);
     }
 
     if (report.errorCount + report.warningCount > 0) {
-      console.log(CLI.getFormatter()(report.results));
+      process.stdout.write(CLI.getFormatter()(report.results));
 
       if (report.errorCount > 0) {
         return done(1);
       }
     } else if (report.errorCount === 0) {
-      console.log('No ESLint errors detected!');
+      process.stdout.write('No ESLint errors detected!');
     }
 
     return done();

@@ -17,6 +17,7 @@ Once you've installed marko-tester, you can start using the `markotester` alias 
 - `--no-coverage` if you don't want to generate coverage report
 - `--no-mocha` if you want to execute only linting
 - `--no-lint` if you don't want lint checks
+- `--lint-es6` if you want to lint your es6 code
 - `--fix-lint` if you want to automatically fix your linting issues
 - `--with-acceptance` for running acceptance tests (keep in mind, with this flag in place unit-tests won't be executed)
 
@@ -261,6 +262,7 @@ tester('source/pages/index', function(expect, browser) {
 * [mock-require](https://github.com/boblauer/mock-require)
 * [ESLint](http://eslint.org/)
 * [eslint-airbnb-config](https://github.com/airbnb/javascript/tree/es5-deprecated/es5)
+* [eslint-config-ebay](https://github.com/darkwebdev/eslint-config-ebay)
 * [Stylelint](https://github.com/stylelint/stylelint)
 * [stylelint-config-standard](https://github.com/stylelint/stylelint-config-standard)
 * [Istanbul](https://github.com/gotwarlost/istanbul)

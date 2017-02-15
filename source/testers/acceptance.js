@@ -31,7 +31,7 @@ function testAcceptance() {
 
   sourcePaths.forEach(searchPathForTests);
 
-  console.log('\n\nStarting your app using `' + configuration.acceptance.startCommand + '` command.\n\n');
+  process.stdout.write('\n\nStarting your app using `' + configuration.acceptance.startCommand + '` command.\n\n');
 
   exec(configuration.acceptance.startCommand);
 
@@ -50,7 +50,7 @@ function testAcceptance() {
   process.on('exit', function stopApp() {
     var stopCommand = configuration.acceptance.stopCommand;
 
-    console.log('\n\nShutting down your app using `' + stopCommand + '` command.\n\n');
+    process.stdout.write('\n\nShutting down your app using `' + stopCommand + '` command.\n\n');
 
     exec(stopCommand);
   });

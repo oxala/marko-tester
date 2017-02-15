@@ -1,12 +1,5 @@
 {
-  "extends": "airbnb-base/legacy",
-  "env": {
-    "mocha": true,
-    "node": true,
-    "jquery": true
-  },
+  "extends": "./eslintrc-legacy.js",
   "rules": {
-    "vars-on-top": 0,
-    "no-param-reassign": 0
   }
 }
