@@ -42,10 +42,7 @@ function buildPage(context, opts, cb) {
 }
 
 function buildDependencies() {
-  var dependencies = [{
-    path: 'jquery/dist/jquery.js',
-    'mask-define': true
-  }];
+  var dependencies = [];
   var browserJSONPath = path.resolve(utils.getHelpers().outputPath, 'browser.json');
 
   dependencies = dependencies.concat(utils.getHelpers().rendererPaths);
