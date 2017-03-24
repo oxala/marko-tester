@@ -77,7 +77,7 @@ module.exports = {
         outputPath: path.join(__dirname, '..', 'static'),
         withCoverage: argv.indexOf('--with-acceptance') === -1 && argv.indexOf('--no-coverage') === -1,
         withLint: argv.indexOf('--no-lint') === -1,
-        withNode4Lint: argv.indexOf('--lint-es6') > -1,
+        withEs6Lint: argv.indexOf('--lint-es6') > -1,
         withFix: argv.indexOf('--fix-lint') > -1,
         withMocha: argv.indexOf('--with-acceptance') === -1 && argv.indexOf('--no-mocha') === -1,
         withAcceptance: argv.indexOf('--with-acceptance') > -1,
