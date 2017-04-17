@@ -1,9 +1,9 @@
 'use strict';
 
-var configure = require('./configure');
-var buildTester = require('./builders/tester');
-var buildAcceptance = require('./builders/acceptance');
-var testLint = require('./testers/lint');
+const configure = require('./configure');
+const buildTester = require('./builders/tester');
+const buildAcceptance = require('./builders/acceptance');
+const testLint = require('./testers/lint');
 
 module.exports = buildTester;
 module.exports.only = buildTester.only;

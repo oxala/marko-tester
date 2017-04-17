@@ -3,6 +3,7 @@
 var path = require('path');
 var fs = require('fs-extra');
 var _ = require('lodash');
+var glob = require('glob');
 var stylelint = require('stylelint');
 var CLI = require('eslint').CLIEngine;
 var utils = require('../utils');
@@ -44,7 +45,7 @@ function testLint(done) {
       console.error(data.output);
       done(1);
     } else {
-      process.stdout.write('No Stylelint errors detected!');
+      process.stdout.write('No Stylelint errors detected!\n\n');
     }
   }
 
@@ -56,24 +57,61 @@ function testLint(done) {
     });
   }
 
-  function lintES() {
-    var report = getReport(eslintConfig, sourcePaths.concat(testPaths));
+  function processReport(report, version) {
+    var error = 0;
+
+    if (report.errorCount + report.warningCount > 0) {
+      process.stdout.write(CLI.getFormatter()(report.results) + '\n\n');
+
+      if (report.errorCount > 0) {
+        error = 1;
+      }
+    } else if (report.errorCount === 0) {
+      process.stdout.write('No ' + version + ' errors detected!\n\n');
+    }
+
+    return error;
+  }
+
+  function getES5Files(sourcePath) {
+    return glob.sync(path.join(sourcePath, '**', '!(*.es6.js)'));
+  }
+
+  function lintES6() {
+    var config = _.merge({}, eslintConfig);
+    var es5files = sourcePaths.map(getES5Files);
+
+    config.baseConfig = eslintEs6Config;
+    config.ignorePattern.push(es5files);
+    config.ignorePattern = _.flattenDeep(config.ignorePattern);
+
+    var report = getReport(config, sourcePaths.concat(testPaths));
 
     if (enableAutoFixing) {
       persistFixes(report);
     }
 
-    if (report.errorCount + report.warningCount > 0) {
-      process.stdout.write(CLI.getFormatter()(report.results));
+    return done(processReport(report, 'ES6'));
+  }
 
-      if (report.errorCount > 0) {
-        return done(1);
-      }
-    } else if (report.errorCount === 0) {
-      process.stdout.write('No ESLint errors detected!');
+  function lintES() {
+    var config = _.merge({}, eslintConfig);
+
+    config.ignorePattern.push('**/*.es6.js');
+
+    var report = getReport(config, sourcePaths.concat(testPaths));
+
+    if (enableAutoFixing) {
+      persistFixes(report);
     }
 
-    return done();
+    var error = processReport(report, supportEs6 ? 'ES6' : 'ES5');
+
+    if (!supportEs6) {
+      return lintES6();
+    }
+
+    return done(error);
   }
 
   stylelintConfig = _.extend(stylelintConfig, {

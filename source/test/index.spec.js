@@ -28,7 +28,7 @@ describe('index', function () {
     mockRequire('../builders/acceptance', mockBuildAcceptance);
     mockRequire('../testers/lint', mockTestLint);
 
-    index = require('../');
+    index = require('../index.es6');
   });
 
   it('should expose API', function () {

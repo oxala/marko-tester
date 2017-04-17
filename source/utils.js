@@ -217,7 +217,7 @@ module.exports = {
 
       if (!renderer) {
         rendererPath = path.join(testPath, '..');
-        rendererPath = glob.sync(path.resolve(rendererPath, '?(index|renderer).js'));
+        rendererPath = glob.sync(path.resolve(rendererPath, '?(index|renderer)?(.es6).js'));
       } else {
         rendererPath = glob.sync(path.resolve(testPath, renderer));
       }
