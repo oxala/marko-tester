@@ -107,11 +107,13 @@ function testLint(done) {
 
     var error = processReport(report, supportEs6 ? 'ES6' : 'ES5');
 
+    if (error) {
+      return done(error);
+    }
+
     if (!supportEs6) {
       return lintES6();
     }
-
-    return done(error);
   }
 
   stylelintConfig = _.extend(stylelintConfig, {
