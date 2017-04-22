@@ -74,7 +74,7 @@ function testLint(done) {
   }
 
   function getES5Files(sourcePath) {
-    return glob.sync(path.join(sourcePath, '**', '!(*.es6.js)'));
+    return glob.sync(path.join(sourcePath, '**', '!(*.es6).js'));
   }
 
   function lintES6() {
