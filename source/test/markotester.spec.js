@@ -74,7 +74,7 @@ describe('markotester', function () {
       });
 
       it('should exit the process successfully', function () {
-        expect(process.exit).to.be.calledWith(null);
+        expect(process.exit).to.be.calledWith();
       });
     });
 
@@ -99,7 +99,7 @@ describe('markotester', function () {
       });
 
       it('should exit the process successfully', function () {
-        expect(process.exit).to.be.calledWith(null);
+        expect(process.exit).to.be.calledWith();
       });
     });
 
@@ -124,7 +124,7 @@ describe('markotester', function () {
       });
 
       it('should exit the process successfully', function () {
-        expect(process.exit).to.be.calledWith(null);
+        expect(process.exit).to.be.calledWith();
       });
     });
 
@@ -149,7 +149,7 @@ describe('markotester', function () {
       });
 
       it('should exit the process successfully', function () {
-        expect(process.exit).to.be.calledWith(null);
+        expect(process.exit).to.be.calledWith();
       });
     });
   });
