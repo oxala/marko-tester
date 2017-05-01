@@ -1,6 +1,6 @@
 module.exports = {
   "extends": [
-    "eslint-config-ebay-common",
+    "eslint-config-marko-tester",
     "./eslintrc"
   ].map(require.resolve),
 
