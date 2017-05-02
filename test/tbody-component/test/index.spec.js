@@ -1,7 +1,6 @@
 'use strict';
 
 var tester = require('../../../');
-var fixture = require('./fixtures/default.json')
 
 tester('tbody-component', function (expect, sinon) {
   this.testFixtures();
