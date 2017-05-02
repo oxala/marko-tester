@@ -11,7 +11,7 @@ tester('tbody-component', function (expect, sinon) {
   },function () {
     this.buildWidget(function () {
       it('should be able to access the DOM correctly', function () {
-        expect(this.widget.getInnerHtml()).to.be.equal(fixture.text);
+        expect(this.widget.el.tagName).to.be.equal('TBODY');
       });
     });
   });
