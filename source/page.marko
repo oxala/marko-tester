@@ -9,7 +9,8 @@
     </head>
 
     <body>
-        <div id="component-container"></div>
+        <table if(data.layout === 'table') id="component-container"></table>
+        <div else id="component-container"></div>
         <div id="mocha"></div>
         <lasso-body/>
     </body>

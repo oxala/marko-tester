@@ -222,6 +222,14 @@ this.buildComponent({
 }, function() { ... });
 ```
 
+5. You can also use a different file layout if necessary. When your template has a top-level element of `tbody`, `tr`, or something else that expects a `table` element as a parent, you can add the `layout` parameter and set it to `table`. This will ensure JSDOM renders your component correctly.
+```
+this.buildComponent({
+  fixture: this.fixtures.basic,
+  layout: 'table'
+}, function() { ... });
+```
+
 ## Code style (linting)
 
 Apart from testing, consistent styling is another important part of keeping high quality code. For that particular reason, `marko-tester` comes with an `eslint` and `stylelint` checks built-in. It will check the style of your code when you execute the `markotester` command.

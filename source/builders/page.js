@@ -10,6 +10,7 @@ var Promise = require('bluebird');
 var utils = require('../utils');
 var coverage = require('../testers/coverage');
 var pagePrepared;
+var lastLayoutUsed;
 
 function buildPage(context, opts, cb) {
   var callback = cb || opts;
@@ -78,7 +79,7 @@ function createDom(htmlPath, resolve, reject) {
   );
 }
 
-function prepare() {
+function prepare(context, layout) {
   fs.ensureDirSync(utils.getHelpers().outputPath);
 
   var lassoPluginPaths = utils.getHelpers().config.lassoPlugins || [];
@@ -104,6 +105,12 @@ function prepare() {
     bundlingEnabled: false
   });
 
+  if (layout !== lastLayoutUsed) {
+    pagePrepared = false;
+  }
+
+  lastLayoutUsed = layout;
+
   return new Promise(function promisePage(resolve, reject) {
     /* eslint global-require: 0 */
 
@@ -126,7 +133,7 @@ function prepare() {
     buildDependencies();
 
     return require(path.resolve(__dirname, '../page.marko'))
-      .render({}, out)
+      .render({ layout: layout }, out)
       .on('finish', generateDom);
   });
 }

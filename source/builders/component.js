@@ -45,6 +45,7 @@ function buildComponent(context, opts, cb) {
   }
 
   var fixture = getFixture(context, options.fixture);
+  var layout = options.layout;
 
   options.mochaOperation('When component is being built', function whenComponentIsBeingBuilt() {
     this.buildWidget = buildWidget.bind(this, context);
@@ -61,7 +62,7 @@ function buildComponent(context, opts, cb) {
         done();
       }
 
-      context.preparePage().then(buildDom);
+      context.preparePage(layout).then(buildDom);
     });
 
     beforeEach(function (done) {
