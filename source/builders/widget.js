@@ -9,6 +9,11 @@ function buildWidget(context, opts, cb) {
   options.mochaOperation('When widget is being rendered', function whenWidgetIsBeingRendered() {
     beforeEach(function buildWidgetBeforeEach() {
       var widgetContainers = window['component-container'].querySelectorAll('[data-widget]');
+
+      if (!widgetContainers.length) {
+        widgetContainers = window['component-table'].querySelectorAll('[data-widget]');
+      }
+
       var lastWidgetIndex = widgetContainers.length - 1;
       var widgetIds = [];
 

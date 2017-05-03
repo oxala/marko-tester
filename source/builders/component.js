@@ -45,7 +45,6 @@ function buildComponent(context, opts, cb) {
   }
 
   var fixture = getFixture(context, options.fixture);
-  var layout = options.layout;
 
   options.mochaOperation('When component is being built', function whenComponentIsBeingBuilt() {
     this.buildWidget = buildWidget.bind(this, context);
@@ -62,7 +61,7 @@ function buildComponent(context, opts, cb) {
         done();
       }
 
-      context.preparePage(layout).then(buildDom);
+      context.preparePage().then(buildDom);
     });
 
     beforeEach(function (done) {
@@ -96,7 +95,8 @@ function buildComponent(context, opts, cb) {
         }
 
         if (Widget) {
-          var componentContainer = window['component-container'];
+          var layout = options.layout || 'container';
+          var componentContainer = window['component-' + layout];
 
           componentContainer.innerHTML = html;
 
