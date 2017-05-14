@@ -56,7 +56,7 @@ function createTest(context, testCase) {
     renderHtml(context.renderer, testCase.fixture)
       .then(function (actualHtml) {
         if (actualHtml !== expectedHtml && utils.getHelpers().withFixFixtures) {
-          fs.writeFileSync(testCase.absPath, actualHtml, 'utf-8');
+          fs.writeFileSync(testCase.absPath, actualHtml + '\n', 'utf-8');
           expectedHtml = actualHtml;
         }
 
