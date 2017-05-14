@@ -19,6 +19,7 @@ Once you've installed marko-tester, you can start using the `markotester` alias 
 - `--no-lint` if you don't want lint checks
 - `--lint-es6` if you want to lint your es6 code
 - `--fix-lint` if you want to automatically fix your linting issues
+- `--fix-fixtures` if you want to automatically replace failing fixtures with actual render result
 - `--with-acceptance` for running acceptance tests (keep in mind, with this flag in place unit-tests won't be executed)
 
 ```
@@ -26,6 +27,7 @@ markotester source --no-coverage
 markotester source --no-coverage --no-lint
 markotester source --with-acceptance
 markotester source --fix-lint
+markotester source --fix-fixtures
 ```
 
 ### File structure
@@ -135,9 +137,7 @@ Your test file will have to invoke the `testFixtures` function. Below you can fi
 ```
 'use strict';
 
-var tester = require('marko-tester');
-
-tester('source/components/phone-frame', function() {
+global.tester('source/components/phone-frame', function() {
   this.testFixtures();
 });
 ```
@@ -155,9 +155,7 @@ During client testing, `marko-tester` gives you a few methods to utilize:
 ```
 'use strict';
 
-var tester = require('marko-tester');
-
-tester('source/components/phone-frame', function(expect, sinon) { // you can request `sinon` or `expect` just by adding the respective param;
+global.tester('source/components/phone-frame', function(expect, sinon) { // you can request `sinon` or `expect` just by adding the respective param;
 
   // this.buildPage - is available here;
   // this.fixtures - will give you a list of attached test fixtures to this component;
@@ -200,7 +198,7 @@ this.buildComponent({
 
 3. Another thing you can utilize from `tester` callback is `modRequire`. You can require files that were compiled by lasso, so it is only available when page was constructed (after execution of `buildComponent` and/or `buildPage`):<br>
 ```
-tester('util', function (modRequire) {
+global.tester('util', function (modRequire) {
   this.buildPage(function () {
     var util;
 
@@ -246,9 +244,7 @@ To do that, we have a small configuration within our `.marko-tester.json` file u
 ```
 'use strict';
 
-var tester = require('marko-tester');
-
-tester('source/pages/index', function(expect, browser) {
+global.tester('source/pages/index', function(expect, browser) {
   var page;
 
   before(function () {

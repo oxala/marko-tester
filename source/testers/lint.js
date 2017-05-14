@@ -10,7 +10,7 @@ var utils = require('../utils');
 var eslintLegacyConfig = require(path.join(__dirname, '..', '..', 'eslintrc-legacy'));
 var eslintEs6Config = require(path.join(__dirname, '..', '..', 'eslintrc-es6'));
 var stylelintConfig = require('stylelint-config-standard');
-var enableAutoFixing = utils.getHelpers().withFix;
+var enableAutoFixing = utils.getHelpers().withFixLint;
 var supportEs6 = utils.getHelpers().withEs6Lint;
 
 function getReport(config, paths) {

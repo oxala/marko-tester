@@ -1,6 +1,7 @@
 'use strict';
 
 var Normalizer = require('html-normalizer');
+var fs = require('fs-extra');
 var _ = require('lodash');
 var chai = require('chai');
 var Promise = require('bluebird');
@@ -47,16 +48,24 @@ function renderHtml(renderer, fixture) {
 }
 
 function createTest(context, testCase) {
-  it('should render component using ' + testCase.name + ' input', function compareRenderedHtml() {
+  it('should render component using ' + testCase.name + ' input', function compareRenderedHtml(done) {
     this.timeout(utils.getHelpers().config.componentTimeout);
 
-    var actualHtml = renderHtml(context.renderer, testCase.fixture)
-      .catch(function onFailedComponentRender(error) {
-        throw new Error(error);
-      });
     var expectedHtml = cleanRenderedHtml(testCase.expectedHtml);
 
-    return expect(actualHtml).to.eventually.equal(expectedHtml);
+    renderHtml(context.renderer, testCase.fixture)
+      .then(function (actualHtml) {
+        if (actualHtml !== expectedHtml && utils.getHelpers().withFixFixtures) {
+          fs.writeFileSync(testCase.absPath, actualHtml, 'utf-8');
+          expectedHtml = actualHtml;
+        }
+
+        expect(actualHtml).to.be.equal(expectedHtml);
+        done();
+      })
+      .catch(function onFailedComponentRender(error) {
+        done(new Error(error));
+      });
   });
 }
 
@@ -80,7 +89,8 @@ function testFixtures(context, opts) {
     testCases.push({
       name: fixture.testName,
       fixture: fixture.data,
-      expectedHtml: fixture.expectedHtml
+      expectedHtml: fixture.expectedHtml,
+      absPath: fixture.absPath
     });
   });
 
