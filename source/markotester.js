@@ -21,6 +21,8 @@ if (utils.getHelpers().withAcceptance) {
   steps.push(testAcceptance);
 }
 
+global.tester = require('./index.es6');
+
 async.waterfall(steps, function exit(err) {
   process.exit(err);
 });

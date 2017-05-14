@@ -1,8 +1,6 @@
 'use strict';
 
-var tester = require('../../../');
-
-tester('component', function (expect, sinon) {
+global.tester('component', function (expect, sinon) {
   this.testFixtures();
 
   this.buildComponent(function () {
