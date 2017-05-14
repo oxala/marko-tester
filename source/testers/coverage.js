@@ -85,17 +85,19 @@ function initializeBrowser() {
       var coveragePath = path.resolve(utils.getHelpers().rootPath, sourcePath);
       var realPath = filePath.replace(generatedSrcPath, coveragePath);
       var moduleBody = fileContent;
+      var startIndex;
+      var endIndex;
 
       if (fileContent.substring(0, 10) === '$_mod.def(') {
-        var startIndex = fileContent.indexOf('{') + 1;
-        var endIndex = fileContent.lastIndexOf('}');
+        startIndex = fileContent.indexOf('{') + 1;
+        endIndex = fileContent.lastIndexOf('}');
 
         moduleBody = fileContent.substring(startIndex, endIndex);
       }
 
       var instrumentedModuleBody = instrumenter.instrumentSync(moduleBody, realPath);
 
-      fileContent = fileContent.replace(moduleBody, instrumentedModuleBody);
+      fileContent = fileContent.substring(0, startIndex) + instrumentedModuleBody + '});';
 
       fs.writeFileSync(filePath, fileContent, 'utf8');
     }

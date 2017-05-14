@@ -1,5 +1,7 @@
 'use strict';
 
-module.exports = function () {
-  window.alert('hello-world');
+module.exports = function (hello) {
+  window.alert(hello);
+
+  return '$';
 };
