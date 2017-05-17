@@ -142,7 +142,7 @@ module.exports = {
   },
 
   getParamsToApply: function getParamsToApply(fn, context) {
-    var paramString = fn.toString().match(/(function)?[^(]*\(([^)]*)\)/)[2];
+    var paramString = fn.toString().match(/(function)?(\s*)?(\()?([^)=]*)/)[4];
 
     var paramList = paramString.split(',').map(function mapContextValueForKey(key) {
       return context[key.trim()];
