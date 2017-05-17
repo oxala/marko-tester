@@ -113,6 +113,8 @@ function testLint(done) {
 
     if (!supportEs6) {
       lintES6();
+    } else {
+      done();
     }
   }
 
