@@ -57,8 +57,9 @@ function addHooks(config) {
   }
 }
 
-function testConfigure(config) {
-  utils.setHelpers('config', config);
+function testConfigure() {
+  var config = utils.getHelpers().config;
+
   utils.generateBrowserDependencies(config.components);
   excludeMarkoData(config);
   addHooks(config);

@@ -35,9 +35,9 @@ function testLint(done) {
   var eslintConfig = {
     baseConfig: supportEs6 ? eslintEs6Config : eslintLegacyConfig,
     allowInlineConfig: false,
-    ignorePattern: [
+    ignorePattern: _.concat([
       '**/*.marko.js'
-    ]
+    ], _.get(utils.getHelpers().config, 'lint.ignorePattern', []))
   };
 
   function parseStylelintData(data) {

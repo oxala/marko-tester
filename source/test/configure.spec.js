@@ -31,7 +31,7 @@ describe('configure', function () {
     };
     mockUtils = {
       setHelpers: sinon.spy(),
-      getHelpers: sinon.stub().returns(mockGetHelpers),
+      getHelpers: sinon.stub(),
       generateBrowserDependencies: sinon.spy()
     };
     mockTestFixtures = {
@@ -76,7 +76,9 @@ describe('configure', function () {
       mockRequire('marko/compiler', mockMarko.compiler);
       mockRequire('marko/node-require', mockMarko.nodeRequire);
 
-      require('../configure')({});
+      mockUtils.getHelpers.returns(Object.assign({}, mockGetHelpers, { config: {} }));
+
+      require('../configure')();
     });
 
     afterEach(function () {
@@ -113,7 +115,9 @@ describe('configure', function () {
         onDestroy: sinon.spy()
       };
 
-      require('../configure')(mockConfig);
+      mockUtils.getHelpers.returns(Object.assign({}, mockGetHelpers, { config: mockConfig }));
+
+      require('../configure')();
     });
 
     afterEach(function () {
@@ -137,10 +141,6 @@ describe('configure', function () {
     it('should setup chai', function () {
       expect(mockChai.use).to.be.calledWith(mockSinonChai);
       expect(mockChai.use).to.be.calledWith(mockChaiAsPromised);
-    });
-
-    it('should merge user`s config with default', function () {
-      expect(mockUtils.setHelpers).to.be.calledWith('config', mockConfig);
     });
 
     it('should generate browser dependencies based on user`s config', function () {
@@ -180,15 +180,13 @@ describe('configure', function () {
       mockConfig = {};
       mockGetHelpers.withCoverage = false;
 
-      require('../configure')(mockConfig);
+      mockUtils.getHelpers.returns(Object.assign({}, mockGetHelpers, { config: mockConfig }));
+
+      require('../configure')();
     });
 
     afterEach(function () {
       delete require.cache[require.resolve('../configure')];
-    });
-
-    it('should merge user`s config with default', function () {
-      expect(mockUtils.setHelpers).to.be.calledWith('config', mockConfig);
     });
 
     it('should not generate browser dependencies based on user`s config', function () {

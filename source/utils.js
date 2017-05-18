@@ -68,11 +68,22 @@ function getStaticModule(file, testPath, errorMessage) {
 
 module.exports = {
   getHelpers: function getHelpers() {
+    /* eslint global-require: 0 */
+
     if (!helpers) {
       var argv = process.argv;
 
+      var configurationPath = path.join(rootPath, '.marko-tester');
+      var configuration;
+
+      try {
+        configuration = require(configurationPath);
+      } catch (e) {
+        configuration = {};
+      }
+
       helpers = {
-        rootPath: process.cwd(),
+        rootPath: rootPath,
         rendererPaths: [],
         outputPath: path.join(__dirname, '..', 'static'),
         withCoverage: argv.indexOf('--with-acceptance') === -1 && argv.indexOf('--no-coverage') === -1,
@@ -82,7 +93,7 @@ module.exports = {
         withFixFixtures: argv.indexOf('--fix-fixtures') > -1,
         withMocha: argv.indexOf('--with-acceptance') === -1 && argv.indexOf('--no-mocha') === -1,
         withAcceptance: argv.indexOf('--with-acceptance') > -1,
-        config: markoTesterConfig,
+        config: _.defaults({}, configuration, markoTesterConfig),
         bundleName: packageInfo.name + '$' + packageInfo.version
       };
     }
@@ -252,16 +263,7 @@ module.exports = {
   loadConfiguration: function loadConfiguration() {
     /* eslint global-require: 0 */
 
-    var configurationPath = path.join(this.getHelpers().rootPath, '.marko-tester');
-    var configuration;
-
-    try {
-      configuration = require(configurationPath);
-    } catch (e) {
-      configuration = {};
-    }
-
-    require('./configure')(configuration);
+    require('./configure')();
 
     return helpers.config;
   },
