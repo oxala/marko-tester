@@ -20,7 +20,7 @@ function testMocha(done) {
   utils.loadConfiguration();
 
   function searchPathForTests(sourcePath) {
-    var testFiles = glob.sync(path.resolve(utils.getHelpers().rootPath, sourcePath, '**/*.spec.js'));
+    var testFiles = glob.sync(path.resolve(utils.getHelpers().rootPath, sourcePath, '**/*.spec?(.es6).js'));
 
     testFiles.forEach(function addPathToMocha(testFile) {
       mocha.addFile(testFile);

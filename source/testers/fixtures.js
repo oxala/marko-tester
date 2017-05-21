@@ -54,8 +54,11 @@ function createTest(context, testCase) {
     var expectedHtml = cleanRenderedHtml(testCase.expectedHtml);
 
     renderHtml(context.renderer, testCase.fixture)
+      .catch(function onFailedComponentRender(error) {
+        throw new Error(error);
+      })
       .then(function (actualHtml) {
-        if (actualHtml !== expectedHtml && utils.getHelpers().withFixFixtures) {
+        if (utils.getHelpers().withFixFixtures && actualHtml !== expectedHtml) {
           fs.writeFileSync(testCase.absPath, actualHtml + '\n', 'utf-8');
           expectedHtml = actualHtml;
         }
@@ -63,9 +66,7 @@ function createTest(context, testCase) {
         expect(actualHtml).to.be.equal(expectedHtml);
         done();
       })
-      .catch(function onFailedComponentRender(error) {
-        done(new Error(error));
-      });
+      .catch(done);
   });
 }
 

@@ -8,7 +8,7 @@ module.exports = {
     "import/no-extraneous-dependencies": ["warn", {
       "devDependencies": [
         "test/*",
-        "**/*.spec.js"
+        "**/*.spec?(.es6).js"
       ]
     }],
     "import/no-unresolved": ["error", {

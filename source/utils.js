@@ -142,7 +142,7 @@ module.exports = {
     if (trace) {
       var fileName = trace.getFileName();
 
-      if (/^.*\.spec\.js$/.test(fileName)) {
+      if (/^.*\.spec(\.es6)?\.js$/.test(fileName)) {
         return path.resolve(fileName, '..');
       }
 

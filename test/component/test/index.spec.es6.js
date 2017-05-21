@@ -4,16 +4,16 @@ global.tester('component', function (expect, sinon) {
   this.testFixtures();
 
   this.buildComponent(function () {
-    beforeEach(function () {
+    beforeEach(() => {
       sinon.stub(document.location, 'replace');
     });
 
-    afterEach(function () {
+    afterEach(() => {
       document.location.replace.restore();
     });
 
     this.buildWidget(function () {
-      it('should alert the user', function () {
+      it('should alert the user', () => {
         expect(document.location.replace).to.be.called;
       });
     });
