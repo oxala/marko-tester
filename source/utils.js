@@ -93,7 +93,7 @@ module.exports = {
         withFixFixtures: argv.indexOf('--fix-fixtures') > -1,
         withMocha: argv.indexOf('--with-acceptance') === -1 && argv.indexOf('--no-mocha') === -1,
         withAcceptance: argv.indexOf('--with-acceptance') > -1,
-        config: _.defaults({}, configuration, markoTesterConfig),
+        config: _.merge({}, markoTesterConfig, configuration),
         bundleName: packageInfo.name + '$' + packageInfo.version
       };
     }

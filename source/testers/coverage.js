@@ -50,8 +50,8 @@ function initialize() {
   );
 
   process.on('exit', function createCoverage() {
-    var reporters = config.reporters || 'text-summary';
-    var dest = config.dest || '.coverage';
+    var reporters = config.reporters;
+    var dest = config.dest;
     var collector = new istanbul.Collector();
 
     collector.add(global.__coverage__);
@@ -95,11 +95,15 @@ function initializeBrowser() {
         moduleBody = fileContent.substring(startIndex, endIndex);
       }
 
-      var instrumentedModuleBody = instrumenter.instrumentSync(moduleBody, realPath);
+      try {
+        JSON.parse('{' + moduleBody + '}');
+      } catch (e) {
+        var instrumentedModuleBody = instrumenter.instrumentSync(moduleBody, realPath);
 
-      fileContent = fileContent.substring(0, startIndex) + instrumentedModuleBody + '});';
+        fileContent = fileContent.substring(0, startIndex) + instrumentedModuleBody + '});';
 
-      fs.writeFileSync(filePath, fileContent, 'utf8');
+        fs.writeFileSync(filePath, fileContent, 'utf8');
+      }
     }
 
     files.forEach(instrumentFile);
