@@ -63,7 +63,13 @@ function getStaticModule(file, testPath, errorMessage) {
     pkgInfo.version
   ].join('');
 
-  return '/' + path.join(pkgInfo, file);
+  var mod = '/' + path.join(pkgInfo, file);
+
+  if (/^win/.test(process.platform)) {
+    mod = mod.replace(/\\/g, '/');
+  }
+
+  return mod;
 }
 
 module.exports = {
