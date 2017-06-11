@@ -212,10 +212,12 @@ module.exports = {
     dirsToCheck.forEach(function getFixturePairs(dirToCheck) {
       var fixturesPath = path.join(context.testPath, dirToCheck);
 
-      try {
-        fs.readdirSync(fixturesPath).forEach(buildCases.bind(null, fixturesPath));
-      } catch (error) {
-        // throw new Error('Tester: Cannot read fixtures folder.' + error);
+      if (fs.existsSync(fixturesPath)) {
+        try {
+          fs.readdirSync(fixturesPath).forEach(buildCases.bind(null, fixturesPath));
+        } catch (error) {
+          throw new Error('Tester: Cannot read fixtures folder/file. ' + error);
+        }
       }
     });
 
