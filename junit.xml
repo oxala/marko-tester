@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.035" tests="28" failures="0">
+  <testsuite name="Root Suite" timestamp="2017-06-21T20:50:25" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="component" timestamp="2017-06-21T20:50:25" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/component/test/index.spec.es6.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Given specific input data" timestamp="2017-06-21T20:50:25" tests="3" file="/Users/gryshkov/localhost/marko-tester/test/component/test/index.spec.es6.js" failures="0" time="0.017">
+    <testcase name="component Given specific input data should render component using default input" time="0.016" classname="should render component using default input">
+    </testcase>
+    <testcase name="component Given specific input data should render component using no-content-with-new-line input" time="0.001" classname="should render component using no-content-with-new-line input">
+    </testcase>
+    <testcase name="component Given specific input data should render component using no-content input" time="0" classname="should render component using no-content input">
+    </testcase>
+  </testsuite>
+  <testsuite name="When component is being built" timestamp="2017-06-21T20:50:25" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/component/test/index.spec.es6.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="When widget is being rendered" timestamp="2017-06-21T20:50:26" tests="1" file="/Users/gryshkov/localhost/marko-tester/test/component/test/index.spec.es6.js" failures="0" time="0">
+    <testcase name="component When component is being built When widget is being rendered should alert the user" time="0" classname="should alert the user">
+    </testcase>
+  </testsuite>
+  <testsuite name="util" timestamp="2017-06-21T20:50:26" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/component/test/util.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="When page is ready" timestamp="2017-06-21T20:50:26" tests="2" file="/Users/gryshkov/localhost/marko-tester/test/component/test/util.spec.js" failures="0" time="0.001">
+    <testcase name="util When page is ready should alert the window" time="0.001" classname="should alert the window">
+    </testcase>
+    <testcase name="util When page is ready should return $" time="0" classname="should return $">
+    </testcase>
+  </testsuite>
+  <testsuite name="excluded-component" timestamp="2017-06-21T20:50:26" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/excluded-component/test/index.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Given specific input data" timestamp="2017-06-21T20:50:26" tests="1" file="/Users/gryshkov/localhost/marko-tester/test/excluded-component/test/index.spec.js" failures="0" time="0.003">
+    <testcase name="excluded-component Given specific input data should render component using default input" time="0.003" classname="should render component using default input">
+    </testcase>
+  </testsuite>
+  <testsuite name="nested-component" timestamp="2017-06-21T20:50:26" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/nested-components/component-1/test/index.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Given specific input data" timestamp="2017-06-21T20:50:26" tests="1" file="/Users/gryshkov/localhost/marko-tester/test/nested-components/component-1/test/index.spec.js" failures="0" time="0.002">
+    <testcase name="nested-component Given specific input data should render component using default input" time="0.002" classname="should render component using default input">
+    </testcase>
+  </testsuite>
+  <testsuite name="When component is being built" timestamp="2017-06-21T20:50:26" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/nested-components/component-1/test/index.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="When widget is being rendered" timestamp="2017-06-21T20:50:26" tests="1" file="/Users/gryshkov/localhost/marko-tester/test/nested-components/component-1/test/index.spec.js" failures="0" time="0.001">
+    <testcase name="nested-component When component is being built When widget is being rendered should initialize nested component with a proper state and config" time="0.001" classname="should initialize nested component with a proper state and config">
+    </testcase>
+  </testsuite>
+  <testsuite name="non-marko/dep" timestamp="2017-06-21T20:50:26" tests="1" file="/Users/gryshkov/localhost/marko-tester/test/non-marko/test/dep.spec.js" failures="0" time="0">
+    <testcase name="non-marko/dep should log the message" time="0" classname="should log the message">
+    </testcase>
+  </testsuite>
+  <testsuite name="non-marko/logger" timestamp="2017-06-21T20:50:26" tests="1" file="/Users/gryshkov/localhost/marko-tester/test/non-marko/test/logger.spec.js" failures="0" time="0">
+    <testcase name="non-marko/logger should log the message" time="0" classname="should log the message">
+    </testcase>
+  </testsuite>
+  <testsuite name="non-marko/redirect" timestamp="2017-06-21T20:50:26" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/non-marko/test/redirect.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="When page is ready" timestamp="2017-06-21T20:50:26" tests="1" file="/Users/gryshkov/localhost/marko-tester/test/non-marko/test/redirect.spec.js" failures="0" time="0">
+    <testcase name="non-marko/redirect When page is ready should alert window" time="0" classname="should alert window">
+    </testcase>
+  </testsuite>
+  <testsuite name="renderer" timestamp="2017-06-21T20:50:27" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/renderer/test/renderer.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Given specific input data" timestamp="2017-06-21T20:50:27" tests="2" file="/Users/gryshkov/localhost/marko-tester/test/renderer/test/renderer.spec.js" failures="0" time="0.005">
+    <testcase name="renderer Given specific input data should render component using main input" time="0.004" classname="should render component using main input">
+    </testcase>
+    <testcase name="renderer Given specific input data should render component using no-content input" time="0.001" classname="should render component using no-content input">
+    </testcase>
+  </testsuite>
+  <testsuite name="When component is being built" timestamp="2017-06-21T20:50:27" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/renderer/test/renderer.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="When widget is being rendered" timestamp="2017-06-21T20:50:27" tests="1" file="/Users/gryshkov/localhost/marko-tester/test/renderer/test/renderer.spec.js" failures="0" time="0">
+    <testcase name="renderer When component is being built When widget is being rendered should alert the user" time="0" classname="should alert the user">
+    </testcase>
+  </testsuite>
+  <testsuite name="renderer" timestamp="2017-06-21T20:50:27" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/renderer/test/widget.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="When component is being built" timestamp="2017-06-21T20:50:27" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/renderer/test/widget.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="When widget is being rendered" timestamp="2017-06-21T20:50:27" tests="1" file="/Users/gryshkov/localhost/marko-tester/test/renderer/test/widget.spec.js" failures="0" time="0">
+    <testcase name="renderer When component is being built When widget is being rendered should alert the user" time="0" classname="should alert the user">
+    </testcase>
+  </testsuite>
+  <testsuite name="service" timestamp="2017-06-21T20:50:27" tests="1" file="/Users/gryshkov/localhost/marko-tester/test/service/test/index.spec.js" failures="0" time="0">
+    <testcase name="service should say hello" time="0" classname="should say hello">
+    </testcase>
+  </testsuite>
+  <testsuite name="stateful-component" timestamp="2017-06-21T20:50:27" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/stateful-component/test/index.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Given specific input data" timestamp="2017-06-21T20:50:27" tests="2" file="/Users/gryshkov/localhost/marko-tester/test/stateful-component/test/index.spec.js" failures="0" time="0.003">
+    <testcase name="stateful-component Given specific input data should render component using default input" time="0.002" classname="should render component using default input">
+    </testcase>
+    <testcase name="stateful-component Given specific input data should render component using html input" time="0.001" classname="should render component using html input">
+    </testcase>
+  </testsuite>
+  <testsuite name="Given multiple cases" timestamp="2017-06-21T20:50:27" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/stateful-component/test/index.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="When component is being built" timestamp="2017-06-21T20:50:27" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/stateful-component/test/index.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="When widget is being rendered" timestamp="2017-06-21T20:50:27" tests="4" file="/Users/gryshkov/localhost/marko-tester/test/stateful-component/test/index.spec.js" failures="0" time="0">
+    <testcase name="stateful-component Given multiple cases When component is being built When widget is being rendered should redirect" time="0" classname="should redirect">
+    </testcase>
+    <testcase name="stateful-component Given multiple cases When component is being built When widget is being rendered should store the state in the widget" time="0" classname="should store the state in the widget">
+    </testcase>
+    <testcase name="stateful-component Given multiple cases When component is being built When widget is being rendered should mock the modules methods" time="0" classname="should mock the modules methods">
+    </testcase>
+    <testcase name="stateful-component Given multiple cases When component is being built When widget is being rendered should mock the merge function" time="0" classname="should mock the merge function">
+    </testcase>
+  </testsuite>
+  <testsuite name="When component is being built" timestamp="2017-06-21T20:50:27" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/stateful-component/test/index.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="When widget is being rendered" timestamp="2017-06-21T20:50:27" tests="3" file="/Users/gryshkov/localhost/marko-tester/test/stateful-component/test/index.spec.js" failures="0" time="0">
+    <testcase name="stateful-component Given multiple cases When component is being built When widget is being rendered should redirect" time="0" classname="should redirect">
+    </testcase>
+    <testcase name="stateful-component Given multiple cases When component is being built When widget is being rendered should not mock the modules methods" time="0" classname="should not mock the modules methods">
+    </testcase>
+    <testcase name="stateful-component Given multiple cases When component is being built When widget is being rendered should not mock the merge function" time="0" classname="should not mock the merge function">
+    </testcase>
+  </testsuite>
+  <testsuite name="tbody-component" timestamp="2017-06-21T20:50:27" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/tbody-component/test/index.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Given specific input data" timestamp="2017-06-21T20:50:27" tests="1" file="/Users/gryshkov/localhost/marko-tester/test/tbody-component/test/index.spec.js" failures="0" time="0.003">
+    <testcase name="tbody-component Given specific input data should render component using default input" time="0.003" classname="should render component using default input">
+    </testcase>
+  </testsuite>
+  <testsuite name="When component is being built" timestamp="2017-06-21T20:50:27" tests="0" file="/Users/gryshkov/localhost/marko-tester/test/tbody-component/test/index.spec.js" failures="0" time="0">
+  </testsuite>
+  <testsuite name="When widget is being rendered" timestamp="2017-06-21T20:50:27" tests="1" file="/Users/gryshkov/localhost/marko-tester/test/tbody-component/test/index.spec.js" failures="0" time="0">
+    <testcase name="tbody-component When component is being built When widget is being rendered should be able to access the DOM correctly" time="0" classname="should be able to access the DOM correctly">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -7,10 +7,16 @@ var args = require('optimist').argv;
 var utils = require('../utils');
 var mocha = new Mocha({
   ui: 'bdd',
-  reporter: 'spec',
+  reporter: 'mocha-multi-reporters',
   useInlineDiffs: true,
   grep: args.grep,
   ignoreLeaks: false,
+  reporterOptions: {
+    reporterEnabled: 'mocha-junit-reporter, spec',
+    mochaJunitReporterReporterOptions: {
+      mochaFile: './.coverage/junit.xml'
+    }
+  },
   globals: ['document', 'window', 'GLOBAL_LASSO']
 });
 
