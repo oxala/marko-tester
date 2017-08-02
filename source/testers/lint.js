@@ -118,11 +118,7 @@ function testLint(done) {
     }
   }
 
-  stylelintConfig = _.extend(stylelintConfig, {
-    rules: {
-      'selector-type-no-unknown': null
-    }
-  });
+  stylelintConfig.rules['selector-type-no-unknown'] = null;
 
   return stylelint
     .lint({
