@@ -2,11 +2,8 @@
 
 const path = require('path');
 const fs = require('fs-extra');
-const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
+const JSDOM = require('jsdom').JSDOM;
 const lasso = require('lasso');
-const lassoMarko = require('lasso-marko');
-const lassoLess = require('lasso-less');
 const Promise = require('bluebird');
 const utils = require('../utils');
 const coverage = require('../testers/coverage');
@@ -46,13 +43,13 @@ module.exports.prepare = () => {
     try {
       plugin = require(path.join(utils.config.rootPath, 'node_modules', pluginPath));
     } catch (e) {
-      throw new Error('BuildPage: Unable to require specified Lasso Plugin - ' + pluginPath);
+      throw new Error(`BuildPage: Unable to require specified Lasso Plugin - ${pluginPath}`);
     }
 
     return plugin;
   });
 
-  lassoPlugins = lassoPlugins.concat([lassoLess]);
+  lassoPlugins.push('lasso-less');
   lassoPlugins.push({
     plugin: 'lasso-marko',
     config: {
@@ -69,8 +66,6 @@ module.exports.prepare = () => {
   });
 
   return new Promise((resolve) => {
-    /* eslint global-require: 0 */
-
     const htmlPath = path.join(utils.config.outputPath, 'component-tests.html');
 
     if (pagePrepared) {
@@ -78,7 +73,6 @@ module.exports.prepare = () => {
     }
 
     const out = fs.createWriteStream(htmlPath, 'utf8');
-    const dependencies = utils.config.rendererPaths;
     const browserJSONPath = path.resolve(utils.config.outputPath, 'browser.json');
 
     fs.ensureFileSync(browserJSONPath);
@@ -94,17 +88,16 @@ module.exports.prepare = () => {
         }
 
         return JSDOM.fromFile(htmlPath, {
-            runScripts: 'dangerously',
-            resources: 'usable'
-          })
-          .then((dom) => {
-            global.window = dom.window;
-            global.document = dom.window.document;
-            global.window.console = console;
+          runScripts: 'dangerously',
+          resources: 'usable'
+        }).then((dom) => {
+          global.window = dom.window;
+          global.document = dom.window.document;
+          global.window.console = console;
 
-            pagePrepared = true;
-            window.onload = () => resolve();
-          });
+          pagePrepared = true;
+          window.onload = () => resolve();
+        });
       });
   });
 };

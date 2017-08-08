@@ -1,5 +1,3 @@
-/* eslint no-underscore-dangle: 0 */
-
 'use strict';
 
 const fs = require('fs-extra');
@@ -48,10 +46,7 @@ module.exports.initializeServer = () => {
     global.__coverage__browser.forEach(coverage => collector.add(coverage));
 
     reporters.forEach(reporter =>
-      istanbul.Report.create(reporter, {
-        dir: `${dest}/${reporter}`
-      })
-      .writeReport(collector, true)
+      istanbul.Report.create(reporter, { dir: `${dest}/${reporter}` }).writeReport(collector, true)
     );
   });
 };
@@ -81,11 +76,11 @@ module.exports.initializeBrowser = () => {
       }
 
       try {
-        JSON.parse('{' + moduleBody + '}');
+        JSON.parse(`{${moduleBody}}`);
       } catch (e) {
         const instrumentedModuleBody = instrumenter.instrumentSync(moduleBody, realPath);
 
-        fileContent = fileContent.substring(0, startIndex) + instrumentedModuleBody + '});';
+        fileContent = `${fileContent.substring(0, startIndex)}${instrumentedModuleBody}});`;
 
         fs.writeFileSync(filePath, fileContent, 'utf8');
       }

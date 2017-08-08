@@ -1,10 +1,11 @@
+/* eslint no-dynamic-require: 0 */
+
 'use strict';
 
 const path = require('path');
 const fs = require('fs');
 const _ = require('lodash');
-const argv = require('optimist')
-  .argv;
+const argv = require('optimist').argv;
 const glob = require('glob');
 const tryRequire = require('try-require');
 const stackTrace = require('stack-trace');
@@ -12,9 +13,6 @@ const eslintEs5 = require(path.join(__dirname, '..', 'eslintrc-legacy'));
 const eslint = require(path.join(__dirname, '..', 'eslintrc-es6'));
 const stylelint = require('stylelint-config-standard');
 const defaultConfig = require('../.marko-tester.js');
-const chai = require('chai');
-const sinonChai = require('sinon-chai');
-const chaiAsPromised = require('chai-as-promised');
 const rootPackageInfo = require(`${process.cwd()}/package`);
 
 const rootPath = process.cwd();
@@ -33,34 +31,22 @@ let markoCompiler;
 let markoPackageInfo;
 
 try {
-  /* eslint global-require: 0 */
-
   markoCompiler = require(path.join(rootPath, 'node_modules/marko/compiler'));
 } catch (e) {
-  /* eslint global-require: 0 */
-
   markoCompiler = require('marko/compiler');
 }
 
 try {
-  /* eslint global-require: 0 */
-
   require(path.join(rootPath, 'node_modules/marko/node-require'))
     .install();
 } catch (e) {
-  /* eslint global-require: 0 */
-
   require('marko/node-require')
     .install();
 }
 
 try {
-  /* eslint global-require: 0 */
-
   markoPackageInfo = require(path.join(rootPath, 'node_modules/marko/package'));
 } catch (e) {
-  /* eslint global-require: 0 */
-
   markoPackageInfo = require('marko/package');
 }
 
@@ -74,20 +60,22 @@ config.markoCompiler = markoCompiler;
 module.exports = {
   get options() {
     return {
-      lint: (argv['lint'] === undefined || argv['lint']),
+      lint: (argv.lint === undefined || argv.lint),
       lintEs5: argv['lint-es5'],
       fixLint: argv['fix-lint'],
       fixFixtures: argv['fix-fixtures'],
-      unit: !argv['with-acceptance'] && (argv['mocha'] === undefined || argv['mocha']),
-      coverage: !argv['with-acceptance'] && (argv['coverage'] === undefined || argv['coverage']),
+      unit: !argv['with-acceptance'] && (argv.mocha === undefined || argv.mocha),
+      coverage: !argv['with-acceptance'] && (argv.coverage === undefined || argv.coverage),
       acceptance: argv['with-acceptance']
     };
   },
 
   get config() {
-    let configuration = tryRequire(path.join(rootPath, '.marko-tester')) || {};
-
-    return _.defaultsDeep(config, defaultConfig, configuration);
+    return _.defaultsDeep(
+      config,
+      defaultConfig,
+      tryRequire(path.join(rootPath, '.marko-tester')) || {}
+    );
   },
 
   get(namespace, defaultValue) {
@@ -124,11 +112,12 @@ module.exports = {
         return;
       }
 
-      let dependencyPath = path.isAbsolute(dependency) ? dependency : path.join(rootPath, dependency);
+      const dependencyPath = path.relative(
+        __dirname,
+        path.isAbsolute(dependency) ? dependency : path.join(rootPath, dependency)
+      );
 
-      dependencyPath = path.relative(__dirname, dependencyPath);
-
-      config.dependencies.push('require: ' + dependencyPath);
+      config.dependencies.push(`require: ${dependencyPath}`);
     });
 
     this.config.taglibExcludeDirs.forEach(dirPath =>
@@ -143,9 +132,7 @@ module.exports = {
   },
 
   get renderer() {
-    /* eslint global-require: 0 */
-
-    let rendererPath = glob.sync(path.resolve(
+    const rendererPath = glob.sync(path.resolve(
       path.join(this.testPath, '..'),
       'index.marko'
     ));
@@ -203,8 +190,6 @@ module.exports = {
         try {
           fs.readdirSync(fixturesPath)
             .forEach((file) => {
-              /* eslint global-require: 0 */
-
               const absPath = path.join(fixturesPath, file);
               const extension = path.extname(absPath);
               const testName = path.basename(absPath, '.html');
@@ -222,7 +207,7 @@ module.exports = {
               }
             });
         } catch (error) {
-          throw new Error('Tester: Cannot read fixtures folder/file. ' + error);
+          throw new Error(`Tester: Cannot read fixtures folder/file. ${error}`);
         }
       }
     });
@@ -239,31 +224,6 @@ module.exports = {
     func(context, options, callback);
   },
 
-  prepareBrowserJson(dependencies) {
-    if (!dependencies && !dependencies.length) {
-      return;
-    }
-
-    var dependenciesArray = dependencies;
-
-    if (!_.isArray(dependencies)) {
-      dependenciesArray = [dependencies];
-      dependenciesArray = dependenciesArray.concat(glob.sync(path.resolve(dependencies, '..', 'component.js')));
-    }
-
-    dependenciesArray.forEach(function resolveDependency(component) {
-      if (_.isObject(component)) {
-        helpers.rendererPaths.push(component);
-      } else {
-        var componentPath = path.isAbsolute(component) ? component : path.join(rootPath, component);
-
-        componentPath = path.relative(__dirname, componentPath);
-
-        helpers.rendererPaths.push('require: ' + componentPath);
-      }
-    });
-  },
-
   addBrowserDependency(markoPath) {
     if (!markoPath) {
       markoPath = path.resolve(this.testPath, '..', 'index.marko');
@@ -276,8 +236,8 @@ module.exports = {
     return path.relative(rootPath, markoPath);
   },
 
-  mockBrowser(context, mock) {
-    const mockRequirePaths = mock.require || {};
+  mockBrowser(context, mocks) {
+    const mockRequirePaths = mocks.require || {};
 
     Object.keys(mockRequirePaths)
       .forEach((filePath) => {
@@ -285,7 +245,7 @@ module.exports = {
         const mod = this.getStaticModule(
           filePath,
           this.testPath,
-          'BuildComponent: Cannot resolve module to mock require for - ' + filePath
+          `BuildComponent: Cannot resolve module to mock require for - ${filePath}`
         );
 
         let cachedMod = window.require.cache[mod];
@@ -299,15 +259,13 @@ module.exports = {
         cachedMod.exports = mock;
       });
 
-    if (mock.component) {
-      const mockedComponents = mock.component || {};
+    if (mocks.component) {
       const originalGetComponent = window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.getComponent;
 
       window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.originalGetComponent = originalGetComponent;
 
-      window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.getComponent = (id, index) => {
-        return mock.component[id] || originalGetComponent.call(originalGetComponent, id, index);
-      };
+      window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.getComponent = (id, index) =>
+        mocks.component[id] || originalGetComponent.call(originalGetComponent, id, index);
     }
   },
 
@@ -319,7 +277,7 @@ module.exports = {
         const mod = this.getStaticModule(
           filePath,
           this.testPath,
-          'BuildComponent: Cannot resolve module to mock require for - ' + filePath
+          `BuildComponent: Cannot resolve module to mock require for - ${filePath}`
         );
         const cachedMod = window.require.cache[mod];
 
@@ -334,24 +292,22 @@ module.exports = {
   },
 
   getStaticModule(file, testPath, errorMessage) {
-    var pkgInfo;
-    var isAbsolute = path.isAbsolute(file);
+    const isAbsolute = path.isAbsolute(file);
+    let pkgInfo;
 
     if (!isAbsolute && file[0] !== '.') {
-      var fileArray = file.split('/');
+      const fileArray = file.split('/');
 
       try {
-        var modulePath = path.resolve(rootPath, 'node_modules', fileArray[0]);
+        const modulePath = path.resolve(rootPath, 'node_modules', fileArray[0]);
         fs.lstatSync(modulePath);
         pkgInfo = require(path.join(modulePath, 'package'));
         file = fileArray.splice(1)
           .join('/') || pkgInfo.main.split('.')[0];
       } catch (errorNodeModule) {
         try {
-          var moduleFilePath = path.resolve(rootPath, fileArray[0]);
-          fs.lstatSync(moduleFilePath);
+          fs.lstatSync(path.resolve(rootPath, fileArray[0]));
         } catch (errorFile) {
-          /* eslint no-console: 0 */
           console.error(errorMessage);
         }
       }
@@ -370,7 +326,7 @@ module.exports = {
       pkgInfo.version
     ].join('');
 
-    var mod = '/' + path.join(pkgInfo, file);
+    let mod = `/${path.join(pkgInfo, file)}`;
 
     if (/^win/.test(process.platform)) {
       mod = mod.replace(/\\/g, '/');
@@ -380,10 +336,10 @@ module.exports = {
   },
 
   modRequire(modPath) {
-    var mod = this.getStaticModule(
+    let mod = this.getStaticModule(
       modPath,
       this.testPath,
-      'Cannot require static module - ' + modPath
+      `Cannot require static module - ${modPath}`
     );
 
     try {
@@ -415,12 +371,6 @@ module.exports = {
     };
   },
 
-  createParams(fn, context) {
-    const paramString = fn.toString()
-      .match(/(function)?(\s*)?(\()?([^)=]*)/)[4];
-    const paramList = paramString.split(',')
-      .map(key => context[key.trim()]);
-
-    return paramList;
-  },
+  createParams: (fn, context) => fn.toString().match(/(function)?(\s*)?(\()?([^)=]*)/)[4]
+    .split(',').map(key => context[key.trim()])
 };

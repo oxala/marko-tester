@@ -1,7 +1,5 @@
 'use strict';
 
-const path = require('path');
-const glob = require('glob');
 const _ = require('lodash');
 const utils = require('../utils');
 
@@ -30,17 +28,12 @@ const buildComponent = (context, opts, cb) => {
           }
 
           const layout = options.layout || 'container';
-          const componentContainer = window['component-' + layout];
+          const componentContainer = window[`component-${layout}`];
 
-          context.marko.component = renderResult.appendTo(componentContainer)
-            .getComponent();
+          context.marko.component = renderResult.appendTo(componentContainer).getComponent();
 
           done();
         });
-
-      // if (!Widget) {
-      //   done(new Error('BuildComponent: Cannot find any attached widgets for the template. Make sure you used `w-bind` in your template.'));
-      // }
     });
 
     callback.call(this);
