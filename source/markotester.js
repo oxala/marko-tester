@@ -2,27 +2,34 @@
 
 'use strict';
 
-var async = require('async');
-var testLint = require('./testers/lint');
-var testMocha = require('./testers/mocha');
-var testAcceptance = require('./testers/acceptance');
-var utils = require('./utils');
-var steps = [];
+const async = require('async');
+const testLint = require('./testers/lint');
+const testMocha = require('./testers/mocha');
+const utils = require('./utils');
+const steps = [];
 
-if (utils.getHelpers().withLint) {
+if (utils.options.lint) {
   steps.push(testLint);
 }
 
-if (utils.getHelpers().withMocha) {
+if (utils.options.unit) {
   steps.push(testMocha);
 }
 
-if (utils.getHelpers().withAcceptance) {
-  steps.push(testAcceptance);
+if (utils.options.coverage) {
+  steps.push((done) => {
+    /* eslint no-underscore-dangle: 0 */
+    if (global.__coverage__browser && global.window.__coverage__) {
+      global.__coverage__browser.push(global.window.__coverage__);
+    }
+
+    done();
+  });
 }
 
 global.tester = require('./index.es6');
 
-async.waterfall(steps, function exit(err) {
-  process.exit(err);
-});
+async.waterfall(
+  steps,
+  (err) => process.exit(err)
+);
