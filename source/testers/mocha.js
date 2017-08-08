@@ -7,6 +7,7 @@ const args = require('optimist')
   .argv;
 const utils = require('../utils');
 const coverage = require('./coverage');
+
 const mocha = new Mocha({
   ui: 'bdd',
   reporter: 'mocha-multi-reporters',
@@ -32,7 +33,7 @@ module.exports = (done) => {
 
   utils.sourcePaths.forEach(sourcePath =>
     glob.sync(path.resolve(utils.config.rootPath, sourcePath, '**/*.spec?(.es5)?(.es6).js'))
-    .forEach(testFile => mocha.addFile(testFile))
+      .forEach(testFile => mocha.addFile(testFile))
   );
 
   mocha.run(failures => done(failures));

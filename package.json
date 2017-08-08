@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git@github.com:oxala/marko-tester.git"
   },
-  "main": "./source/index.es6",
+  "main": "./source/index",
   "bin": {
     "markotester": "./source/markotester.js"
   },

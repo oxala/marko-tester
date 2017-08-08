@@ -2,7 +2,6 @@
 
 const path = require('path');
 const _ = require('lodash');
-const glob = require('glob');
 const stylelint = require('stylelint');
 const CLI = require('eslint').CLIEngine;
 const utils = require('../utils');
@@ -52,13 +51,13 @@ module.exports = (done) => {
     }
 
     if (report.errorCount + report.warningCount > 0) {
-      process.stdout.write(CLI.getFormatter()(report.results) + '\n\n');
+      process.stdout.write(`${CLI.getFormatter()(report.results)}\n\n`);
 
       if (report.errorCount > 0) {
         error = 1;
       }
     } else if (report.errorCount === 0) {
-      process.stdout.write('No ' + lintVersion + ' errors detected!\n\n');
+      process.stdout.write(`No ${lintVersion} errors detected!\n\n`);
     }
 
     if (error) {

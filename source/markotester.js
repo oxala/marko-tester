@@ -6,6 +6,7 @@ const async = require('async');
 const testLint = require('./testers/lint');
 const testMocha = require('./testers/mocha');
 const utils = require('./utils');
+
 const steps = [];
 
 if (utils.options.lint) {
@@ -18,8 +19,7 @@ if (utils.options.unit) {
 
 if (utils.options.coverage) {
   steps.push((done) => {
-    /* eslint no-underscore-dangle: 0 */
-    if (global.__coverage__browser && global.window.__coverage__) {
+    if (global.__coverage__browser && global.window && global.window.__coverage__) {
       global.__coverage__browser.push(global.window.__coverage__);
     }
 
@@ -27,9 +27,9 @@ if (utils.options.coverage) {
   });
 }
 
-global.tester = require('./index.es6');
+global.tester = require('./');
 
 async.waterfall(
   steps,
-  (err) => process.exit(err)
+  err => process.exit(err)
 );

@@ -17,7 +17,6 @@ require('app-module-path')
 
 const sinonChai = require('sinon-chai');
 const chaiAsPromised = require('chai-as-promised');
-const coverage = require('./testers/coverage');
 
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
@@ -36,8 +35,6 @@ const buildTester = (testString, opts, cb) => {
   }
 
   options.mochaOperation(testString, () => {
-    /* eslint no-shadow: 0 */
-
     const context = utils.context;
 
     context.options = options;
@@ -53,11 +50,11 @@ const buildTester = (testString, opts, cb) => {
     context.testPage.only = testPage.only.bind(this, context);
     context.testPage.skip = testPage.skip.bind(this, context);
 
-    callback.apply(null, utils.createParams(callback, {
-      expect: expect,
-      sinon: sinon,
+    callback(...utils.createParams(callback, {
+      expect,
+      sinon,
       rewire: (filePath) => {
-        var file = filePath;
+        let file = filePath;
 
         if (file[0] !== '.') {
           try {
@@ -71,7 +68,7 @@ const buildTester = (testString, opts, cb) => {
 
         return rewire(file);
       },
-      mockRequire: mockRequire,
+      mockRequire,
       modRequire: utils.modRequire.bind(utils),
       testFixtures: context.testFixtures,
       testComponent: context.testComponent,

@@ -15,45 +15,22 @@ const cleanRenderedHtml = (html) => {
 
   if (trimmedHtml) {
     trimmedHtml = new Normalizer({
-        attributes: null,
-        attributesExcluded: excludedAttributes,
-        styles: null,
-        classNames: null
-      })
-      .domString(trimmedHtml);
+      attributes: null,
+      attributesExcluded: excludedAttributes,
+      styles: null,
+      classNames: null
+    }).domString(trimmedHtml);
 
     (trimmedHtml.match(/="{(.+?)(?=(}" |}">))}|="\[(.+?)(?=(]" |]">))]/g) || [])
-    .map(i => i.substr(2, i.length))
+      .map(i => i.substr(2, i.length))
       .forEach((snippet) => {
-        trimmedHtml = trimmedHtml.replace(
-            snippet,
-            snippet.replace(/"/g, '\'')
-          )
-          .replace(
-            /\<\/br>/g,
-            ''
-          )
+        trimmedHtml = trimmedHtml.replace(snippet, snippet.replace(/"/g, '\''))
+          .replace(/<\/br>/g, '');
       });
   }
 
   return trimmedHtml;
 };
-const renderHtml = (renderer, fixture) => {
-  return new Promise((resolqgve, reject) => {
-    var callback = (error, result) => {
-      if (error) {
-        return reject('TestFixtures: Failed to render component html.');
-      }
-
-      var html = _.isObject(result) ? result.html : result;
-
-      return resolve(cleanRenderedHtml(html));
-    };
-
-    callback.global = {};
-    renderer.renderToString(fixture, callback);
-  });
-}
 const testFixtures = (context, opts) => {
   const options = opts || {};
 
@@ -80,43 +57,32 @@ const testFixtures = (context, opts) => {
 
   options.mochaOperation('Given specific input data', () => {
     testCases.forEach((testCase) => {
-      it(
-        'should render component using ' + testCase.name + ' input',
-        function compareRenderedHtml(done) {
-          this.timeout(utils.config.componentTimeout);
+      it(`should render component using ${testCase.name} input`, (done) => {
+        let expectedHtml = cleanRenderedHtml(testCase.expectedHtml);
 
-          let expectedHtml = cleanRenderedHtml(testCase.expectedHtml);
+        new Promise((resolve, reject) => {
+          const callback = (error, result) => {
+            if (error) {
+              return reject('TestFixtures: Failed to render component html.');
+            }
 
-          new Promise((resolve, reject) => {
-              const callback = (error, result) => {
-                if (error) {
-                  return reject('TestFixtures: Failed to render component html.');
-                }
+            return resolve(cleanRenderedHtml(_.isObject(result) ? result.html : result));
+          };
 
-                var html = _.isObject(result) ? result.html : result;
+          callback.global = {};
+          context.renderer.renderToString(testCase.fixture, callback);
+        }).catch((error) => {
+          throw new Error(error);
+        }).then((actualHtml) => {
+          if (utils.options.fixFixtures && actualHtml !== expectedHtml) {
+            fs.writeFileSync(testCase.absPath, `${actualHtml}\n`, 'utf-8');
+            expectedHtml = actualHtml;
+          }
 
-                return resolve(cleanRenderedHtml(html));
-              };
-
-              callback.global = {};
-              context.renderer.renderToString(testCase.fixture, callback);
-            })
-            .catch((error) => {
-              throw new Error(error);
-            })
-            .then((actualHtml) => {
-              if (utils.options.fixFixtures && actualHtml !== expectedHtml) {
-                fs.writeFileSync(testCase.absPath, actualHtml + '\n', 'utf-8');
-                expectedHtml = actualHtml;
-              }
-
-              expect(actualHtml)
-                .to.be.equal(expectedHtml);
-              done();
-            })
-            .catch(done);
-        }
-      );
+          expect(actualHtml).to.be.equal(expectedHtml);
+          done();
+        }).catch(done);
+      });
     });
   });
 };
