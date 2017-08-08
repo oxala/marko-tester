@@ -5,14 +5,16 @@ var dep = require('./dep');
 var async = require('async');
 var merge = require('lodash/merge');
 
-module.exports = class {
-  onCreate(input) {
-    this.state = input;
-  }
+module.exports = require('marko-widgets').defineComponent({
+  template: template,
 
-  onMount() {
+  getInitialState: function getInitialState(input) {
+    return input;
+  },
+
+  init: function init() {
     this.async = async;
     this.merge = merge;
     document.location.replace(dep.url);
   }
-};
+});

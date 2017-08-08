@@ -1,186 +1,180 @@
 'use strict';
 
-var mockRequire = require('mock-require');
-var sinon = require('sinon');
-var chai = require('chai');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
+const mockRequire = require('mock-require');
+const sinon = require('sinon');
+const chai = require('chai');
+const sinonChai = require('sinon-chai');
+
+const expect = chai.expect;
 
 chai.use(sinonChai);
 
-describe('markotester', function () {
-  var mockUtils;
-  var mockGetHelpers;
+describe('markotester', () => {
+  let mockUtils;
 
-  beforeEach(function () {
-    mockGetHelpers = {
-      withLint: true,
-      withMocha: true,
-      withAcceptance: true
-    };
+  beforeEach(() => {
+    delete require.cache[require.resolve('../markotester')];
+
     mockUtils = {
-      getHelpers: sinon.stub()
+      options: {
+        lint: true,
+        unit: true,
+        acceptance: true
+      }
     };
 
     sinon.stub(process, 'exit');
 
-    mockRequire('../utils', mockUtils);
+    mockRequire('../utils2', mockUtils);
   });
 
-  afterEach(function () {
+  afterEach(() => {
     process.exit.restore();
-    delete require.cache[require.resolve('../markotester')];
     mockRequire.stopAll();
   });
 
-  describe('Given no failed steps', function () {
-    var mockTestLint;
-    var mockTestMocha;
-    var mockTestAcceptance;
+  describe('Given no failed steps', () => {
+    let mockTestLint;
+    let mockTestMocha;
+    let mockTestAcceptance;
+    let mockIndex;
 
-    beforeEach(function () {
-      mockTestLint = sinon.spy(function (done) {
-        done();
-      });
-      mockTestMocha = sinon.spy(function (done) {
-        done();
-      });
-      mockTestAcceptance = sinon.spy(function (done) {
-        done();
-      });
+    beforeEach(() => {
+      mockTestLint = sinon.spy(done => done());
+      mockTestMocha = sinon.spy((done) => done());
+      mockTestAcceptance = sinon.spy((done) => done());
+      mockIndex = {};
 
       mockRequire('../testers/lint', mockTestLint);
       mockRequire('../testers/mocha', mockTestMocha);
       mockRequire('../testers/acceptance', mockTestAcceptance);
+      mockRequire('../index.es6', mockIndex);
     });
 
-    describe('Given nothing should be skipped', function () {
-      beforeEach(function (done) {
-        mockUtils.getHelpers.returns(mockGetHelpers);
+    describe('Given nothing should be skipped', () => {
+      beforeEach((done) => {
         require('../markotester');
         setTimeout(done, 10);
       });
 
-      it('should execute lint test', function () {
+      it('should make tester globally available', () => {
+        expect(global.tester).to.be.deep.equal(mockIndex);
+      });
+
+      it('should execute lint test', () => {
         expect(mockTestLint).to.be.called;
       });
 
-      it('should execute mocha test', function () {
+      it('should execute mocha test', () => {
         expect(mockTestMocha).to.be.called;
       });
 
-      it('should execute acceptance test', function () {
+      it('should execute acceptance test', () => {
         expect(mockTestAcceptance).to.be.called;
       });
 
-      it('should exit the process successfully', function () {
+      it('should exit the process successfully', () => {
         expect(process.exit).to.be.calledWith();
       });
     });
 
-    describe('Given lint should be skipped', function () {
-      beforeEach(function (done) {
-        mockGetHelpers.withLint = false;
-        mockUtils.getHelpers.returns(mockGetHelpers);
+    describe('Given lint should be skipped', () => {
+      beforeEach((done) => {
+        mockUtils.options.lint = false;
         require('../markotester');
         setTimeout(done, 10);
       });
 
-      it('should execute lint test', function () {
+      it('should execute lint test', () => {
         expect(mockTestLint).not.to.be.called;
       });
 
-      it('should execute mocha test', function () {
+      it('should execute mocha test', () => {
         expect(mockTestMocha).to.be.called;
       });
 
-      it('should execute acceptance test', function () {
+      it('should execute acceptance test', () => {
         expect(mockTestAcceptance).to.be.called;
       });
 
-      it('should exit the process successfully', function () {
+      it('should exit the process successfully', () => {
         expect(process.exit).to.be.calledWith();
       });
     });
 
-    describe('Given mocha should be skipped', function () {
-      beforeEach(function (done) {
-        mockGetHelpers.withMocha = false;
-        mockUtils.getHelpers.returns(mockGetHelpers);
+    describe('Given mocha should be skipped', () => {
+      beforeEach((done) => {
+        mockUtils.options.unit = false;
         require('../markotester');
         setTimeout(done, 10);
       });
 
-      it('should execute lint test', function () {
+      it('should execute lint test', () => {
         expect(mockTestLint).to.be.called;
       });
 
-      it('should execute mocha test', function () {
+      it('should execute mocha test', () => {
         expect(mockTestMocha).not.to.be.called;
       });
 
-      it('should execute acceptance test', function () {
+      it('should execute acceptance test', () => {
         expect(mockTestAcceptance).to.be.called;
       });
 
-      it('should exit the process successfully', function () {
+      it('should exit the process successfully', () => {
         expect(process.exit).to.be.calledWith();
       });
     });
 
-    describe('Given acceptance should be skipped', function () {
-      beforeEach(function (done) {
-        mockGetHelpers.withAcceptance = false;
-        mockUtils.getHelpers.returns(mockGetHelpers);
+    describe('Given acceptance should be skipped', () => {
+      beforeEach((done) => {
+        mockUtils.options.acceptance = false;
         require('../markotester');
         setTimeout(done, 10);
       });
 
-      it('should execute lint test', function () {
+      it('should execute lint test', () => {
         expect(mockTestLint).to.be.called;
       });
 
-      it('should execute mocha test', function () {
+      it('should execute mocha test', () => {
         expect(mockTestMocha).to.be.called;
       });
 
-      it('should execute acceptance test', function () {
+      it('should execute acceptance test', () => {
         expect(mockTestAcceptance).not.to.be.called;
       });
 
-      it('should exit the process successfully', function () {
+      it('should exit the process successfully', () => {
         expect(process.exit).to.be.calledWith();
       });
     });
   });
 
-  describe('Given failed step', function () {
-    var mockTestLint;
-    var mockError;
+  describe('Given failed step', () => {
+    let mockTestLint;
+    let mockError;
 
-    beforeEach(function () {
+    beforeEach(() => {
       mockError = 'error';
-      mockTestLint = sinon.spy(function (done) {
-        done(mockError);
-      });
+      mockTestLint = sinon.spy(done => done(mockError));
 
       mockRequire('../testers/lint', mockTestLint);
     });
 
-    describe('Given only lint should be executed', function () {
-      beforeEach(function (done) {
-        mockGetHelpers.withMocha = false;
-        mockGetHelpers.withAcceptance = false;
-        mockUtils.getHelpers.returns(mockGetHelpers);
+    describe('Given only lint should be executed', () => {
+      beforeEach((done) => {
+        mockUtils.options.unit = false;
+        mockUtils.options.acceptance = false;
         require('../markotester');
         setTimeout(done, 10);
       });
 
-      it('should execute lint test', function () {
+      it('should execute lint test', () => {
         expect(mockTestLint).to.be.called;
       });
 
-      it('should exit the process with an error', function () {
+      it('should exit the process with an error', () => {
         expect(process.exit).to.be.calledWith(mockError);
       });
     });
