@@ -11,7 +11,7 @@
     "markotester": "./source/markotester.js"
   },
   "scripts": {
-    "test": "npm run eslint && npm run coverage && npm run integration-test",
+    "test": "npm run eslint",
     "eslint": "node ./source/markotester source --no-mocha",
     "unit-test": "./node_modules/.bin/_mocha $(find source -name '*.spec.js')",
     "integration-test": "node ./source/markotester test --no-coverage --no-lint",

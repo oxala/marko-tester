@@ -9,11 +9,12 @@ const argv = require('optimist').argv;
 const glob = require('glob');
 const tryRequire = require('try-require');
 const stackTrace = require('stack-trace');
-const eslintEs5 = require(path.join(__dirname, '..', 'eslintrc-legacy'));
-const eslint = require(path.join(__dirname, '..', 'eslintrc-es6'));
 const stylelint = require('stylelint-config-standard');
 const defaultConfig = require('../.marko-tester.js');
+
 const rootPackageInfo = require(`${process.cwd()}/package`);
+const eslintEs5 = require(path.join(__dirname, '..', 'eslintrc-legacy'));
+const eslint = require(path.join(__dirname, '..', 'eslintrc-es6'));
 
 const rootPath = process.cwd();
 const config = {
