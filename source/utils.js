@@ -200,9 +200,9 @@ module.exports = {
                 const expectedHtml = fs.readFileSync(absPath, 'utf-8');
 
                 fixturesData.push({
-                  testName: testName,
-                  absPath: absPath,
-                  expectedHtml: expectedHtml,
+                  testName,
+                  absPath,
+                  expectedHtml,
                   data: fixture
                 });
               }

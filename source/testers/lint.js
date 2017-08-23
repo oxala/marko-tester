@@ -16,21 +16,23 @@ module.exports = (done) => {
         '**/*.marko.js'
       ], utils.get('config.lint.ignorePattern', []))
     };
-    const cli = new CLI(config);
+    let files;
 
     if (esVersion === 'es5') {
       config.baseConfig = utils.config.eslintEs5;
-      config.files = '**/*.es5.js';
+      files = '*.es5.js';
     } else if (esVersion === 'es6') {
       config.baseConfig = utils.config.eslint;
-      config.files = '**/*.es6.js';
+      files = '*.es6.js';
     } else {
       config.ignorePattern.push(utils.options.lintEs5 ? '*.es6.js' : '*.es5.js');
-      config.files = '**/*.js';
+      files = '*.js';
     }
 
-    config.files = utils.sourcePaths.map(sourcePath => path.join(sourcePath, config.files));
+    config.files = utils.sourcePaths.map(sourcePath => path.join(sourcePath, '**', files));
+    config.files.push(files);
 
+    const cli = new CLI(config);
     const report = cli.executeOnFiles(config.files.map(
       filesPath => path.join(utils.config.rootPath, filesPath)
     ));

@@ -1,6 +1,6 @@
 'use strict';
 
-global.tester('tbody-component', (expect, sinon, testFixtures, testComponent, marko) => {
+global.tester.only('tbody-component', (expect, sinon, testFixtures, testComponent, marko) => {
   testFixtures();
 
   testComponent({

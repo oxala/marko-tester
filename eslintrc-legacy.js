@@ -1,6 +1,8 @@
+'use strict';
+
 module.exports = {
-  "extends": [
-    "eslint-config-marko-tester/legacy",
-    "./eslintrc"
+  extends: [
+    'eslint-config-marko-tester/legacy',
+    './eslintrc'
   ].map(require.resolve)
 };

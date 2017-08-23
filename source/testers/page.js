@@ -37,7 +37,7 @@ module.exports.prepare = () => {
   fs.ensureDirSync(utils.config.outputPath);
 
   const lassoPluginPaths = utils.config.lassoPlugins || [];
-  let lassoPlugins = lassoPluginPaths.map((pluginPath) => {
+  const lassoPlugins = lassoPluginPaths.map((pluginPath) => {
     let plugin;
 
     try {
