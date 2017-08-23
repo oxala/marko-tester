@@ -1,9 +1,10 @@
 'use strict';
 
-global.tester('component', (expect, sinon, testFixtures, testComponent) => {
+global.tester('component', (expect, sinon, testFixtures, testComponent, testPage) => {
   testFixtures();
 
-  testComponent(() => {
+  testPage(() => {
+
     beforeEach(() => {
       sinon.stub(document.location, 'replace');
     });
@@ -12,8 +13,10 @@ global.tester('component', (expect, sinon, testFixtures, testComponent) => {
       document.location.replace.restore();
     });
 
-    it('should alert the user', () => {
-      expect(document.location.replace).to.be.called;
+    testComponent(() => {
+      it('should alert the user', () => {
+        expect(document.location.replace).to.be.calledWith('hello-world');
+      });
     });
   });
 });

@@ -2,9 +2,9 @@
 
 global.tester('util', (expect, sinon, modRequire, testPage) => {
   testPage(() => {
-    const util;
-    const hello;
-    const result;
+    let util;
+    let hello;
+    let result;
 
     beforeEach(() => {
       hello = 'world';

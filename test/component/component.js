@@ -4,6 +4,6 @@ require('./util');
 
 module.exports = class {
   onMount() {
-    document.location.replace();
+    document.location.replace('hello-world');
   }
 };
