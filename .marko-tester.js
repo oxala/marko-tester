@@ -1,17 +1,16 @@
 'use strict';
 
 module.exports = {
+  components: [],
   taglibExcludeDirs: [
-    'test'
   ],
   taglibExcludePackages: [
-    'excluded-component'
   ],
-  excludedAttributes: ['data-widget'],
+  excludedAttributes: [],
   lassoPlugins: [],
   componentTimeout: 10000,
-  onInit: function onInit() {},
-  onDestroy: function onDestroy() {},
+  onInit: () => {},
+  onDestroy: () => {},
   coverage: {
     reporters: [
       'text-summary',

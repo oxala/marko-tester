@@ -1,9 +1,7 @@
 'use strict';
 
-var dep = require('./dep');
+const dep = require('./dep');
 
-function logger() {
+module.exports = () => {
   console.log(dep.message);
-}
-
-module.exports = logger;
+};

@@ -1,7 +1,5 @@
 'use strict';
 
-function redirect() {
+module.exports = () => {
   document.location.replace('hello-world');
-}
-
-module.exports = redirect;
+};

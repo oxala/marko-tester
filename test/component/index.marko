@@ -1,0 +1,15 @@
+$ const viewModel = input.viewModel;
+$ const config = input.config;
+<div class="mock-component" if(viewModel)>
+  <h1>${input.content.get('title')}</h1>
+  <p>${viewModel.content}</p>
+  <div if(config)>
+    <a _sp="${input.tracking.spTag().moduleId(8242).linkId(8243)}">
+      ${config.url}
+    </a>
+    <p>${config.locale}</p>
+    <p>${config.timeout}</p>
+    <p>$!{config.isDev}</p>
+  </div>
+  <excluded-component/>
+</div>

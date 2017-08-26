@@ -1,21 +1,18 @@
 'use strict';
 
-var tester = require('../../../');
-var redirect = require('../redirect');
-
-tester('non-marko/redirect', function (expect, sinon) {
-  this.buildPage(function () {
-    beforeEach(function () {
+global.tester('non-marko/redirect', (expect, sinon, testPage, marko) => {
+  testPage(() => {
+    beforeEach(() => {
       sinon.stub(document.location, 'replace');
 
-      redirect();
+      marko.require('../redirect')();
     });
 
-    afterEach(function () {
+    afterEach(() => {
       document.location.replace.restore();
     });
 
-    it('should alert window', function () {
+    it('should alert window', () => {
       expect(document.location.replace).to.be.calledWith('hello-world');
     });
   });

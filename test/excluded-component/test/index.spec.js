@@ -1,7 +1,5 @@
 'use strict';
 
-var tester = require('../../../');
-
-tester('excluded-component', function () {
-  this.testFixtures();
+global.tester('excluded-component', (testFixtures) => {
+  testFixtures();
 });

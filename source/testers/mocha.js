@@ -1,16 +1,20 @@
 'use strict';
 
-var path = require('path');
-var glob = require('glob');
-var Mocha = require('mocha');
-var args = require('optimist').argv;
-var utils = require('../utils');
-var mocha = new Mocha({
+const path = require('path');
+const glob = require('glob');
+const Mocha = require('mocha');
+const args = require('optimist')
+  .argv;
+const utils = require('../utils');
+const coverage = require('./coverage');
+
+const mocha = new Mocha({
   ui: 'bdd',
   reporter: 'mocha-multi-reporters',
   useInlineDiffs: true,
   grep: args.grep,
   ignoreLeaks: false,
+  timeout: utils.config.componentTimeout,
   reporterOptions: {
     reporterEnabled: 'mocha-junit-reporter, spec',
     mochaJunitReporterReporterOptions: {
@@ -20,24 +24,17 @@ var mocha = new Mocha({
   globals: ['document', 'window', 'GLOBAL_LASSO']
 });
 
-function testMocha(done) {
-  var sourcePaths = utils.getSourcePaths();
+module.exports = (done) => {
+  utils.configure();
 
-  utils.loadConfiguration();
-
-  function searchPathForTests(sourcePath) {
-    var testFiles = glob.sync(path.resolve(utils.getHelpers().rootPath, sourcePath, '**/*.spec?(.es6).js'));
-
-    testFiles.forEach(function addPathToMocha(testFile) {
-      mocha.addFile(testFile);
-    });
+  if (utils.options.coverage) {
+    coverage.initializeServer();
   }
 
-  sourcePaths.forEach(searchPathForTests);
+  utils.sourcePaths.forEach(sourcePath =>
+    glob.sync(path.resolve(utils.config.rootPath, sourcePath, '**/*.spec?(.es5)?(.es6).js'))
+      .forEach(testFile => mocha.addFile(testFile))
+  );
 
-  mocha.run(function exitMarkoTester(failures) {
-    done(failures);
-  });
-}
-
-module.exports = testMocha;
+  mocha.run(failures => done(failures));
+};

@@ -1,14 +1,12 @@
 'use strict';
 
-var tester = require('../../../');
+global.tester('util', (expect, sinon, modRequire, testPage) => {
+  testPage(() => {
+    let util;
+    let hello;
+    let result;
 
-tester('util', function (expect, sinon, modRequire) {
-  this.buildPage(function () {
-    var util;
-    var hello;
-    var result;
-
-    beforeEach(function () {
+    beforeEach(() => {
       hello = 'world';
       sinon.stub(window, 'alert');
 
@@ -17,15 +15,15 @@ tester('util', function (expect, sinon, modRequire) {
       result = util(hello);
     });
 
-    afterEach(function () {
+    afterEach(() => {
       window.alert.restore();
     });
 
-    it('should alert the window', function () {
+    it('should alert the window', () => {
       expect(window.alert).to.be.calledWith(hello);
     });
 
-    it('should return $', function () {
+    it('should return $', () => {
       expect(result).to.be.equal('$');
     });
   });
