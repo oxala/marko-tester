@@ -63,8 +63,8 @@
     "sinon-chai": "^2.8.0",
     "stack-trace": "0.0.9",
     "stream-browserify": "^2.0.1",
-    "stylelint": "^7.5.0",
-    "stylelint-config-standard": "^14.0.0",
+    "stylelint": "^8.0.0",
+    "stylelint-config-standard": "^17.0.0",
     "try-require": "^1.2.1",
     "webdriverio": "^4.4.0"
   },
