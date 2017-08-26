@@ -43,7 +43,7 @@
     "firefox-profile": "^0.4.2",
     "fs-extra": "^0.30.0",
     "glob": "^7.0.5",
-    "html-normalizer": "git+ssh://git@github.com:oxala/normalizer.git#JSDOM",
+    "html-normalizer": "git+ssh://git@github.com:oxala/normalizer.git",
     "istanbul": "^0.4.5",
     "jsdom": "^11.1.0",
     "jshint": "^2.9.3",
