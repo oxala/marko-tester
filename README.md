@@ -166,13 +166,13 @@ global.tester('source/components/phone-frame', (expect, sinon, testPage, testFix
 });
 ```
 
-By default, running `this.buildComponent` will build the component using the `default` fixture (if there is one). If you wish to build the component using a different fixture, you can pass an option to do that before the callback:
+By default, running `testComponent` will build the component using the `default` fixture (if there is one). If you wish to build the component using a different fixture, you can pass an option to do that before the callback:
 
 ```
-this.buildComponent({
+testComponent({
   fixture: {}
   // It can be either a fixture object or a string with a relative path to the fixture.
-  // Do not forget that you can also utilize the "this.fixtures" data.
+  // Do not forget that you can also utilize the "fixtures" data.
 }, function () {});
 ```
 
