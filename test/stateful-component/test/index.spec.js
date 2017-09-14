@@ -1,9 +1,7 @@
 'use strict';
 
-var tester = require('../../../');
-
-tester('stateful-component', function (expect, sinon, helpers) {
-  this.testFixtures();
+global.tester('stateful-component', (expect, sinon, testFixtures, testComponent, testWidget, marko, fixtures) => {
+  testFixtures();
 
   var mockUrl = 'mockUrl';
   var mockDep = {
@@ -12,65 +10,69 @@ tester('stateful-component', function (expect, sinon, helpers) {
   var mockAsync = {
     hello: 'world'
   };
-  var mockMerge = function () {
+  var mockMerge = () => {
     return mockUrl;
   };
 
-  describe('Given multiple cases', function () {
-    this.parent.buildComponent({
+  describe('Given multiple cases', () => {
+    testComponent({
       mockRequire: {
         '../dep': mockDep,
-        'async': mockAsync,
-        'lodash/merge': mockMerge
+        'async': mockAsync
+      },
+      mock: {
+        require: {
+          'lodash/merge': mockMerge
+        }
       }
-    }, function () {
-      beforeEach(function () {
+    }, () => {
+      beforeEach(() => {
         sinon.spy(document.location, 'replace');
       });
 
-      afterEach(function () {
+      afterEach(() => {
         document.location.replace.restore();
       });
 
-      this.buildWidget(function () {
-        it('should redirect', function () {
+      testWidget(() => {
+        it('should redirect', () => {
           expect(document.location.replace).to.be.calledWith(mockUrl);
         });
 
-        it('should store the state in the widget', function () {
-          expect(this.widget.state).to.deep.equal(this.fixtures.default);
+        it('should store the state in the widget', () => {
+          expect(marko.component.state).to.deep.equal(fixtures.default);
         });
 
-        it('should mock the modules methods', function () {
-          expect(this.widget.async).to.deep.equal(mockAsync);
+        it('should mock the modules methods', () => {
+          expect(marko.component.async).to.deep.equal(mockAsync);
         });
 
-        it('should mock the merge function', function () {
-          expect(this.widget.merge).to.deep.equal(mockMerge);
+        it('should mock the merge ', () => {
+          expect(marko.component.merge).to.deep.equal(mockMerge);
         });
       });
     });
 
-    this.parent.buildComponent(function () {
-      beforeEach(function () {
+    testComponent(() => {
+      beforeEach(() => {
         sinon.spy(document.location, 'replace');
       });
 
-      afterEach(function () {
+      afterEach(() => {
         document.location.replace.restore();
       });
 
-      this.buildWidget(function () {
-        it('should redirect', function () {
+      testWidget(() => {
+        it('should redirect', () => {
           expect(document.location.replace).to.be.calledWith('hello-world');
         });
 
-        it('should not mock the modules methods', function () {
-          expect(this.widget.async).not.to.deep.equal(mockAsync);
+        it('should not mock the modules methods', () => {
+          expect(marko.component.async).not.to.deep.equal(mockAsync);
         });
 
-        it('should not mock the merge function', function () {
-          expect(this.widget.merge).not.to.deep.equal(mockMerge);
+        it('should not mock the merge ', () => {
+          expect(marko.component.merge).not.to.deep.equal(mockMerge);
         });
       });
     });

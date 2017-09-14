@@ -54,8 +54,10 @@ function buildComponent(context, opts, cb) {
 
     before(function buildComponentBeforeEach(done) {
       function buildDom() {
-        if (options.mockRequire) {
-          utils.mockRequire(options.mockRequire, context.testPath);
+        var mockRequires = Object.assign({}, _.get(options, 'mock.require'), options.mockRequire);
+
+        if (mockRequires) {
+          utils.mockRequire(mockRequires, context.testPath);
         }
 
         done();

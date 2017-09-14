@@ -23,6 +23,7 @@ function buildWidget(context, opts, cb) {
 
       window.$MARKO_WIDGETS.initWidgets(widgetIds.join(','));
       this.widget = window.$MARKO_WIDGETS.getWidgetForEl(widgetIds[lastWidgetIndex]);
+      context.marko.component = this.widget;
     });
 
     afterEach(function buildWidgetAfterEach() {

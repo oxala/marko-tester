@@ -1,15 +1,13 @@
 'use strict';
 
-var tester = require('../../../../');
+global.tester('nested-component', (expect, marko, testFixtures, testComponent, testWidget, fixtures) => {
+  testFixtures();
 
-tester('nested-component', function (expect) {
-  this.testFixtures();
-
-  this.buildComponent(function () {
-    this.buildWidget(function () {
-      it('should initialize nested component with a proper state and config', function () {
-        expect(this.widget.getWidget('nestedComponent').state).to.be.deep.equal(this.fixtures.default);
-        expect(this.widget.getWidget('nestedComponent').config).to.be.deep.equal(this.fixtures.default);
+  testComponent(() => {
+    testWidget(() => {
+      it('should initialize nested component with a proper state and config', () => {
+        expect(marko.component.getWidget('nestedComponent').state).to.be.deep.equal(fixtures.default);
+        expect(marko.component.getWidget('nestedComponent').config).to.be.deep.equal(fixtures.default);
       });
     });
   });

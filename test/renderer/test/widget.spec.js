@@ -1,21 +1,19 @@
 'use strict';
 
-var tester = require('../../../');
-
-tester('renderer', function (sinon, expect) {
-  this.buildComponent({
+global.tester('renderer', (sinon, expect, testComponent, testWidget) => {
+  testComponent({
     fixture: 'main'
-  }, function () {
-    beforeEach(function () {
+  }, () => {
+    beforeEach(() => {
       sinon.stub(document.location, 'replace');
     });
 
-    afterEach(function () {
+    afterEach(() => {
       document.location.replace.restore();
     });
 
-    this.buildWidget(function () {
-      it('should alert the user', function () {
+    testWidget(() => {
+      it('should alert the user', () => {
         expect(document.location.replace).to.be.called;
       });
     });

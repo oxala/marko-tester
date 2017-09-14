@@ -1,26 +1,24 @@
 'use strict';
 
-var tester = require('../../../');
-
-tester('non-marko/logger', function (expect, sinon, mockRequire) {
+global.tester('non-marko/logger', (expect, sinon, mockRequire) => {
   var mockMessage = 'mockMessage';
   var mockDep = {
     message: mockMessage
   };
 
-  beforeEach(function () {
+  beforeEach(() => {
     mockRequire('../dep', mockDep);
     sinon.stub(console, 'log');
 
     require('../logger')();
   });
 
-  afterEach(function () {
+  afterEach(() => {
     mockRequire.stopAll();
     console.log.restore();
   });
 
-  it('should log the message', function () {
+  it('should log the message', () => {
     expect(console.log).to.be.calledWith(mockMessage);
   });
 });

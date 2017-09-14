@@ -1,6 +1,6 @@
 'use strict';
 
-global.tester('service', function (sinon, expect) {
+global.tester('service', (sinon, expect) => {
   beforeEach(() => {
     sinon.stub(console, 'log');
 

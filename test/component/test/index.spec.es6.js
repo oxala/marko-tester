@@ -1,9 +1,9 @@
 'use strict';
 
-global.tester('component', function (expect, sinon) {
-  this.testFixtures();
+global.tester('component', (expect, sinon, testFixtures, testComponent, testWidget) => {
+  testFixtures();
 
-  this.buildComponent(function () {
+  testComponent(() => {
     beforeEach(() => {
       sinon.stub(document.location, 'replace');
     });
@@ -12,7 +12,7 @@ global.tester('component', function (expect, sinon) {
       document.location.replace.restore();
     });
 
-    this.buildWidget(function () {
+    testWidget(() => {
       it('should alert the user', () => {
         expect(document.location.replace).to.be.called;
       });

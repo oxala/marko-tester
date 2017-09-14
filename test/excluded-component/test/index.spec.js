@@ -2,6 +2,6 @@
 
 var tester = require('../../../');
 
-tester('excluded-component', function () {
-  this.testFixtures();
+tester('excluded-component', (testFixtures) => {
+  testFixtures();
 });

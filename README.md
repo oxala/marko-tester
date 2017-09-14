@@ -137,8 +137,8 @@ Your test file will have to invoke the `testFixtures` function. Below you can fi
 ```
 'use strict';
 
-global.tester('source/components/phone-frame', function() {
-  this.testFixtures();
+global.tester('source/components/phone-frame', function (testFixtures) {
+  testFixtures();
 });
 ```
 
@@ -146,86 +146,68 @@ global.tester('source/components/phone-frame', function() {
 
 The client test works by instantiating a marko-widget and testing the functionality against it. For that browser environment is needed, for those purposes marko-tester uses jsdom to render the lasso-generated page and expose window object.
 
-During client testing, `marko-tester` gives you a few methods to utilize:
+During client testing, `marko-tester` gives you a few functions to utilize:
 
-* **buildPage** - Will create an empty page, giving you access to window and document objects. This method is available right after test case declaration.
-* **buildComponent** - Used to build the page with the component constructor in it. At this point, the `Widget` attribute will be exposed to the mocha context giving you access to your Widget's prototype. This method is available right after test case declaration.
-* **buildWidget** - Will instantiate the widget on the page and expose the `widget` attibute to the mocha context with the instance of your widget. This method is available within *buildComponent* context.
+* **testPage** - Will create an empty page, giving you access to window and document objects. This function is available right after test case declaration.
+* **testComponent** - Used to build the page with the component constructor in it. At this point, the `Widget` attribute will be exposed to the mocha context giving you access to your Widget's prototype. This function is available right after test case declaration.
+* **testWidget** - Will instantiate the widget on the page and expose the `widget` attibute to the mocha context with the instance of your widget. This function is available within *testComponent* scope.
 
 ```
 'use strict';
 
-global.tester('source/components/phone-frame', function(expect, sinon) { // you can request `sinon` or `expect` just by adding the respective param;
+global.tester('source/components/phone-frame', function (expect, sinon, testPage, testFixtures, testComponent, marko, fixtures) {
+  // list of the params you can ask for (order doesn't matter):
+  //   expect - chai's expect;
+  //   sinon - library to spy and stub;
+  //   testFixtures - runs fixture test;
+  //   testPage - create an empty page with lasso generated dependancies;
+  //   testComponent - renders and instantiates marko component;
+  //   marko - marko context and exposes 'component' and 'require';
+  //   fixtures - will give you a list of attached test fixtures to current component;
+  //   mockRequire - exposes 'mock-require' npm module;
 
-  // this.buildPage - is available here;
-  // this.fixtures - will give you a list of attached test fixtures to this component;
-
-  this.buildComponent(function() {
-    var mockHello = 'world';
-
-    beforeEach(function() {
-      this.Widget.prototype.hello = mockHello;
-    });
-
-    afterEach(function() {
-      delete this.Widget.prototype.hello;
-    });
-
-    this.buildWidget(function() {
+  testComponent(function() {
+    testWidget(function() {
       it('should have hello attribute', function() {
-        expect(this.widget.hello).to.be.equal(mockHello);
+        expect(marko.component).not.to.be.undefined;
       });
     });
   });
 });
 ```
 
-By default, running `this.buildComponent` will build the component using the `default` fixture (if there is one). If you wish to build the component using a different fixture, you can pass an option to do that before the callback:
+By default, running `testComponent` will build the component using the `default` fixture (if there is one). If you wish to build the component using a different fixture, you can pass an option to do that before the callback:
 
 ```
-this.buildComponent({
+testComponent({
   fixture: {}
   // It can be either a fixture object or a string with a relative path to the fixture.
-  // Do not forget that you can also utilize the "this.fixtures" data.
+  // Do not forget that you can also utilize the "fixtures" data.
 }, function () {});
 ```
 
 ### Few additional features
 
-1. `tester`, `buildComponent`, `buildPage` and `buildWidget` commands will create a mocha's `describe` function. That's why the `only` and `skip` operators can be used with these commands the same way as with `describe` (e.g `this.buildComponent.only(...)`, `tester.skip(...)`).
 
-2. `tester` command on callback along with `sinon` and/or `expect` can expose `rewire` and `mockRequire` functions for you in order to rewire or mock necessary module you using in your implementation. Note: that only will work during server-side testing.
+1. `tester`, `testComponent` and `testPage` commands will create a mocha's `describe` function. That's why the `only` and `skip` operators can be used with these commands the same way as with `describe` (e.g `testComponent.only(...)`, `tester.skip(...)`).
 
-3. Another thing you can utilize from `tester` callback is `modRequire`. You can require files that were compiled by lasso, so it is only available when page was constructed (after execution of `buildComponent` and/or `buildPage`):<br>
+2. If you want to mock require during client-side testing - you can do that using options for `testComponent` method. There as a key you can pass relative path to the necessary file that will be required. And the mock of that file as a value. Keep in mind that mocked require will only exist within this `testComponent`.<br>
 ```
-global.tester('util', function (modRequire) {
-  this.buildPage(function () {
-    var util;
-
-    beforeEach(function () {
-      util = modRequire('src/util');
-    });
-
-    ...
-  });
-});
-```
-
-4. If you want to mock require during client-side testing - you can do that using options for `buildComponent` method. There as a key you can pass relative path to the necessary file that will be required. And the mock of that file as a value. Keep in mind that mocked require will only exist within this `buildComponent`.<br>
-```
-this.buildComponent({
-  mockRequire: {
-    '../dep': { hello: 'world'}
+testComponent({
+  mock: {
+    require: {
+      '../dep': { hello: 'world' }
+    }
   },
-}, function() { ... });
+}, function () { ... });
 ```
 
-5. You can also use a different file layout if necessary. When your template has a top-level element of `tbody`, `tr`, or something else that expects a `table` element as a parent, you can add the `layout` parameter and set it to `table`. This will ensure JSDOM renders your component correctly.
+3. You can also use a different file layout if necessary. When your template has a top-level element of `tbody`, `tr`, or something else that expects a `table` element as a parent, you can add the `layout` parameter and set it to `table`. This will ensure JSDOM renders your component correctly.
 ```
-this.buildComponent({
-  fixture: this.fixtures.basic,
+testComponent({
+  fixture: fixtures.basic,
   layout: 'table'
-}, function() { ... });
+}, function () { ... });
 ```
 
 ## Code style (linting)
@@ -244,7 +226,7 @@ To do that, we have a small configuration within our `.marko-tester.json` file u
 ```
 'use strict';
 
-global.tester('source/pages/index', function(expect, browser) {
+global.tester('source/pages/index', function (expect, browser) {
   var page;
 
   before(function () {
@@ -259,12 +241,13 @@ global.tester('source/pages/index', function(expect, browser) {
 
 ## References
 
-* [Mocha](https://mochajs.org/)
+* [Marko](http://markojs.com)
+* [Mocha](https://mochajs.org)
 * [Sinon](http://sinonjs.org/docs/)
 * [Expect](http://chaijs.com/api/bdd/)
 * [rewire](https://github.com/jhnns/rewire)
 * [mock-require](https://github.com/boblauer/mock-require)
-* [ESLint](http://eslint.org/)
+* [ESLint](http://eslint.org)
 * [eslint-airbnb-config](https://github.com/airbnb/javascript/tree/es5-deprecated/es5)
 * [eslint-config-ebay](https://github.com/darkwebdev/eslint-config-ebay)
 * [Stylelint](https://github.com/stylelint/stylelint)

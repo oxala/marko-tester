@@ -1,16 +1,14 @@
 'use strict';
 
-var tester = require('../../../');
+global.tester('tbody-component', (expect, sinon, testFixtures, testComponent, testWidget, marko) => {
+  testFixtures();
 
-tester('tbody-component', function (expect, sinon) {
-  this.testFixtures();
-
-  this.buildComponent({
+  testComponent({
     layout: 'table'
-  },function () {
-    this.buildWidget(function () {
-      it('should be able to access the DOM correctly', function () {
-        expect(this.widget.el.tagName).to.be.equal('TBODY');
+  }, () => {
+    testWidget(() => {
+      it('should be able to access the DOM correctly', () => {
+        expect(marko.component.el.tagName).to.be.equal('TBODY');
       });
     });
   });

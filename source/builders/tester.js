@@ -8,6 +8,7 @@ var mockRequire = require('mock-require');
 var rewire = require('rewire');
 var buildPage = require('./page');
 var buildComponent = require('./component');
+var buildWidget = require('./widget');
 var buildAcceptance = require('./acceptance');
 var testFixtures = require('../testers/fixtures');
 var utils = require('../utils');
@@ -79,6 +80,9 @@ function buildTester(testString, opts, cb) {
     context.buildPage = buildPage.bind(this, context);
     context.buildPage.only = buildPage.only.bind(this, context);
     context.buildPage.skip = buildPage.skip.bind(this, context);
+    context.marko = {
+      require: utils.modRequire.bind(utils)
+    };
 
     Object.assign(this, context);
 
@@ -88,7 +92,16 @@ function buildTester(testString, opts, cb) {
       rewire: patchRewire,
       mockRequire: mockRequire,
       modRequire: utils.modRequire.bind(utils),
-      browser: buildAcceptance
+      browser: buildAcceptance,
+      buildComponent: context.buildComponent,
+      testComponent: context.buildComponent,
+      buildWidget: buildWidget.bind(this, context),
+      testWidget: buildWidget.bind(this, context),
+      buildPage: context.buildPage,
+      testPage: context.buildPage,
+      testFixtures: context.testFixtures,
+      marko: context.marko,
+      fixtures: context.fixtures
     }));
   });
 }
