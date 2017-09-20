@@ -47,7 +47,7 @@
     "istanbul": "^0.4.5",
     "jsdom": "^9.2.0",
     "jshint": "^2.9.3",
-    "lasso": "^2.4.1",
+    "lasso": "<=2.10",
     "lasso-less": "^2.1.2",
     "lasso-marko": "^2.0.4",
     "lodash": "^4.13.1",
