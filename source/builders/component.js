@@ -72,7 +72,7 @@ function buildComponent(context, opts, cb) {
 
       ctx.fixtures = context.fixtures;
 
-      renderer(fixture, function onComponentRender(err, result) {
+      renderer(_.defaultsDeep({}, fixture), function onComponentRender(err, result) {
         var html = result;
 
         if (_.isObject(result)) {
