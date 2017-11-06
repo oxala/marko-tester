@@ -117,6 +117,17 @@ function buildComponent(context, opts, cb) {
         } else {
           ctx.Widget = Widget;
 
+          var mockWidgets = _.get(options, 'mock.component');
+
+          if (mockWidgets) {
+            var originalGetWidget = Widget.prototype.getWidget;
+
+            Widget.prototype.originalGetWidget = originalGetWidget;
+            Widget.prototype.getWidget = function (id, index) {
+              return mockWidgets[id] || originalGetWidget.call(originalGetWidget, id, index);
+            };
+          }
+
           done();
         }
       });
