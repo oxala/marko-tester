@@ -6,7 +6,6 @@ const path = require('path');
 const chai = require('chai');
 const sinon = require('sinon');
 const mockRequire = require('mock-require');
-const rewire = require('rewire');
 const testPage = require('./testers/page');
 const testComponent = require('./testers/component');
 const testFixtures = require('./testers/fixtures');
@@ -53,21 +52,6 @@ const buildTester = (testString, opts, cb) => {
     callback(...utils.createParams(callback, {
       expect,
       sinon,
-      rewire: (filePath) => {
-        let file = filePath;
-
-        if (file[0] !== '.') {
-          try {
-            require.resolve(file);
-          } catch (e) {
-            file = path.resolve(context.testPath, file);
-          }
-        } else {
-          file = path.resolve(context.testPath, file);
-        }
-
-        return rewire(file);
-      },
       mockRequire,
       modRequire: utils.modRequire.bind(utils),
       testFixtures: context.testFixtures,
