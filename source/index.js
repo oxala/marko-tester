@@ -2,7 +2,6 @@
 
 const testLint = require('./testers/lint');
 const _ = require('lodash');
-const path = require('path');
 const chai = require('chai');
 const sinon = require('sinon');
 const mockRequire = require('mock-require');
