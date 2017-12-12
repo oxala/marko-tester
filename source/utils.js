@@ -133,9 +133,9 @@ module.exports = {
   },
 
   get renderer() {
-    const rendererPath = glob.sync(path.resolve(
+    let rendererPath = glob.sync(path.resolve(
       path.join(this.testPath, '..'),
-      'index.marko'
+      'index.@(marko|js)'
     ));
     let renderer;
 
@@ -145,6 +145,10 @@ module.exports = {
 
     if (renderer) {
       renderer = require(renderer);
+
+      if (!renderer.renderToString) {
+        renderer.renderToString = renderer.render;
+      }
     } else {
       renderer = {
         renderToString: null
@@ -245,7 +249,7 @@ module.exports = {
         const mock = mockRequirePaths[filePath];
         const mod = this.getStaticModule(
           filePath,
-          this.testPath,
+          context.testPath,
           `BuildComponent: Cannot resolve module to mock require for - ${filePath}`
         );
 
@@ -277,7 +281,7 @@ module.exports = {
       .forEach((filePath) => {
         const mod = this.getStaticModule(
           filePath,
-          this.testPath,
+          context.testPath,
           `BuildComponent: Cannot resolve module to mock require for - ${filePath}`
         );
         const cachedMod = window.require.cache[mod];

@@ -2,7 +2,6 @@
 
 const Normalizer = require('html-normalizer');
 const fs = require('fs-extra');
-const _ = require('lodash');
 const chai = require('chai');
 const Promise = require('bluebird');
 const utils = require('../utils');
@@ -10,8 +9,7 @@ const utils = require('../utils');
 const expect = chai.expect;
 const excludedAttributes = utils.config.excludedAttributes.map(attr => attr.toLowerCase());
 const cleanRenderedHtml = (html) => {
-  let trimmedHtml = (html || '')
-    .trim();
+  let trimmedHtml = (html || '').trim();
 
   if (trimmedHtml) {
     trimmedHtml = new Normalizer({
@@ -66,7 +64,7 @@ const testFixtures = (context, opts) => {
               return reject('TestFixtures: Failed to render component html.');
             }
 
-            return resolve(cleanRenderedHtml(_.isObject(result) ? result.html : result));
+            return resolve(cleanRenderedHtml(result.toString()));
           };
 
           callback.global = {};
