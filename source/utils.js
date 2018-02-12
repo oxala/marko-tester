@@ -238,7 +238,9 @@ module.exports = {
       markoPath = path.resolve(this.testPath, '..', 'index.js');
     }
 
-    config.dependencies.push(`require: ${markoPath}`);
+    if (fs.existsSync(markoPath)) {
+      config.dependencies.push(`require: ${markoPath}`);
+    }
 
     return path.relative(rootPath, markoPath);
   },
