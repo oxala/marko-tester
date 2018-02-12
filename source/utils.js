@@ -361,8 +361,6 @@ module.exports = {
   },
 
   get context() {
-    const markoPath = this.addBrowserDependency();
-    const modulePath = this.getStaticModule(markoPath);
     const fixtures = {};
 
     this.fixturesData.forEach((fixture) => {
@@ -375,8 +373,7 @@ module.exports = {
       fixtures,
       marko: {
         require: this.modRequire.bind(this)
-      },
-      modulePath
+      }
     };
   },
 

@@ -8,6 +8,10 @@ const buildComponent = (context, opts, cb) => {
   const options = cb ? opts : {};
 
   options.mochaOperation('When component is being built', () => {
+    if (!context.modulePath) {
+      context.modulePath = utils.getStaticModule(utils.addBrowserDependency());
+    }
+
     before((done) => {
       context.preparePage()
         .then(() => {
