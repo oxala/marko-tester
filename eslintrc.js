@@ -6,7 +6,7 @@ module.exports = {
     jquery: true
   },
   globals: {
-    widget: true
+    AbortController: true
   },
   rules: {
     'mocha/no-skipped-tests': 'error',
