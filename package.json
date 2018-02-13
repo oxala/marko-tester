@@ -1,6 +1,6 @@
 {
   "name": "marko-tester",
-  "version": "7.1.6",
+  "version": "7.1.7",
   "description": "Assist Marko components unit/client testing",
   "repository": {
     "type": "git",
