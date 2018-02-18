@@ -57,7 +57,21 @@ const buildTester = (testString, opts, cb) => {
       testComponent: context.testComponent,
       testPage: context.testPage,
       marko: context.marko,
-      fixtures: context.fixtures
+      fixtures: context.fixtures,
+      defer: () => {
+        let resolve;
+        let reject;
+        const promise = new Promise((res, rej) => {
+          resolve = res;
+          reject = rej;
+        });
+
+        return {
+          promise,
+          resolve,
+          reject
+        };
+      }
     }));
   });
 };
