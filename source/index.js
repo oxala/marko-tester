@@ -8,6 +8,8 @@ const mockRequire = require('mock-require');
 const testPage = require('./testers/page');
 const testComponent = require('./testers/component');
 const testFixtures = require('./testers/fixtures');
+const rewire = require('rewire');
+const path = require('path');
 const utils = require('./utils');
 
 require('app-module-path')
@@ -58,6 +60,21 @@ const buildTester = (testString, opts, cb) => {
       testPage: context.testPage,
       marko: context.marko,
       fixtures: context.fixtures,
+      rewire: (filePath) => {
+        let file = filePath;
+
+        if (file[0] !== '.') {
+          try {
+            require.resolve(file);
+          } catch (e) {
+            file = path.resolve(context.testPath, file);
+          }
+        } else {
+          file = path.resolve(context.testPath, file);
+        }
+
+        return rewire(file);
+      },
       defer: () => {
         let resolve;
         let reject;
