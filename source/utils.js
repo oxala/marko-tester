@@ -63,11 +63,12 @@ module.exports = {
     return {
       lint: (argv.lint === undefined || argv.lint),
       lintEs5: argv['lint-es5'],
-      fixLint: argv['fix-lint'],
+      fixLint: argv['fix-lint'] || argv.fix,
       fixFixtures: argv['fix-fixtures'],
       unit: !argv['with-acceptance'] && (argv.mocha === undefined || argv.mocha),
       coverage: !argv['with-acceptance'] && (argv.coverage === undefined || argv.coverage),
-      acceptance: argv['with-acceptance']
+      acceptance: argv['with-acceptance'],
+      integration: argv.integration
     };
   },
 
@@ -168,7 +169,7 @@ module.exports = {
     if (trace) {
       const fileName = trace.getFileName();
 
-      if (/^.*\.spec(\.es6)?(\.es5)?\.js$/.test(fileName)) {
+      if (/^.*\.(spec|integration)(\.es6)?(\.es5)?\.js$/.test(fileName)) {
         this.stackTraceArray = null;
 
         return path.resolve(fileName, '..');

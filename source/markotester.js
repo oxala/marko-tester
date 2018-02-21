@@ -5,26 +5,31 @@
 const async = require('async');
 const testLint = require('./testers/lint');
 const testMocha = require('./testers/mocha');
+const testIntegration = require('./testers/integration');
 const utils = require('./utils');
 
 const steps = [];
 
-if (utils.options.lint) {
-  steps.push(testLint);
-}
+if (utils.options.integration) {
+  steps.push(testIntegration);
+} else {
+  if (utils.options.lint) {
+    steps.push(testLint);
+  }
 
-if (utils.options.unit) {
-  steps.push(testMocha);
-}
+  if (utils.options.unit) {
+    steps.push(testMocha);
+  }
 
-if (utils.options.coverage) {
-  steps.push((done) => {
-    if (global.__coverage__browser && global.window && global.window.__coverage__) {
-      global.__coverage__browser.push(global.window.__coverage__);
-    }
+  if (utils.options.coverage) {
+    steps.push((done) => {
+      if (global.__coverage__browser && global.window && global.window.__coverage__) {
+        global.__coverage__browser.push(global.window.__coverage__);
+      }
 
-    done();
-  });
+      done();
+    });
+  }
 }
 
 global.tester = require('./');
