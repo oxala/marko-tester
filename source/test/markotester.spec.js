@@ -25,6 +25,7 @@ describe('markotester', function () {
     sinon.stub(process, 'exit');
 
     mockRequire('../utils', mockUtils);
+    mockRequire('../index.es6', {});
   });
 
   afterEach(function () {

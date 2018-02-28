@@ -31,6 +31,10 @@ describe('index', function () {
     index = require('../index.es6');
   });
 
+  afterEach(function () {
+    mockRequire.stopAll();
+  });
+
   it('should expose API', function () {
     expect(index).to.be.deep.equal(mockBuildTester);
     expect(index.only).to.be.deep.equal(mockBuildTester.only);

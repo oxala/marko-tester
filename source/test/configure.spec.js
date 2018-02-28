@@ -69,6 +69,10 @@ describe('configure', function () {
     mockRequire('sinon-chai', mockSinonChai);
   });
 
+  afterEach(function () {
+    mockRequire.stopAll();
+  });
+
   describe('Given marko is not installed from within root', function () {
     beforeEach(function () {
       mockGetHelpers.rootPath = '/';
@@ -76,7 +80,9 @@ describe('configure', function () {
       mockRequire('marko/compiler', mockMarko.compiler);
       mockRequire('marko/node-require', mockMarko.nodeRequire);
 
-      mockUtils.getHelpers.returns(Object.assign({}, mockGetHelpers, { config: {} }));
+      mockUtils.getHelpers.returns(Object.assign({}, mockGetHelpers, {
+        config: {}
+      }));
 
       require('../configure')();
     });
@@ -115,7 +121,9 @@ describe('configure', function () {
         onDestroy: sinon.spy()
       };
 
-      mockUtils.getHelpers.returns(Object.assign({}, mockGetHelpers, { config: mockConfig }));
+      mockUtils.getHelpers.returns(Object.assign({}, mockGetHelpers, {
+        config: mockConfig
+      }));
 
       require('../configure')();
     });
@@ -180,7 +188,9 @@ describe('configure', function () {
       mockConfig = {};
       mockGetHelpers.withCoverage = false;
 
-      mockUtils.getHelpers.returns(Object.assign({}, mockGetHelpers, { config: mockConfig }));
+      mockUtils.getHelpers.returns(Object.assign({}, mockGetHelpers, {
+        config: mockConfig
+      }));
 
       require('../configure')();
     });

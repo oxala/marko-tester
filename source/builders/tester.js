@@ -15,7 +15,6 @@ var utils = require('../utils');
 var expect = chai.expect;
 
 function buildTester(testString, opts, cb) {
-  /* eslint global-require: 0 */
   var callback = cb || opts;
   var options = cb ? opts : {};
 
@@ -28,8 +27,6 @@ function buildTester(testString, opts, cb) {
   }
 
   options.mochaOperation(testString, function startTestCase() {
-    /* eslint no-shadow: 0 */
-
     var context = {
       testPath: utils.getTestPath(),
       options: options,
@@ -105,7 +102,7 @@ function buildTester(testString, opts, cb) {
       defer: function () {
         var resolve;
         var reject;
-        var promise = new Promise(function (res, rej) {
+        var promise = new global.Promise(function (res, rej) {
           resolve = res;
           reject = rej;
         });
