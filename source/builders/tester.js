@@ -101,7 +101,21 @@ function buildTester(testString, opts, cb) {
       testPage: context.buildPage,
       testFixtures: context.testFixtures,
       marko: context.marko,
-      fixtures: context.fixtures
+      fixtures: context.fixtures,
+      defer: function () {
+        var resolve;
+        var reject;
+        var promise = new Promise(function (res, rej) {
+          resolve = res;
+          reject = rej;
+        });
+
+        return {
+          promise: promise,
+          resolve: resolve,
+          reject: reject
+        };
+      }
     }));
   });
 }
