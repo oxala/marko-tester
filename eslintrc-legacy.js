@@ -4,5 +4,9 @@ module.exports = {
   extends: [
     'eslint-config-marko-tester/legacy',
     './eslintrc'
-  ].map(require.resolve)
+  ].map(require.resolve),
+
+  globals: {
+    browser: true
+  }
 };

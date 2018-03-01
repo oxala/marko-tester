@@ -20,5 +20,9 @@ module.exports = {
         '^lib/'
       ]
     }]
+  },
+
+  globals: {
+    browser: true
   }
 };
