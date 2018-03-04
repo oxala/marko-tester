@@ -75,8 +75,8 @@ module.exports = {
   get config() {
     return _.defaultsDeep(
       config,
-      defaultConfig,
-      tryRequire(path.join(rootPath, '.marko-tester')) || {}
+      tryRequire(path.join(rootPath, '.marko-tester')) || {},
+      defaultConfig
     );
   },
 
