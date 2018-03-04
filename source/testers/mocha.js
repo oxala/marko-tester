@@ -17,7 +17,7 @@ const mocha = new Mocha({
   reporterOptions: {
     reporterEnabled: 'mocha-junit-reporter, spec',
     mochaJunitReporterReporterOptions: {
-      mochaFile: './.coverage/junit.xml'
+      mochaFile: `./${utils.config.coverage.dest}/junit.xml`
     }
   },
   globals: ['document', 'window', 'GLOBAL_LASSO']
