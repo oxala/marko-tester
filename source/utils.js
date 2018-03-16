@@ -137,7 +137,7 @@ module.exports = {
     let rendererPath = glob.sync(path.resolve(
       path.join(this.testPath, '..'),
       'index.@(marko|js)'
-    ));
+    )).sort(f1 => !(/marko$/.test(f1)));
     let renderer;
 
     if (rendererPath && rendererPath.length > 0) {
