@@ -8,6 +8,8 @@ const testMocha = require('./testers/mocha');
 const testIntegration = require('./testers/integration');
 const utils = require('./utils');
 
+require('app-module-path').addPath(utils.config.rootPath);
+
 const steps = [];
 
 if (utils.options.integration) {
@@ -31,8 +33,6 @@ if (utils.options.integration) {
     });
   }
 }
-
-global.tester = require('./');
 
 async.waterfall(
   steps,

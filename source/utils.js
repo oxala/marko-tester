@@ -64,10 +64,9 @@ module.exports = {
       lint: (argv.lint === undefined || argv.lint),
       lintEs5: argv['lint-es5'],
       fixLint: argv['fix-lint'] || argv.fix,
-      fixFixtures: argv['fix-fixtures'],
-      unit: !argv['with-acceptance'] && (argv.mocha === undefined || argv.mocha),
-      coverage: !argv['with-acceptance'] && (argv.coverage === undefined || argv.coverage),
-      acceptance: argv['with-acceptance'],
+      fixFixtures: argv['fix-fixtures'] || argv.fix,
+      unit: (argv.mocha === undefined || argv.mocha),
+      coverage: (argv.coverage === undefined || argv.coverage),
       integration: argv.integration
     };
   },

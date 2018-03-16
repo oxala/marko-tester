@@ -20,7 +20,7 @@ const cleanRenderedHtml = (html) => {
     }).domString(trimmedHtml);
 
     (trimmedHtml.match(/="{(.+?)(?=(}" |}">))}|="\[(.+?)(?=(]" |]">))]/g) || [])
-      .map(i => i.substr(2, i.length))
+    .map(i => i.substr(2, i.length))
       .forEach((snippet) => {
         trimmedHtml = trimmedHtml.replace(snippet, snippet.replace(/"/g, '\''))
           .replace(/<\/br>/g, '');
@@ -49,7 +49,7 @@ const testFixtures = (context, opts) => {
     absPath: fixture.absPath
   }));
 
-  if (context.options.fixturesPath && !testCases.length) {
+  if (options.fixturesPath && !testCases.length) {
     throw new Error('TestFixtures: No fixtures found in specified location');
   }
 

@@ -33,6 +33,7 @@
   "author": "Ryshkov, Gleb <gleb@ryshkov.com>",
   "license": "ISC",
   "dependencies": {
+    "@lasso/marko-taglib": "^1.0.10",
     "app-module-path": "^2.0.0",
     "async": "^2.1.2",
     "bluebird": "^3.5.1",
@@ -45,7 +46,7 @@
     "html-normalizer": "https://github.com/oxala/normalizer.git",
     "istanbul": "^0.4.5",
     "jsdom": "^11.1.0",
-    "lasso": "^2",
+    "lasso": "^3.1.3",
     "lodash": "^4.13.1",
     "marko": "^4",
     "mocha": "^4.0.1",

@@ -5,6 +5,9 @@ const glob = require('glob');
 const Mocha = require('mocha');
 const args = require('optimist').argv;
 const utils = require('../utils');
+const {
+  preRequire
+} = require('./mocha');
 
 const mocha = new Mocha({
   ui: 'bdd',
@@ -17,6 +20,8 @@ const mocha = new Mocha({
 });
 
 module.exports = (done) => {
+  mocha.suite.on('pre-require', preRequire);
+
   utils.sourcePaths.forEach(sourcePath =>
     glob.sync(path.resolve(
       utils.config.rootPath,
