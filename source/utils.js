@@ -375,8 +375,5 @@ module.exports = {
         require: this.modRequire.bind(this)
       }
     };
-  },
-
-  createParams: (fn, context) => fn.toString().match(/(function)?(\s*)?(\()?([^)=]*)/)[4]
-    .split(',').map(key => context[key.trim()])
+  }
 };

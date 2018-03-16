@@ -19,8 +19,8 @@ const cleanRenderedHtml = (html) => {
       classNames: null
     }).domString(trimmedHtml);
 
-    (trimmedHtml.match(/="{(.+?)(?=(}" |}">))}|="\[(.+?)(?=(]" |]">))]/g) || [])
-    .map(i => i.substr(2, i.length))
+    (trimmedHtml
+      .match(/="{(.+?)(?=(}" |}">))}|="\[(.+?)(?=(]" |]">))]/g) || []).map(i => i.substr(2, i.length))
       .forEach((snippet) => {
         trimmedHtml = trimmedHtml.replace(snippet, snippet.replace(/"/g, '\''))
           .replace(/<\/br>/g, '');

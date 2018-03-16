@@ -66,7 +66,7 @@ const preRequire = (ctx) => {
     context.testPage.only = testPage.only.bind(this, context);
     context.testPage.skip = testPage.skip.bind(this, context);
 
-    originalDescribe(describeText, callback ? callback.bind(originalDescribe, ...utils.createParams(callback, {
+    originalDescribe(describeText, callback ? callback.bind(originalDescribe, {
       expect,
       sinon,
       mockRequire,
@@ -105,7 +105,7 @@ const preRequire = (ctx) => {
           reject
         };
       }
-    })) : undefined);
+    }) : undefined);
   };
 
   const originalDescribeOnly = ctx.describe.only;
