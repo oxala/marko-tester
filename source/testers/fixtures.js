@@ -29,7 +29,7 @@ const cleanRenderedHtml = (html) => {
 
   return trimmedHtml;
 };
-const testFixtures = (context, opts) => {
+const testFixtures = (mochaMethod, context, opts) => {
   const options = opts || {};
 
   if (!context.renderer) {
@@ -53,38 +53,34 @@ const testFixtures = (context, opts) => {
     throw new Error('TestFixtures: No fixtures found in specified location');
   }
 
-  options.mochaOperation('Given specific input data', () => {
-    testCases.forEach((testCase) => {
-      it(`should render component using ${testCase.name} input`, (done) => {
-        let expectedHtml = cleanRenderedHtml(testCase.expectedHtml);
+  testCases.forEach((testCase) => {
+    mochaMethod(`should render component using ${testCase.name} input`, (done) => {
+      let expectedHtml = cleanRenderedHtml(testCase.expectedHtml);
 
-        new Promise((resolve, reject) => {
-          const callback = (error, result) => {
-            if (error) {
-              return reject('TestFixtures: Failed to render component html.');
-            }
-
-            return resolve(cleanRenderedHtml(result.toString()));
-          };
-
-          callback.global = {};
-          context.renderer.renderToString(testCase.fixture, callback);
-        }).catch((error) => {
-          throw new Error(error);
-        }).then((actualHtml) => {
-          if (utils.options.fixFixtures && actualHtml !== expectedHtml) {
-            fs.writeFileSync(testCase.absPath, `${actualHtml}\n`, 'utf-8');
-            expectedHtml = actualHtml;
+      new Promise((resolve, reject) => {
+        const callback = (error, result) => {
+          if (error) {
+            return reject('TestFixtures: Failed to render component html.');
           }
 
-          expect(actualHtml).to.be.equal(expectedHtml);
-          done();
-        }).catch(done);
-      });
+          return resolve(cleanRenderedHtml(result.toString()));
+        };
+
+        callback.global = {};
+        context.renderer.renderToString(testCase.fixture, callback);
+      }).catch((error) => {
+        throw new Error(error);
+      }).then((actualHtml) => {
+        if (utils.options.fixFixtures && actualHtml !== expectedHtml) {
+          fs.writeFileSync(testCase.absPath, `${actualHtml}\n`, 'utf-8');
+          expectedHtml = actualHtml;
+        }
+
+        expect(actualHtml).to.be.equal(expectedHtml);
+        done();
+      }).catch(done);
     });
   });
 };
 
-module.exports = utils.runWithMochaOperation.bind(null, null, testFixtures);
-module.exports.only = utils.runWithMochaOperation.bind(null, 'only', testFixtures);
-module.exports.skip = utils.runWithMochaOperation.bind(null, 'skip', testFixtures);
+module.exports = testFixtures;

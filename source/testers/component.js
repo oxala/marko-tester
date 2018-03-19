@@ -3,11 +3,8 @@
 const _ = require('lodash');
 const utils = require('../utils');
 
-const buildComponent = (context, opts, cb) => {
-  const callback = cb || opts;
-  const options = cb ? opts : {};
-
-  options.mochaOperation('When component is being built', () => {
+const buildComponent = (mochaAction, context, options, callback) => {
+  mochaAction('When component is being built', () => {
     if (!context.modulePath) {
       context.modulePath = utils.getStaticModule(utils.addBrowserDependency());
     }
@@ -16,7 +13,7 @@ const buildComponent = (context, opts, cb) => {
       context.preparePage()
         .then(() => {
           if (options.mock) {
-            utils.mockBrowser(context, options.mock);
+            utils.mockBrowser(options.mock);
           }
         })
         .then(done);
@@ -40,7 +37,9 @@ const buildComponent = (context, opts, cb) => {
         });
     });
 
-    callback.call(this);
+    callback && callback({
+      marko: context.marko
+    });
 
     afterEach(() => {
       utils.config.onDestroy();
@@ -55,6 +54,4 @@ const buildComponent = (context, opts, cb) => {
   });
 };
 
-module.exports = utils.runWithMochaOperation.bind(null, null, buildComponent);
-module.exports.only = utils.runWithMochaOperation.bind(null, 'only', buildComponent);
-module.exports.skip = utils.runWithMochaOperation.bind(null, 'skip', buildComponent);
+module.exports = buildComponent;

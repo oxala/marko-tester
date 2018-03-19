@@ -37,44 +37,60 @@ const mocha = new Mocha({
   globals: ['document', 'window', 'GLOBAL_LASSO']
 });
 const preRequire = (ctx) => {
-  const fakeDescribe = originalDescribe => (describeText, callback) => {
-    if (!ctx.firstDescribe) {
-      originalDescribe(describeText, callback);
+  const fakeDescribe = (originalDescribe, testType) => (describeText, options, callback) => {
+    if (!ctx.firstDescribe && !(/^(component|fixtures)$/.test(testType))) {
+      originalDescribe(describeText, options);
 
       return;
     }
 
-    ctx.firstDescribe = false;
-
-    if (!_.isFunction(callback) && _.isFunction(describeText)) {
+    if (_.isFunction(describeText)) {
       callback = describeText;
-      describeText = path.relative(process.cwd(), path.resolve(utils.testPath, '..'));
-    } else {
-      describeText = path.relative(process.cwd(), path.resolve(utils.testPath, '..', describeText));
+      options = {};
+      describeText = undefined;
+    } else if (_.isObject(describeText)) {
+      callback = options;
+      options = describeText;
+      describeText = undefined;
     }
+
+    if (_.isFunction(options)) {
+      callback = options;
+      options = {};
+    }
+
+    ctx.firstDescribe = false;
 
     const context = utils.context;
 
     context.preparePage = testPage.prepare.bind(this, context);
-    context.testFixtures = testFixtures.bind(this, context);
-    context.testFixtures.only = testFixtures.only.bind(this, context);
-    context.testFixtures.skip = testFixtures.skip.bind(this, context);
-    context.testComponent = testComponent.bind(this, context);
-    context.testComponent.only = testComponent.only.bind(this, context);
-    context.testComponent.skip = testComponent.skip.bind(this, context);
     context.testPage = testPage.bind(this, context);
     context.testPage.only = testPage.only.bind(this, context);
     context.testPage.skip = testPage.skip.bind(this, context);
+
+    if (testType === 'fixtures') {
+      testFixtures(originalDescribe, context, options);
+      return;
+    }
+
+    if (testType === 'component') {
+      testComponent(originalDescribe, context, options, callback);
+
+      return;
+    }
+
+    if (!describeText) {
+      describeText = path.relative(process.cwd(), path.resolve(utils.testPath, '..'));
+    } else {
+      describeText = path.relative(process.cwd(), path.resolve(utils.testPath, '..', describeText));
+    }
 
     originalDescribe(describeText, callback ? callback.bind(originalDescribe, {
       expect,
       sinon,
       mockRequire,
       modRequire: utils.modRequire.bind(utils),
-      testFixtures: context.testFixtures,
-      testComponent: context.testComponent,
       testPage: context.testPage,
-      marko: context.marko,
       fixtures: context.fixtures,
       rewire: (filePath) => {
         let file = filePath;
@@ -113,6 +129,12 @@ const preRequire = (ctx) => {
 
   ctx.firstDescribe = true;
   ctx.describe = fakeDescribe(ctx.describe);
+  ctx.describe.fixtures = fakeDescribe(it, 'fixtures');
+  ctx.describe.fixtures.only = fakeDescribe(it.only, 'fixtures');
+  ctx.describe.fixtures.skip = fakeDescribe(it.skip, 'fixtures');
+  ctx.describe.component = fakeDescribe(ctx.describe, 'component');
+  ctx.describe.component.only = fakeDescribe(originalDescribeOnly, 'component');
+  ctx.describe.component.skip = fakeDescribe(originalDescribeSkip, 'component');
   ctx.describe.only = fakeDescribe(originalDescribeOnly);
   ctx.describe.skip = fakeDescribe(originalDescribeSkip);
 };

@@ -245,7 +245,7 @@ module.exports = {
     return path.relative(rootPath, markoPath);
   },
 
-  mockBrowser(context, mocks) {
+  mockBrowser(mocks) {
     const mockRequirePaths = mocks.require || {};
 
     Object.keys(mockRequirePaths)
@@ -253,7 +253,7 @@ module.exports = {
         const mock = mockRequirePaths[filePath];
         const mod = this.getStaticModule(
           filePath,
-          context.testPath,
+          this.testPath,
           `BuildComponent: Cannot resolve module to mock require for - ${filePath}`
         );
 
@@ -285,7 +285,7 @@ module.exports = {
       .forEach((filePath) => {
         const mod = this.getStaticModule(
           filePath,
-          context.testPath,
+          this.testPath,
           `BuildComponent: Cannot resolve module to mock require for - ${filePath}`
         );
         const cachedMod = window.require.cache[mod];

@@ -12,5 +12,11 @@ module.exports = {
     'mocha/no-skipped-tests': 'error',
     'mocha/no-pending-tests': 'error',
     'mocha/max-top-level-suites': 0
+  },
+  settings: {
+    'mocha/additionalTestFunctions': [
+      'describe.fixtures',
+      'describe.component'
+    ]
   }
 };
