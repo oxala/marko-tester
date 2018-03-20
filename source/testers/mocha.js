@@ -85,43 +85,49 @@ const preRequire = (ctx) => {
       describeText = path.relative(process.cwd(), path.resolve(utils.testPath, '..', describeText));
     }
 
-    originalDescribe(describeText, callback ? callback.bind(originalDescribe, {
-      expect,
-      sinon,
-      mockRequire,
-      modRequire: utils.modRequire.bind(utils),
-      testPage: context.testPage,
-      fixtures: context.fixtures,
-      rewire: (filePath) => {
-        let file = filePath;
+    originalDescribe(describeText, callback ? () => {
+      if (utils.renderer.renderToString && !_.isEmpty(utils.context.fixtures)) {
+        testFixtures(it, context, options);
+      }
 
-        if (file[0] !== '.') {
-          try {
-            require.resolve(file);
-          } catch (e) {
+      callback({
+        expect,
+        sinon,
+        mockRequire,
+        modRequire: utils.modRequire.bind(utils),
+        testPage: context.testPage,
+        fixtures: context.fixtures,
+        rewire: (filePath) => {
+          let file = filePath;
+
+          if (file[0] !== '.') {
+            try {
+              require.resolve(file);
+            } catch (e) {
+              file = path.resolve(context.testPath, file);
+            }
+          } else {
             file = path.resolve(context.testPath, file);
           }
-        } else {
-          file = path.resolve(context.testPath, file);
+
+          return rewire(file);
+        },
+        defer: () => {
+          let resolve;
+          let reject;
+          const promise = new Promise((res, rej) => {
+            resolve = res;
+            reject = rej;
+          });
+
+          return {
+            promise,
+            resolve,
+            reject
+          };
         }
-
-        return rewire(file);
-      },
-      defer: () => {
-        let resolve;
-        let reject;
-        const promise = new Promise((res, rej) => {
-          resolve = res;
-          reject = rej;
-        });
-
-        return {
-          promise,
-          resolve,
-          reject
-        };
-      }
-    }) : undefined);
+      });
+    } : undefined);
   };
 
   const originalDescribeOnly = ctx.describe.only;
