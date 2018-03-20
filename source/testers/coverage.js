@@ -46,12 +46,14 @@ module.exports.initializeServer = () => {
     global.__coverage__browser.forEach(coverage => collector.add(coverage));
 
     reporters.forEach(reporter =>
-      istanbul.Report.create(reporter, { dir: `${dest}/${reporter}` }).writeReport(collector, true)
+      istanbul.Report.create(reporter, {
+        dir: `${dest}/${reporter}`
+      }).writeReport(collector, true)
     );
   });
 };
 module.exports.initializeBrowser = () => {
-  const bundleBasePath = path.resolve(utils.config.outputPath, 'source');
+  const bundleBasePath = path.resolve(utils.config.outputPath, 'source-flagList-flagMap-key');
   const bundlePath = path.resolve(bundleBasePath, utils.config.bundleName);
 
   utils.sourcePaths.forEach((sourcePath) => {
