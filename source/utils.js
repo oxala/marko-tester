@@ -38,11 +38,9 @@ try {
 }
 
 try {
-  require(path.join(rootPath, 'node_modules/marko/node-require'))
-    .install();
+  require(path.join(rootPath, 'node_modules/marko/node-require')).install();
 } catch (e) {
-  require('marko/node-require')
-    .install();
+  require('marko/node-require').install();
 }
 
 try {
@@ -133,18 +131,21 @@ module.exports = {
   },
 
   get renderer() {
-    let rendererPath = glob.sync(path.resolve(
+    let rendererPaths = glob.sync(path.resolve(
       path.join(this.testPath, '..'),
-      'index.@(marko|js)'
-    )).sort(f1 => !(/marko$/.test(f1)));
+      'index.marko'
+    ));
     let renderer;
+    let rendererPath;
 
-    if (rendererPath && rendererPath.length > 0) {
-      renderer = rendererPath[0];
+    if (rendererPaths.length === 1) {
+      rendererPath = rendererPaths[0];
     }
 
-    if (renderer) {
-      renderer = require(renderer);
+    if (rendererPath) {
+      renderer = require(rendererPath);
+
+      delete require.cache[rendererPath];
 
       if (!renderer.renderToString) {
         renderer.renderToString = renderer.render;

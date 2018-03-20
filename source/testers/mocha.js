@@ -90,6 +90,14 @@ const preRequire = (ctx) => {
         testFixtures(it, context, options);
       }
 
+      beforeEach(() => {
+        Object.keys(require.cache).forEach(key => (delete require.cache[key]));
+      });
+
+      after(() => {
+        mockRequire.stopAll();
+      });
+
       callback({
         expect,
         sinon,
