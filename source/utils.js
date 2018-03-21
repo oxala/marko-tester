@@ -277,6 +277,15 @@ module.exports = {
       window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.getComponent = (id, index) =>
         mocks.component[id] || originalGetComponent.call(originalGetComponent, id, index);
     }
+
+    if (mocks.components) {
+      const originalGetComponents = window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.getComponents;
+
+      window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.originalGetComponents = originalGetComponents;
+
+      window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.getComponents = (id, index) =>
+        mocks.components[id] || originalGetComponents.call(originalGetComponents, id, index);
+    }
   },
 
   unmockBrowser(context, mock) {
@@ -298,6 +307,11 @@ module.exports = {
     if (mock.component) {
       window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.getComponent = window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.originalGetComponent;
       delete window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.originalGetComponent;
+    }
+
+    if (mock.components) {
+      window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.getComponents = window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.originalGetComponents;
+      delete window.require(`/${this.config.markoBundleName}/src/components/Component`).prototype.originalGetComponents;
     }
   },
 
