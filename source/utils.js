@@ -145,6 +145,10 @@ module.exports = {
     if (rendererPath) {
       renderer = require(rendererPath);
 
+      if (renderer.meta.legacy && renderer.meta.component) {
+        renderer = require(path.join(this.testPath, '..', renderer.meta.component));
+      }
+
       delete require.cache[rendererPath];
 
       if (!renderer.renderToString) {
@@ -237,6 +241,8 @@ module.exports = {
 
     if (!fs.existsSync(markoPath)) {
       markoPath = path.resolve(this.testPath, '..', 'index.js');
+    } else if (require(markoPath).meta.legacy && require(markoPath).meta.component) {
+      markoPath = require.resolve(path.resolve(markoPath, '..', require(markoPath).meta.component));
     }
 
     if (fs.existsSync(markoPath)) {
