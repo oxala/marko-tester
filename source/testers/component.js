@@ -2,9 +2,10 @@
 
 const _ = require('lodash');
 const utils = require('../utils');
+const sinon = require('sinon');
 
-const buildComponent = (mochaAction, context, options, callback) => {
-  mochaAction('When component is being built', () => {
+const buildComponent = (mochaAction, context, describeText = '', options, callback) => {
+  mochaAction(`When component is being built: ${describeText}`, () => {
     if (!context.modulePath) {
       context.modulePath = utils.getStaticModule(utils.addBrowserDependency());
     }
@@ -33,6 +34,11 @@ const buildComponent = (mochaAction, context, options, callback) => {
 
           context.marko.component = renderResult.appendTo(componentContainer).getComponent();
 
+          sinon.spy(context.marko.component, 'emit');
+          sinon.spy(context.marko.component, 'forceUpdate');
+          sinon.spy(context.marko.component, 'update');
+          sinon.spy(context.marko.component, 'rerender');
+
           done();
         });
     });
@@ -42,6 +48,10 @@ const buildComponent = (mochaAction, context, options, callback) => {
     });
 
     afterEach(() => {
+      context.marko.component.emit.restore();
+      context.marko.component.forceUpdate.restore();
+      context.marko.component.update.restore();
+      context.marko.component.rerender.restore();
       utils.config.onDestroy();
       context.marko.component.destroy();
     });

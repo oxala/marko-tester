@@ -74,7 +74,7 @@ const preRequire = (ctx) => {
     }
 
     if (testType === 'component') {
-      testComponent(originalDescribe, context, options, callback);
+      testComponent(originalDescribe, context, describeText, options, callback);
 
       return;
     }
