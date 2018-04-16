@@ -139,6 +139,9 @@ During client testing, `marko-tester` gives you a few methods to utilize:
 ```
 'use strict';
 
+// First describe in spec files will be read by marko-tester to initialize test environment;
+// By default the describe string will be the path to autodiscovered renderer or `index.js` in the directory above;
+// If you specify a string for first describe, your text will be appended to the path of the directory above;
 describe(({ expect, sinon, fixtures }) => {
   // list of the params that are being returned in the callback:
   //   expect - chai's expect;
