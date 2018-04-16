@@ -39,23 +39,5 @@ describe(({
     it('should mock node module', () => {
       expect(marko.component.lodash).to.be.equal(mockLodash);
     });
-
-    describe('When user clicks button', () => {
-      beforeEach(() => {
-        marko.component.getEl('button').click();
-      });
-
-      it('should emit `toggle`', () => {
-        expect(marko.component.emit).to.be.calledWith('toggle');
-      });
-
-      it('should update the component', () => {
-        expect(marko.component.update).to.be.calledWith();
-      });
-
-      it('should force update the component', () => {
-        expect(marko.component.forceUpdate).to.be.calledWith();
-      });
-    });
   });
 });

@@ -13,11 +13,5 @@ module.exports = {
   onMount() {
     this.lodash = lodash;
     this.util = util;
-  },
-
-  toggle() {
-    this.emit('toggle');
-    this.forceUpdate();
-    this.update();
   }
 };
