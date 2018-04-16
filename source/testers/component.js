@@ -25,7 +25,7 @@ const buildComponent = (mochaAction, context, describeText = '', options, callba
       const fixture = options.fixture || _.get(context, 'fixtures.default', {});
 
       window.$_mod.require(context.modulePath)
-        .render(fixture, (err, renderResult) => {
+        .render(JSON.parse(JSON.stringify(fixture)), (err, renderResult) => {
           if (err) {
             done(new Error(`BuildComponent: ${err}`));
           }

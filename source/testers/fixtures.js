@@ -67,7 +67,7 @@ const testFixtures = (mochaMethod, context, opts) => {
         };
 
         callback.global = {};
-        context.renderer.renderToString(testCase.fixture, callback);
+        context.renderer.renderToString(JSON.parse(JSON.stringify(testCase.fixture)), callback);
       }).catch((error) => {
         throw new Error(error);
       }).then((actualHtml) => {
