@@ -13,5 +13,9 @@ module.exports = {
   onMount() {
     this.lodash = lodash;
     this.util = util;
+  },
+
+  changeInput() {
+    this.input.i = this.input.i + 1;
   }
 };

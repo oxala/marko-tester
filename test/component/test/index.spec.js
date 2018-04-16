@@ -39,5 +39,19 @@ describe(({
     it('should mock node module', () => {
       expect(marko.component.lodash).to.be.equal(mockLodash);
     });
+
+    describe('When user clicks the button', () => {
+      beforeEach(() => {
+        marko.component.getEl('button').click();
+      });
+
+      it('should set i to 1', () => {
+        expect(marko.component.input.i).to.be.equal(1);
+      });
+
+      it('should keep i as 1', () => {
+        expect(marko.component.input.i).to.be.equal(1);
+      });
+    });
   });
 });
