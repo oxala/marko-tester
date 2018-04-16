@@ -1,13 +1,13 @@
-#marko-tester [![Build Status](https://travis-ci.org/oxala/marko-tester.svg?branch=master)](https://travis-ci.org/oxala/marko-tester)
+# marko-tester [![Build Status](https://travis-ci.org/oxala/marko-tester.svg?branch=master)](https://travis-ci.org/oxala/marko-tester)
 
-Test library to assist with testing marko 4 UI components and more.
+Test library to assist with testing marko 4 (and marko 4 legacy) UI components and more.
 
 ## Usage
 
 ### Start using marko-tester with:
 
 ```
-yarn add marko-tester
+yarn add marko-tester --dev
 ```
 
 ### CLI
@@ -20,12 +20,24 @@ Once you've installed marko-tester, you can start using the `markotester` alias 
 - `--lint-es5` if you want to lint code with es5 rules by default
 - `--fix-lint` if you want to automatically fix your linting issues
 - `--fix-fixtures` if you want to automatically replace failing fixtures with actual render result
+- `--fix` combines `--fix-lint` and `--fix-fixtures` together
 
 ```
 markotester source --no-coverage
 markotester source --no-coverage --no-lint
 markotester source --fix-lint
 markotester source --fix-fixtures
+```
+
+`package.json` example:
+
+```
+"scripts": {
+  "lint": "yarn test --lint --no-mocha",
+  "test": "markotester src --no-lint --no-coverage",
+  "coverage": "yarn test --coverage"
+  ...
+}
 ```
 
 ### File structure
@@ -37,48 +49,49 @@ app
 |  |  |- phone-frame
 |  |  |  +- test
 |  |  |     |- fixtures
-|  |  |     |  |- default.json
 |  |  |     |  |- default.html
+|  |  |     |  |- default.json
 |  |  |     |  |- empty.js
 |  |  |     |  +- empty.html
 |  |  |     +- index.spec.js
 |  |  |- component.js
 |  |  +- index.marko
 |  +- pages
-|     +- mobile-preview
-|        |- test
-|        |  +- index.spec.js
-|        +- index.marko
+|  |  +- mobile-preview
+|  |     |- test
+|  |     |  |- fixtures
+|  |     |  |  |- default.html
+|  |     |  |  +- default.json
+|  |     |  +- index.spec.js
+|  |     |- index.js
+|  |     +- index.marko
+|  +- services
+|     |- test
+|     |  +- amazing-service.spec.js
+|     +- amazing-service.js
 +- .marko-tester.js
 ```
 
 ### Configuration file
 
-You can find an example configuration file in the root folder of `marko-tester`:
+You can find an example configuration file in the root folder of `marko-tester` (default confirugation):
 
 ```
-'use strict';
-
-module.exports = {
-  taglibExcludeDirs: [
-    'src'
-  ],
-  taglibExcludePackages: [
-    'excluded-component'
-  ],
-  excludedAttributes: ['data-widget'],
-  lassoPlugins: [],
-  onInit: () => {},
-  onDestroy: () => {},
-  coverage: {
-    reporters: [
-      'text-summary',
-      'html',
-      'json-summary'
+{
+  "components": [],
+  "taglibExcludeDirs": [],
+  "taglibExcludePackages": [],
+  "excludedAttributes": [],
+  "lassoPlugins": [],
+  "coverage": {
+    "reporters": [
+      "text-summary",
+      "html",
+      "json-summary"
     ],
-    dest: '.coverage',
-    excludes: [
-      '**/*.marko.js'
+    "dest": ".reports",
+    "excludes": [
+      "**/*.marko.js"
     ]
   }
 };
@@ -87,41 +100,31 @@ module.exports = {
 * **components** - An array of patterns for files that should be loaded into jsdom page by lasso.
 * **taglibExcludeDirs** - An array of paths relative to the root of your project folders that contain `marko.json`. This is used to isolate your tests so the nested components won't be renderer.
 * **taglibExcludePackages** - An array of module names. This is used to isolate your tests so the nested components won't be renderer.
-* **excludedAttributes** - An array of HTML attributes that can be different every test execution (e.g `data-widget` which marko dynamically changes based on package version). *(Default: `['data-widget']`)*
+* **excludedAttributes** - An array of HTML attributes that can be different every test execution (e.g `data-widget` which marko dynamically changes based on package version).
 * **lassoPlugins** - An array of lasso plugins to require and attach to lasso configuration during client test execution.
-* **onInit** - A hook that will be executed before every `it` when the widget needs to be instantiated.
-* **onDestroy** - A hook that will be executed after every `it` when the widget needs to be destroyed.
-* **coverage.reporters** - An array of reporters for istanbul to use. *(Default: `['text-summary', 'html', 'json-summary']`)*
-* **coverage.dest** - The target destination folder where reports will be written. *(Default: `.coverage`)*
-* **coverage.excludes** - An array of file patterns to exclude from istanbul reports. *(Default: `['**/*.marko.js']`)*
+* **coverage.reporters** - An array of reporters for istanbul to use.
+* **coverage.dest** - The target destination folder where reports will be written.
+* **coverage.excludes** - An array of file patterns to exclude from istanbul reports.
 
-### Automatic component/fixtures search
+### Automatic component/fixtures search and fixtures test
 
-Marko-tester will try to automatically find your component renderer and/or fixtures to test. For the renderer, marko-tester will go up one level from your spec file and search for `index.marko`.
+Marko-tester will try to automatically find your component renderer and/or fixtures to test. For the renderer, marko-tester will go up one level from your spec file and search for `index.marko` (or the file specified in `w-bind` for legacy components).
 
 Fixtures will be automatically found if they are inside the `fixtures` folder on the same level as your spec file.
 
-### Render comparison based on specific input
+If fixtures and renderer would be found, and spec file exists for the component,fixture test would be automatically performed.
+
+### Render comparison based on specific input (fixtures test)
 
 The rendering test works by giving your template the input to use for rendering and then comparing output with the specified HTML.
 
 The JSON file and HTML file comprising a test should follow the pattern below (check the `fixtures` folder in File Structure section):
 
 ```
-{test-case}.json
 {test-case}.html
-{another-test-case}.js
+{test-case}.json
 {another-test-case}.html
-```
-
-Your test file will have to invoke the `testFixtures` function. Below you can find an example of how your spec might look:
-
-```
-'use strict';
-
-global.tester('source/components/phone-frame', (testFixtures) => {
-  testFixtures();
-});
+{another-test-case}.js
 ```
 
 ### Component client-side testing
@@ -130,24 +133,24 @@ The client test works by instantiating a marko-widget and testing the functional
 
 During client testing, `marko-tester` gives you a few methods to utilize:
 
-* **testPage** - Will create an empty page, giving you access to window and document objects. This method is available right after test case declaration.
-* **testComponent** - Used to build the page with the component constructor in it. At this point, the `marko.component` attribute will be exposed to the mocha context giving you access to your widget's instance. This method is available right after test case declaration.
+* **describe.page** - Will create an empty page, giving you access to window and document objects. This method is available right after test case declaration.
+* **describe.component** - Used to build the page with the component constructor in it. At this point, the `marko.component` attribute will be exposed to the mocha context giving you access to your widget's instance. This method is available right after test case declaration.
 
 ```
 'use strict';
 
-global.tester('source/components/phone-frame', (expect, sinon, testPage, testFixtures, testComponent, marko, fixtures) => {
-  // list of the params you can ask for (order doesn't matter):
+describe(({ expect, sinon, fixtures }) => {
+  // list of the params that are being returned in the callback:
   //   expect - chai's expect;
   //   sinon - library to spy and stub;
-  //   testFixtures - runs fixture test;
-  //   testPage - create an empty page with lasso generated dependancies;
-  //   testComponent - renders and instantiates marko component;
-  //   marko - marko context and exposes 'component' and 'require';
   //   fixtures - will give you a list of attached test fixtures to current component;
   //   mockRequire - exposes 'mock-require' npm module;
 
-  testComponent(() => {
+  describe.component(({ marko, modRequire }) => {
+    // list of the params that are being returned in the callback:
+    //   modRequire - a helper function to require modules on a browser level;
+    //   marko - marko context that contains the component instance under `marko.component`;
+
     let mockHello;
 
     beforeEach(() => {
@@ -166,40 +169,42 @@ global.tester('source/components/phone-frame', (expect, sinon, testPage, testFix
 });
 ```
 
-By default, running `testComponent` will build the component using the `default` fixture (if there is one). If you wish to build the component using a different fixture, you can pass an option to do that before the callback:
+By default, running `describe.component` will build the component using the `default` fixture (if there is one). If you wish to build the component using a different fixture, you can pass an option to do that before the callback:
 
 ```
-testComponent({
+describe.component({
   fixture: {}
-  // It can be either a fixture object or a string with a relative path to the fixture.
-  // Do not forget that you can also utilize the "fixtures" data.
-}, function () {});
+}, ({ marko }) => { ... });
 ```
 
 ### Few additional features
 
-1. `tester`, `testComponent` and `testPage` commands will create a mocha's `describe` function. That's why the `only` and `skip` operators can be used with these commands the same way as with `describe` (e.g `testComponent.only(...)`, `tester.skip(...)`).
+1. `describe.component` and `describe.page` commands are just patched describe functions. That's why the `only` and `skip` operators can be used with these commands (e.g `describe.component.only()`, `describe.page.skip()`).
 
 2. If you want to mock require during client-side testing - you can do that using options for `testComponent` method. There as a key you can pass relative path to the necessary file that will be required. And the mock of that file as a value. Keep in mind that mocked require will only exist within this `buildComponent`.<br>
 ```
-testComponent({
+describe.component({
   mock: {
     require: {
-      '../dep': { hello: 'world' }
+      '../dep': { hello: 'world' },
+      some_node_module: { world: 'hello' }
     },
     component: {
       'nested-component': { world: 'hello' }
+    },
+    components: {
+      'hello-worlds': [{ worlds: 'hello' }]
     }
   },
-}, () => { ... });
+}, ({ marko }) => { ... });
 ```
 
 3. You can also use a different file layout if necessary. When your template has a top-level element of `tbody`, `tr`, or something else that expects a `table` element as a parent, you can add the `layout` parameter and set it to `table`. This will ensure JSDOM renders your component correctly.
 ```
-testComponent({
+describe.component({
   fixture: fixtures.basic,
   layout: 'table'
-}, () => { ... });
+}, ({ marko }) => { ... });
 ```
 
 ## Code style (linting)
