@@ -3,5 +3,5 @@
 const dep = require('./dep');
 
 module.exports = () => {
-  console.log(dep.message);
+  console.error(dep.message);
 };

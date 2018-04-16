@@ -1,6 +1,10 @@
 'use strict';
 
-global.tester('non-marko/logger', (expect, sinon, mockRequire) => {
+describe(({
+  expect,
+  sinon,
+  mockRequire
+}) => {
   const mockMessage = 'mockMessage';
   const mockDep = {
     message: mockMessage
@@ -8,17 +12,17 @@ global.tester('non-marko/logger', (expect, sinon, mockRequire) => {
 
   beforeEach(() => {
     mockRequire('../dep', mockDep);
-    sinon.stub(console, 'log');
+
+    sinon.stub(console, 'error');
 
     require('../logger')();
   });
 
   afterEach(() => {
-    mockRequire.stopAll();
-    console.log.restore();
+    console.error.restore();
   });
 
   it('should log the message', () => {
-    expect(console.log).to.be.calledWith(mockMessage);
+    expect(console.error).to.be.calledWith(mockMessage);
   });
 });

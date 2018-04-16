@@ -1,13 +1,15 @@
 'use strict';
 
-global.tester.only('tbody-component', (expect, sinon, testFixtures, testComponent, marko) => {
-  testFixtures();
-
-  testComponent({
+describe(({
+  expect
+}) => {
+  describe.component({
     layout: 'table'
-  }, () => {
+  }, ({
+    marko
+  }) => {
     it('should be able to access the DOM correctly', () => {
-      expect(marko.component.el.tagName).to.be.equal('TBODY');
+      expect(marko.component.getEl().tagName).to.be.equal('TBODY');
     });
   });
 });

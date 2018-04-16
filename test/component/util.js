@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (hello) {
+module.exports = (hello) => {
   window.alert(hello);
 
   return '$';

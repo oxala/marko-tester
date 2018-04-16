@@ -11,13 +11,13 @@
     "markotester": "./source/markotester.js"
   },
   "scripts": {
-    "test": "node ./source/markotester source --no-mocha",
-    "eslint": "npm test -- --no-mocha",
-    "unit-test": "./node_modules/.bin/_mocha $(find source -name '*.spec.js')",
-    "integration-test": "node ./source/markotester test --no-coverage --no-lint",
+    "lint": "yarn test --no-mocha",
+    "test": "node ./source/markotester source --no-coverage",
+    "test:integration": "node ./source/markotester test",
     "coverage": "istanbul cover ./node_modules/.bin/_mocha $(find source -name '*.spec.js')",
     "clean": "rm -rf .beans .cache static source/browser.json $(find test -name '*.marko.js') $(find source -name '*.marko.js') .coverage",
-    "bump": "sh ./tasks/bump.sh"
+    "bump": "npm_bump --auto --auto-fallback minor",
+    "prepush": "yarn lint && yarn test && yarn test:integration"
   },
   "prepush": [
     "test"
@@ -64,8 +64,10 @@
     "try-require": "^1.2.1"
   },
   "devDependencies": {
+    "husky": "^0.14.3",
+    "lasso-less": "^2.4.7",
     "lasso-marko": "^2.3.1",
-    "pre-push": "^0.1.1"
+    "release-tools": "^2.7.1"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"

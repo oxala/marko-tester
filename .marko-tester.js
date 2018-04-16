@@ -2,10 +2,8 @@
 
 module.exports = {
   components: [],
-  taglibExcludeDirs: [
-  ],
-  taglibExcludePackages: [
-  ],
+  taglibExcludeDirs: [],
+  taglibExcludePackages: [],
   excludedAttributes: [],
   lassoPlugins: [],
   componentTimeout: 10000,
@@ -17,15 +15,9 @@ module.exports = {
       'html',
       'json-summary'
     ],
-    dest: '.coverage',
+    dest: '.reports',
     excludes: [
       '**/*.marko.js'
     ]
-  },
-  acceptance: {
-    baseUrl: 'localhost:8080',
-    startCommand: 'npm start',
-    stopCommand: 'npm stop',
-    startTimeout: 10000
   }
 };

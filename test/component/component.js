@@ -1,9 +1,23 @@
 'use strict';
 
-require('./util');
+const util = require('./util');
+const lodash = require('lodash');
 
-module.exports = class {
+module.exports = {
+  onCreate(input) {
+    this.state = {
+      hidden: input.hidden
+    };
+  },
+
   onMount() {
-    document.location.replace('hello-world');
+    this.lodash = lodash;
+    this.util = util;
+  },
+
+  toggle() {
+    this.emit('toggle');
+    this.forceUpdate();
+    this.update();
   }
 };

@@ -1,7 +1,11 @@
 'use strict';
 
-global.tester('util', (expect, sinon, modRequire, testPage) => {
-  testPage(() => {
+describe(({
+  expect,
+  sinon,
+  modRequire
+}) => {
+  describe.page(() => {
     let util;
     let hello;
     let result;

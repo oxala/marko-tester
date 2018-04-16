@@ -1,5 +1,3 @@
-/* eslint no-dynamic-require: 0 */
-
 'use strict';
 
 const path = require('path');
@@ -131,7 +129,7 @@ module.exports = {
   },
 
   get renderer() {
-    let rendererPaths = glob.sync(path.resolve(
+    const rendererPaths = glob.sync(path.resolve(
       path.join(this.testPath, '..'),
       'index.marko'
     ));
@@ -180,6 +178,30 @@ module.exports = {
       }
 
       return this.testPath;
+    }
+
+    this.stackTraceArray = null;
+
+    return null;
+  },
+
+  get testFileName() {
+    if (!this.stackTraceArray) {
+      this.stackTraceArray = stackTrace.get();
+    }
+
+    const trace = this.stackTraceArray.shift();
+
+    if (trace) {
+      const fileName = trace.getFileName();
+
+      if (/^.*\.(spec|integration)(\.es6)?(\.es5)?\.js$/.test(fileName)) {
+        this.stackTraceArray = null;
+
+        return fileName.split('/').pop().replace(/\.(spec|integration)(\.es6)?(\.es5)?\.js$/g, '');
+      }
+
+      return this.testFileName;
     }
 
     this.stackTraceArray = null;
@@ -237,12 +259,18 @@ module.exports = {
   addBrowserDependency(markoPath) {
     if (!markoPath) {
       markoPath = path.resolve(this.testPath, '..', 'index.marko');
+    } else {
+      markoPath = require.resolve(markoPath);
     }
 
     if (!fs.existsSync(markoPath)) {
       markoPath = path.resolve(this.testPath, '..', 'index.js');
-    } else if (require(markoPath).meta.legacy && require(markoPath).meta.component) {
-      markoPath = require.resolve(path.resolve(markoPath, '..', require(markoPath).meta.component));
+    } else if (path.extname(markoPath) === 'marko') {
+      const meta = require(markoPath).meta;
+
+      if (meta && meta.legacy && meta.component) {
+        markoPath = require.resolve(path.resolve(markoPath, '..', meta.component));
+      }
     }
 
     if (fs.existsSync(markoPath)) {
@@ -252,7 +280,7 @@ module.exports = {
     return path.relative(rootPath, markoPath);
   },
 
-  mockBrowser(mocks) {
+  mockBrowser(mocks, context) {
     const mockRequirePaths = mocks.require || {};
 
     Object.keys(mockRequirePaths)
@@ -260,7 +288,7 @@ module.exports = {
         const mock = mockRequirePaths[filePath];
         const mod = this.getStaticModule(
           filePath,
-          this.testPath,
+          context.testPath,
           `BuildComponent: Cannot resolve module to mock require for - ${filePath}`
         );
 
@@ -294,14 +322,14 @@ module.exports = {
     }
   },
 
-  unmockBrowser(context, mock) {
+  unmockBrowser(mock, context) {
     const mockRequirePaths = mock.require || {};
 
     Object.keys(mockRequirePaths)
       .forEach((filePath) => {
         const mod = this.getStaticModule(
           filePath,
-          this.testPath,
+          context.testPath,
           `BuildComponent: Cannot resolve module to mock require for - ${filePath}`
         );
         const cachedMod = window.require.cache[mod];
@@ -342,8 +370,7 @@ module.exports = {
         }
       }
     } else if (!isAbsolute) {
-      file = path.resolve(testPath, file)
-        .replace(rootPath, '');
+      file = path.resolve(testPath, file).replace(rootPath, '');
     }
 
     if (!pkgInfo) {

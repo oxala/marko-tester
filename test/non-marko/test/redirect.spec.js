@@ -1,11 +1,15 @@
 'use strict';
 
-global.tester('non-marko/redirect', (expect, sinon, testPage, marko) => {
-  testPage(() => {
+describe(({
+  expect,
+  sinon,
+  modRequire
+}) => {
+  describe.page(() => {
     beforeEach(() => {
       sinon.stub(document.location, 'replace');
 
-      marko.require('../redirect')();
+      modRequire('../redirect')();
     });
 
     afterEach(() => {

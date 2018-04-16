@@ -5,7 +5,9 @@ const utils = require('../utils');
 const sinon = require('sinon');
 
 const buildComponent = (mochaAction, context, describeText = '', options, callback) => {
-  mochaAction(`When component is being built: ${describeText}`, () => {
+  mochaAction(`When component is being built: ${describeText}`, function whenComponentIsBeingBuild() {
+    this.timeout(utils.config.componentTimeout);
+
     if (!context.modulePath) {
       context.modulePath = utils.getStaticModule(utils.addBrowserDependency());
     }
@@ -14,7 +16,7 @@ const buildComponent = (mochaAction, context, describeText = '', options, callba
       context.preparePage()
         .then(() => {
           if (options.mock) {
-            utils.mockBrowser(options.mock);
+            utils.mockBrowser(options.mock, context);
           }
         })
         .then(done);
@@ -34,10 +36,21 @@ const buildComponent = (mochaAction, context, describeText = '', options, callba
 
           context.marko.component = renderResult.appendTo(componentContainer).getComponent();
 
-          sinon.spy(context.marko.component, 'emit');
-          sinon.spy(context.marko.component, 'forceUpdate');
-          sinon.spy(context.marko.component, 'update');
-          sinon.spy(context.marko.component, 'rerender');
+          if (context.marko.component.emit) {
+            sinon.spy(context.marko.component, 'emit');
+          }
+
+          if (context.marko.component.forceUpdate) {
+            sinon.spy(context.marko.component, 'forceUpdate');
+          }
+
+          if (context.marko.component.update) {
+            sinon.spy(context.marko.component, 'update');
+          }
+
+          if (context.marko.component.rerender) {
+            sinon.spy(context.marko.component, 'emit');
+          }
 
           done();
         });
@@ -48,17 +61,29 @@ const buildComponent = (mochaAction, context, describeText = '', options, callba
     });
 
     afterEach(() => {
-      context.marko.component.emit.restore();
-      context.marko.component.forceUpdate.restore();
-      context.marko.component.update.restore();
-      context.marko.component.rerender.restore();
+      if (context.marko.component.emit) {
+        context.marko.component.emit.restore();
+      }
+
+      if (context.marko.component.forceUpdate) {
+        context.marko.component.forceUpdate.restore();
+      }
+
+      if (context.marko.component.update) {
+        context.marko.component.update.restore();
+      }
+
+      if (context.marko.component.rerender) {
+        context.marko.component.rerender.restore();
+      }
+
       utils.config.onDestroy();
       context.marko.component.destroy();
     });
 
     after(() => {
       if (options.mock) {
-        utils.unmockBrowser(context, options.mock);
+        utils.unmockBrowser(options.mock, context);
       }
     });
   });

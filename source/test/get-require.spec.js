@@ -1,7 +1,11 @@
 'use strict';
 
-global.tester('get-require', (expect, testPage, marko) => {
-  testPage(() => {
+describe('get-require', ({
+  expect
+}) => {
+  describe.page(({
+    marko
+  }) => {
     beforeEach(() => {
       marko.require('../get-require');
     });

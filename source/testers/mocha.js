@@ -38,7 +38,7 @@ const mocha = new Mocha({
 });
 const preRequire = (ctx) => {
   const fakeDescribe = (originalDescribe, testType) => (describeText, options, callback) => {
-    if (!ctx.firstDescribe && !(/^(component|fixtures)$/.test(testType))) {
+    if (!ctx.firstDescribe && !(/^(component|fixtures|page)$/.test(testType))) {
       originalDescribe(describeText, options);
 
       return;
@@ -64,12 +64,10 @@ const preRequire = (ctx) => {
     const context = utils.context;
 
     context.preparePage = testPage.prepare.bind(this, context);
-    context.testPage = testPage.bind(this, context);
-    context.testPage.only = testPage.only.bind(this, context);
-    context.testPage.skip = testPage.skip.bind(this, context);
 
     if (testType === 'fixtures') {
       testFixtures(originalDescribe, context, options);
+
       return;
     }
 
@@ -79,14 +77,20 @@ const preRequire = (ctx) => {
       return;
     }
 
+    if (testType === 'page') {
+      testPage(originalDescribe, context, describeText, options, callback);
+
+      return;
+    }
+
     if (!describeText) {
-      describeText = path.relative(process.cwd(), path.resolve(utils.testPath, '..'));
+      describeText = path.relative(process.cwd(), path.resolve(utils.testPath, '..', utils.testFileName));
     } else {
       describeText = path.relative(process.cwd(), path.resolve(utils.testPath, '..', describeText));
     }
 
     originalDescribe(describeText, callback ? () => {
-      if (utils.renderer.renderToString && !_.isEmpty(utils.context.fixtures)) {
+      if (utils.renderer.renderToString && !_.isEmpty(utils.context.fixtures) && utils.testFileName === 'index') {
         testFixtures(it, context, options);
       }
 
@@ -98,12 +102,13 @@ const preRequire = (ctx) => {
         mockRequire.stopAll();
       });
 
+      context.testPath = utils.testPath;
+
       callback({
         expect,
         sinon,
         mockRequire,
         modRequire: utils.modRequire.bind(utils),
-        testPage: context.testPage,
         fixtures: context.fixtures,
         rewire: (filePath) => {
           let file = filePath;
@@ -149,6 +154,9 @@ const preRequire = (ctx) => {
   ctx.describe.component = fakeDescribe(ctx.describe, 'component');
   ctx.describe.component.only = fakeDescribe(originalDescribeOnly, 'component');
   ctx.describe.component.skip = fakeDescribe(originalDescribeSkip, 'component');
+  ctx.describe.page = fakeDescribe(ctx.describe, 'page');
+  ctx.describe.page.only = fakeDescribe(originalDescribeOnly, 'page');
+  ctx.describe.page.skip = fakeDescribe(originalDescribeSkip, 'page');
   ctx.describe.only = fakeDescribe(originalDescribeOnly);
   ctx.describe.skip = fakeDescribe(originalDescribeSkip);
 };

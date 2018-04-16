@@ -16,7 +16,8 @@ module.exports = {
   settings: {
     'mocha/additionalTestFunctions': [
       'describe.fixtures',
-      'describe.component'
+      'describe.component',
+      'describe.page'
     ]
   }
 };

@@ -9,12 +9,11 @@ const utils = require('../utils');
 const coverage = require('../testers/coverage');
 
 let pagePrepared;
-const buildPage = (context, opts, cb) => {
-  const callback = cb || opts;
-  const options = cb ? opts : {};
-
-  options.mochaOperation('When page is ready', function whenPageIsReady() {
+const buildPage = (mochaAction, context, describeText = '', options, callback) => {
+  mochaAction(`When page is being built: ${describeText}`, function whenPageIsBeingBuilt() {
     this.timeout(utils.config.componentTimeout);
+
+    utils.addBrowserDependency(path.resolve(utils.testPath, '..', utils.testFileName));
 
     before((done) => {
       context.preparePage()
@@ -26,13 +25,13 @@ const buildPage = (context, opts, cb) => {
         .then(done);
     });
 
-    callback();
+    callback && callback({
+      marko: context.marko
+    });
   });
 };
 
-module.exports = utils.runWithMochaOperation.bind(null, null, buildPage);
-module.exports.only = utils.runWithMochaOperation.bind(null, 'only', buildPage);
-module.exports.skip = utils.runWithMochaOperation.bind(null, 'skip', buildPage);
+module.exports = buildPage;
 module.exports.prepare = () => {
   fs.ensureDirSync(utils.config.outputPath);
 
