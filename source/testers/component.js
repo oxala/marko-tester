@@ -2,13 +2,21 @@
 
 const _ = require('lodash');
 const utils = require('../utils');
+const path = require('path');
 
 const buildComponent = (mochaAction, context, describeText = '', options, callback) => {
   mochaAction(`When component is being built: ${describeText}`, function whenComponentIsBeingBuild() {
     this.timeout(utils.config.componentTimeout);
 
     if (!context.modulePath) {
-      context.modulePath = utils.getStaticModule(utils.addBrowserDependency());
+      let modulePath = utils.addBrowserDependency();
+      let renderer = require(path.join(utils.config.rootPath, modulePath));
+
+      if (renderer.meta.legacy && renderer.meta.component) {
+        modulePath = path.relative(process.cwd(), path.join(utils.testPath, '..', renderer.meta.component));
+      }
+
+      context.modulePath = utils.getStaticModule(modulePath);
     }
 
     before((done) => {
