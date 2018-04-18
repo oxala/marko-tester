@@ -16,6 +16,7 @@ const eslint = require(path.join(__dirname, '..', 'eslintrc-es6'));
 
 const rootPath = process.cwd();
 const config = {
+  pathSeparator: (/^win/.test(process.platform) ? '\\' : '/'),
   stylelint,
   eslintEs5,
   eslint,
@@ -198,7 +199,7 @@ module.exports = {
       if (/^.*\.(spec|integration)(\.es6)?(\.es5)?\.js$/.test(fileName)) {
         this.stackTraceArray = null;
 
-        return fileName.split('/').pop().replace(/\.(spec|integration)(\.es6)?(\.es5)?\.js$/g, '');
+        return fileName.split(this.config.pathSeparator).pop().replace(/\.(spec|integration)(\.es6)?(\.es5)?\.js$/g, '');
       }
 
       return this.testFileName;
