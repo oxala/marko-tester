@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const chai = require('chai');
 const Promise = require('bluebird');
 const utils = require('../utils');
+const deepClone = require('just-clone');
 
 const expect = chai.expect;
 const excludedAttributes = utils.config.excludedAttributes.map(attr => attr.toLowerCase());
@@ -67,7 +68,7 @@ const testFixtures = (mochaMethod, context, opts) => {
         };
 
         callback.global = {};
-        context.renderer.renderToString(JSON.parse(JSON.stringify(testCase.fixture)), callback);
+        context.renderer.renderToString(deepClone(testCase.fixture), callback);
       }).catch((error) => {
         throw new Error(error);
       }).then((actualHtml) => {

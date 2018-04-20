@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const utils = require('../utils');
 const path = require('path');
+const deepClone = require('just-clone');
 
 const buildComponent = (mochaAction, context, describeText = '', options, callback) => {
   mochaAction(`When component is being built: ${describeText}`, function whenComponentIsBeingBuild() {
@@ -33,7 +34,7 @@ const buildComponent = (mochaAction, context, describeText = '', options, callba
       const fixture = options.fixture || _.get(context, 'fixtures.default', {});
 
       window.$_mod.require(context.modulePath)
-        .render(JSON.parse(JSON.stringify(fixture)), (err, renderResult) => {
+        .render(deepClone(fixture), (err, renderResult) => {
           if (err) {
             done(new Error(`BuildComponent: ${err}`));
           }
