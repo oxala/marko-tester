@@ -5,10 +5,8 @@ const path = require('path');
 const glob = require('glob');
 const istanbul = require('istanbul');
 const utils = require('../utils');
+const instrumenter = require('istanbul-lib-instrument').createInstrumenter();
 
-const instrumenter = new istanbul.Instrumenter({
-  noCompact: true
-});
 const preparePathForIgnore = prependPath => ignoredPath => path.resolve(prependPath, ignoredPath, '**');
 
 module.exports.initializeServer = () => {

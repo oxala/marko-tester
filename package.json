@@ -45,6 +45,7 @@
     "glob": "^7.0.5",
     "html-normalizer": "https://github.com/oxala/normalizer.git",
     "istanbul": "^0.4.5",
+    "istanbul-lib-instrument": "^1.10.1",
     "jsdom": "^11.1.0",
     "just-clone": "^3.0.0",
     "lasso": "^3.1.3",
