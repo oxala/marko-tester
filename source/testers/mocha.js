@@ -110,6 +110,11 @@ const preRequire = (ctx) => {
         mockRequire,
         modRequire: utils.modRequire.bind(utils),
         fixtures: context.fixtures,
+        customEvent: (eventName) => {
+          const customEvent = document.createEvent('Event');
+          customEvent.initEvent(eventName, true, true);
+          return customEvent;
+        },
         rewire: (filePath) => {
           let file = filePath;
 
