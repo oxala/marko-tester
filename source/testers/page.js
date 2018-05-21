@@ -7,6 +7,7 @@ const lasso = require('lasso');
 const Promise = require('bluebird');
 const utils = require('../utils');
 const coverage = require('../testers/coverage');
+const pageTemplate = require('../page.marko');
 
 let pagePrepared;
 const buildPage = (mochaAction, context, describeText = '', options, callback) => {
@@ -79,24 +80,26 @@ module.exports.prepare = () => {
       dependencies: utils.config.dependencies
     }));
 
-    return require(path.resolve(__dirname, '../page.marko'))
+    return pageTemplate
       .render({}, out)
       .on('finish', () => {
         if (utils.options.coverage) {
           coverage.initializeBrowser();
         }
 
-        return JSDOM.fromFile(htmlPath, {
-          runScripts: 'dangerously',
-          resources: 'usable'
-        }).then((dom) => {
-          global.window = dom.window;
-          global.document = dom.window.document;
-          global.window.console = console;
+        return JSDOM
+          .fromFile(htmlPath, {
+            runScripts: 'dangerously',
+            resources: 'usable'
+          })
+          .then((dom) => {
+            global.window = dom.window;
+            global.document = dom.window.document;
+            global.window.console = console;
 
-          pagePrepared = true;
-          window.onload = () => resolve();
-        });
+            pagePrepared = true;
+            window.onload = () => resolve();
+          });
       });
   });
 };
