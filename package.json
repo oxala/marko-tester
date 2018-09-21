@@ -1,77 +1,122 @@
 {
   "name": "marko-tester",
-  "version": "8.5.5",
-  "description": "Assist Marko components unit/client testing",
+  "version": "9.0.2",
+  "description": "Assist Marko components testing using Jest.",
   "repository": {
     "type": "git",
     "url": "git@github.com:oxala/marko-tester.git"
   },
-  "main": "./source/index",
-  "bin": {
-    "markotester": "./source/markotester.js"
-  },
+  "main": "./src/index",
   "scripts": {
-    "lint": "yarn test --no-mocha",
-    "test": "node ./source/markotester source --no-coverage",
-    "test:integration": "node ./source/markotester test",
-    "coverage": "istanbul cover ./node_modules/.bin/_mocha $(find source -name '*.spec.js')",
-    "clean": "rm -rf .beans .cache static source/browser.json $(find test -name '*.marko.js') $(find source -name '*.marko.js') .coverage",
-    "bump": "npm_bump --auto --auto-fallback minor",
-    "prepush": "yarn lint && yarn test && yarn test:integration"
+    "postinstall": "node ./src/generate-marko-module-map.js",
+    "lint": "eslint src tests",
+    "test": "jest",
+    "clean": "markoc . --clean && rm -rf coverage",
+    "prepush": "yarn lint && yarn test",
+    "commitmsg": "commitlint -e"
   },
-  "prepush": [
-    "test"
-  ],
   "keywords": [
     "marko",
     "test",
+    "tester",
     "marko-tester",
     "coverage",
-    "eslint",
-    "lint"
+    "jest",
+    "unit",
+    "component"
   ],
   "author": "Ryshkov, Gleb <gleb@ryshkov.com>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "@lasso/marko-taglib": "^1.0.10",
-    "app-module-path": "^2.0.0",
-    "async": "^2.1.2",
-    "bluebird": "^3.5.1",
     "chai": "^4.1.2",
-    "chai-as-promised": "^7.1.1",
-    "eslint": "^4.3.0",
-    "eslint-config-marko-tester": "^1.2.0",
-    "fs-extra": "^0.30.0",
-    "glob": "^7.0.5",
-    "html-normalizer": "https://github.com/oxala/normalizer.git",
-    "istanbul": "^0.4.5",
-    "istanbul-lib-instrument": "^1.10.1",
-    "jsdom": "^11.1.0",
-    "just-clone": "^3.0.0",
-    "lasso": "^3.1.3",
-    "lasso-less": "^3.0.1",
-    "lasso-marko": "^2.4.0",
-    "lodash": "^4.13.1",
-    "marko": "^4",
-    "mocha": "^4.0.1",
-    "mocha-junit-reporter": "^1.15.0",
-    "mocha-multi-reporters": "^1.1.6",
-    "mock-require": "^1.3.0",
-    "optimist": "^0.6.1",
-    "rewire": "^3.0.2",
-    "sinon": "^4.1.2",
-    "sinon-chai": "^2.14.0",
-    "stack-trace": "0.0.9",
-    "stream-browserify": "^2.0.1",
-    "stylelint": "^8.0.0",
-    "stylelint-config-standard": "^17.0.0",
-    "try-require": "^1.2.1"
+    "glob": "^7.1.3",
+    "just-clone": "^3.1.0",
+    "stack-trace": "0.0.9"
   },
   "devDependencies": {
+    "@commitlint/cli": "^7.1.2",
+    "@commitlint/config-conventional": "^7.1.2",
+    "@lasso/marko-taglib": "^1.0.12",
+    "@semantic-release/changelog": "^3.0.0",
+    "@semantic-release/git": "^7.0.3",
+    "eslint": "^5.6.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^21.22.0",
     "husky": "^0.14.3",
-    "release-tools": "^2.7.0"
+    "jest": "^23.6.0",
+    "marko": "^4.13.5",
+    "marko-widgets": "^7",
+    "semantic-release": "^15.9.16"
+  },
+  "peerDependencies": {
+    "jest": "^23",
+    "marko": "^4.5"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
+  },
+  "release": {
+    "prepare": [
+      {
+        "path": "@semantic-release/changelog",
+        "changelogFile": "CHANGELOG.md"
+      },
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ],
+    "publish": [
+      "@semantic-release/github"
+    ],
+    "npmPublish": false,
+    "assets": [
+      "CHANGELOG.md",
+      "package.json"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "jest": {
+    "rootDir": "./",
+    "coverageDirectory": "<rootDir>/coverage/",
+    "roots": [
+      "<rootDir>/tests/"
+    ],
+    "transform": {
+      "^.+\\.marko$": "<rootDir>/preprocessor.js"
+    },
+    "testRegex": ".*\\.spec\\.(js)$",
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "marko"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js}",
+      "src/**/*.{marko}",
+      "!test/**",
+      "!**/node_modules/**"
+    ],
+    "globals": {
+      "tester": {
+        "fixturesDir": "inputs"
+      }
+    }
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "plugins": [
+      "jest"
+    ],
+    "env": {
+      "browser": true,
+      "jest/globals": true
+    }
   }
 }

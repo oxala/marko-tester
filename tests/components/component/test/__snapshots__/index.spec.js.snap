@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render component with default fixture 1`] = `
+Array [
+  ,
+  <div
+    class="mock-component"
+  >
+    <h1>
+      hello
+    </h1>
+    <button
+      type="button"
+    >
+      Hello
+    </button>
+    <tbody-component>
+      <at_body>
+        body is here
+      </at_body>
+    </tbody-component>
+  </div>,
+  ,
+]
+`;
+
+exports[`should render component with hidden fixture 1`] = `
+Array [
+  ,
+  <div
+    class="mock-component"
+  >
+    <h1>
+      
+    </h1>
+    <button
+      type="button"
+    >
+      Hello
+    </button>
+  </div>,
+  ,
+]
+`;
+
+exports[`should render component with no-content fixture 1`] = `
+Array [
+  ,
+  <div
+    class="mock-component"
+  >
+    <h1>
+      
+    </h1>
+    <button
+      type="button"
+    >
+      Hello
+    </button>
+    <tbody-component>
+      <at_body>
+        body is here
+      </at_body>
+    </tbody-component>
+  </div>,
+  ,
+]
+`;

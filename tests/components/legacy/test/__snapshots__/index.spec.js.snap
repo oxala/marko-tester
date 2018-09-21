@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render component with index fixture 1`] = `
+Array [
+  ,
+  <div
+    class="legacy"
+  >
+    <section>
+      Section
+    </section>
+    <button
+      type="button"
+    >
+      Hello
+    </button>
+  </div>,
+  ,
+]
+`;

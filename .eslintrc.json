@@ -1,6 +1,0 @@
-{
-  "extends": "./eslintrc-legacy.js",
-  "rules": {
-    "import/no-dynamic-require": 0
-  }
-}
