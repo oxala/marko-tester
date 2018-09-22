@@ -8,3 +8,5 @@ marko-modules-mocking-map.json
 cc-test-reporter
 tests
 .travis.yml
+.gitignore
+.npmignore
