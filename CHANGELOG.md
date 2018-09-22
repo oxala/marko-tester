@@ -1,3 +1,10 @@
+## [9.0.4](https://github.com/oxala/marko-tester/compare/v9.0.3...v9.0.4) (2018-09-22)
+
+
+### Bug Fixes
+
+* fixed search of fixtures without snapshot test run ([553e51e](https://github.com/oxala/marko-tester/commit/553e51e))
+
 ## [9.0.3](https://github.com/oxala/marko-tester/compare/v9.0.2...v9.0.3) (2018-09-22)
 
 
