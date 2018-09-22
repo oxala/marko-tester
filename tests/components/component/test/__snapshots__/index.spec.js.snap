@@ -14,7 +14,9 @@ Array [
     >
       Hello
     </button>
-    <tbody-component>
+    <tbody-component
+      attribute="{\\"title\\":\\"hello\\",\\"i\\":0,\\"hello\\":\\"world\\"}"
+    >
       <at_body>
         body is here
       </at_body>
@@ -57,7 +59,9 @@ Array [
     >
       Hello
     </button>
-    <tbody-component>
+    <tbody-component
+      attribute="{\\"hello\\":\\"world\\"}"
+    >
       <at_body>
         body is here
       </at_body>
