@@ -103,12 +103,7 @@
       "src/**/*.{marko}",
       "!test/**",
       "!**/node_modules/**"
-    ],
-    "globals": {
-      "tester": {
-        "fixturesDir": "inputs"
-      }
-    }
+    ]
   },
   "eslintConfig": {
     "extends": "airbnb-base",

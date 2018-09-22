@@ -21,13 +21,10 @@ In the global JEST object, you can pass a `tester` configuration:
 "global": {
   ...
   "tester": {
-    "fixturesDir": "inputs",
     "shallow": false
   }
 }
 ```
-
-- fixturesDir - The folder name where you have fixtures to render the component with. _(Default: "fixtures")_
 
 - shallow - You can turn off shallow rendering by passing `false` here. That way marko won't isolate any component test. _(Default: true)_
 
@@ -36,7 +33,7 @@ In the global JEST object, you can pass a `tester` configuration:
 
 - `render` is a method that renders a component with a given input and mounts it to `document.body`. The mounted component instance is returned.
 
-- `fixtures` is an object by default. It contains all the fixtures that are found within the fixture folder of this component. If a `withoutFixtures` option is passed, `fixtures` will be a function that will run JEST SnapShots test for your fixtures. You will still be able to get any fixture content by the filename: `fixtures[FixtureFileName]`.
+- `fixtures` is an object by default. It contains all the fixtures that are found within the `__snapshots__` folder for the component. If a `withoutFixtures` option is passed, `fixtures` will also be a function that will run JEST SnapShots test for your fixtures. You will still be able to get any fixture content by the filename: `fixtures[FixtureFileName]`.
 
 ### Example
 You can find examples in the `tests` folder. The boilerplate looks like this:

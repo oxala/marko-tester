@@ -9,7 +9,6 @@ const markoModulesMockingMap = require('../marko-modules-mocking-map');
 
 global.tester = Object.assign({
   shallow: true,
-  fixturesDir: 'fixtures',
 }, global.tester);
 
 Object.keys(markoModulesMockingMap)
@@ -54,7 +53,7 @@ module.exports = (componentPath, { withoutFixtures } = {}) => {
       .appendTo(document.body)
       .getComponent();
   };
-  const fixturesPath = getFullPath(global.tester.fixturesDir);
+  const fixturesPath = getFullPath('__snapshots__');
   const runFixtures = () => {
     /* eslint-disable-next-line no-use-before-define */
     const fixturesEntries = Object.entries(fixtures);
