@@ -4,3 +4,4 @@ node_modules
 yarn*
 .vscode
 marko-modules-mocking-map.json
+cc-test-reporter
