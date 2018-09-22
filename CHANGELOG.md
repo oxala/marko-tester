@@ -1,3 +1,10 @@
+## [9.0.5](https://github.com/oxala/marko-tester/compare/v9.0.4...v9.0.5) (2018-09-22)
+
+
+### Bug Fixes
+
+* fixed path to node_modules for marko map generation ([dbe0bd6](https://github.com/oxala/marko-tester/commit/dbe0bd6))
+
 ## [9.0.4](https://github.com/oxala/marko-tester/compare/v9.0.3...v9.0.4) (2018-09-22)
 
 
