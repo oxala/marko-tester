@@ -55,8 +55,7 @@
     "marko": "^4.5"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
-    "tag": "jest"
+    "registry": "https://registry.npmjs.org"
   },
   "release": {
     "prepare": [
