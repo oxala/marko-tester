@@ -1,3 +1,10 @@
+## [9.0.1](https://github.com/oxala/marko-tester/compare/v9.0.0...v9.0.1) (2018-09-22)
+
+
+### Bug Fixes
+
+* fixed publish tag ([e3cb721](https://github.com/oxala/marko-tester/commit/e3cb721))
+
 # [9.0.0](https://github.com/oxala/marko-tester/compare/v8.5.1...v9.0.0) (2018-09-22)
 
 
