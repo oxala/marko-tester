@@ -1,6 +1,4 @@
-const { getComponent } = require('../../../../src/index');
-
-const { render, fixtures } = getComponent('../index.marko', { withoutFixtures: true });
+const { render, fixtures } = require('../../../../src/index')('../index.marko', { withoutFixtures: true });
 
 fixtures();
 

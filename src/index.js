@@ -33,75 +33,73 @@ const getFullPath = (componentPath) => {
   return index > -1 && resolve(stack[index].getFileName(), '..', componentPath);
 };
 
-module.exports = {
-  getComponent: (componentPath, { withoutFixtures } = {}) => {
-    const fullPath = getFullPath(componentPath);
+module.exports = (componentPath, { withoutFixtures } = {}) => {
+  const fullPath = getFullPath(componentPath);
 
-    if (!fullPath) {
-      throw new Error(`Cannot find specified component at "${componentPath}".`);
-    }
+  if (!fullPath) {
+    throw new Error(`Cannot find specified component at "${componentPath}".`);
+  }
 
-    function render(input) {
-      /* eslint-disable-next-line global-require, import/no-dynamic-require */
-      const component = require(fullPath);
+  function render(input) {
+    /* eslint-disable-next-line global-require, import/no-dynamic-require */
+    const component = require(fullPath);
 
-      /* eslint-disable-next-line global-require, import/no-unresolved */
-      require('marko/components').init();
+    /* eslint-disable-next-line global-require, import/no-unresolved */
+    require('marko/components').init();
 
-      jest.resetModules();
+    jest.resetModules();
 
-      return component
-        .renderSync(clone(input))
-        .appendTo(document.body)
-        .getComponent();
-    }
+    return component
+      .renderSync(clone(input))
+      .appendTo(document.body)
+      .getComponent();
+  }
 
-    let fixtures = {};
-    const fixturesPath = getFullPath(global.tester.fixturesDir);
-    const runFixtures = () => {
-      if (fixturesPath) {
-        let fixturesAmount = 0;
+  let fixtures = {};
+  const fixturesPath = getFullPath(global.tester.fixturesDir);
+  const runFixtures = () => {
+    if (fixturesPath) {
+      let fixturesAmount = 0;
 
-        readdirSync(fixturesPath).forEach((file) => {
-          const absPath = join(fixturesPath, file);
-          const extension = extname(absPath);
-          const testName = basename(absPath).replace(/\.(js|json)$/, '');
+      readdirSync(fixturesPath).forEach((file) => {
+        const absPath = join(fixturesPath, file);
+        const extension = extname(absPath);
+        const testName = basename(absPath).replace(/\.(js|json)$/, '');
 
-          if (extension === '.js' || extension === '.json') {
-            fixturesAmount += 1;
+        if (extension === '.js' || extension === '.json') {
+          fixturesAmount += 1;
 
-            let fixture;
+          let fixture;
 
-            try {
-              /* eslint-disable-next-line global-require, import/no-dynamic-require */
-              fixture = require(absPath);
-            } catch (error) { /* */ }
+          try {
+            /* eslint-disable-next-line global-require, import/no-dynamic-require */
+            fixture = require(absPath);
+          } catch (error) { /* */ }
 
-            fixtures[testName] = fixture || {};
+          fixtures[testName] = fixture || {};
 
-            it(`should render component with ${testName} fixture`, () => {
-              const comp = render(clone(fixture));
-              expect(Array.from(document.body.childNodes)).toMatchSnapshot();
-              comp.destroy();
-            });
-          }
-        });
-
-        if (fixturesAmount === 0) {
-          throw new Error(`No fixtures where found for component in "${fullPath}".`);
+          it(`should render component with ${testName} fixture`, () => {
+            const comp = render(clone(fixture));
+            expect(Array.from(document.body.childNodes)).toMatchSnapshot();
+            comp.destroy();
+          });
         }
+      });
+
+      if (fixturesAmount === 0) {
+        throw new Error(`No fixtures where found for component in "${fullPath}".`);
       }
-    };
-
-    if (withoutFixtures) {
-      fixtures = runFixtures;
-    } else {
-      runFixtures();
     }
+  };
 
-    return {
-      fixtures,
-      render,
-    };
-  },
+  if (withoutFixtures) {
+    fixtures = runFixtures;
+  } else {
+    runFixtures();
+  }
+
+  return {
+    fixtures,
+    render,
+  };
 };

@@ -1,6 +1,4 @@
-const { getComponent } = require('../../../../src/index');
-
-const { render } = getComponent('../index.marko');
+const { render } = require('../../../../src/index')('../index.marko');
 
 describe('When component is rendered', () => {
   let component;
