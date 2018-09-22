@@ -7,7 +7,7 @@ const path = require('path');
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
 const fileExistsAsync = promisify(fs.exists);
-const NODE_MODULES_PATH = './node_modules';
+const NODE_MODULES_PATH = path.relative(`${__dirname}/..`, path.resolve(require.resolve('marko'), '..', '..'));
 const MARKO_DIST = `marko/${isDebug && process.env.NODE_ENV !== 'test' ? 'src' : 'dist'}`;
 const BASE_PATH = `${NODE_MODULES_PATH}/${MARKO_DIST}`;
 const OUTPUT_PATH = './marko-modules-mocking-map.json';
