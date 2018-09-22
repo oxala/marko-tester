@@ -1,3 +1,10 @@
+## [9.0.3](https://github.com/oxala/marko-tester/compare/v9.0.2...v9.0.3) (2018-09-22)
+
+
+### Bug Fixes
+
+* exposed marko-tester as a function ([f41aae7](https://github.com/oxala/marko-tester/commit/f41aae7))
+
 ## [9.0.2](https://github.com/oxala/marko-tester/compare/v9.0.1...v9.0.2) (2018-09-22)
 
 
