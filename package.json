@@ -1,6 +1,6 @@
 {
   "name": "marko-tester",
-  "version": "9.0.5",
+  "version": "9.1.0",
   "description": "Assist Marko components testing using Jest.",
   "repository": {
     "type": "git",

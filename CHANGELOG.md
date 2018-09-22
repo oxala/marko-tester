@@ -1,3 +1,10 @@
+# [9.1.0](https://github.com/oxala/marko-tester/compare/v9.0.5...v9.1.0) (2018-09-22)
+
+
+### Features
+
+* removed fixture folder configuration, defaulted to __snapshots__ ([e64f314](https://github.com/oxala/marko-tester/commit/e64f314))
+
 ## [9.0.5](https://github.com/oxala/marko-tester/compare/v9.0.4...v9.0.5) (2018-09-22)
 
 
