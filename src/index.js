@@ -40,7 +40,7 @@ module.exports = (componentPath, { withoutFixtures } = {}) => {
     throw new Error(`Cannot find specified component at "${componentPath}".`);
   }
 
-  function render(input) {
+  const render = (input) => {
     /* eslint-disable-next-line global-require, import/no-dynamic-require */
     const component = require(fullPath);
 
@@ -53,53 +53,43 @@ module.exports = (componentPath, { withoutFixtures } = {}) => {
       .renderSync(clone(input))
       .appendTo(document.body)
       .getComponent();
-  }
-
-  let fixtures = {};
+  };
   const fixturesPath = getFullPath(global.tester.fixturesDir);
   const runFixtures = () => {
-    if (fixturesPath) {
-      let fixturesAmount = 0;
+    /* eslint-disable-next-line no-use-before-define */
+    const fixturesEntries = Object.entries(fixtures);
 
-      readdirSync(fixturesPath).forEach((file) => {
-        const absPath = join(fixturesPath, file);
-        const extension = extname(absPath);
-        const testName = basename(absPath).replace(/\.(js|json)$/, '');
-
-        if (extension === '.js' || extension === '.json') {
-          fixturesAmount += 1;
-
-          let fixture;
-
-          try {
-            /* eslint-disable-next-line global-require, import/no-dynamic-require */
-            fixture = require(absPath);
-          } catch (error) { /* */ }
-
-          fixtures[testName] = fixture || {};
-
-          it(`should render component with ${testName} fixture`, () => {
-            const comp = render(clone(fixture));
-            expect(Array.from(document.body.childNodes)).toMatchSnapshot();
-            comp.destroy();
-          });
-        }
+    fixturesEntries.forEach(([name, fixture]) => {
+      it(`should render component with ${name} fixture`, () => {
+        const comp = render(clone(fixture));
+        expect(Array.from(document.body.childNodes)).toMatchSnapshot();
+        comp.destroy();
       });
+    });
 
-      if (fixturesAmount === 0) {
-        throw new Error(`No fixtures where found for component in "${fullPath}".`);
-      }
+    if (fixturesEntries.length === 0 && fixturesPath) {
+      throw new Error(`No fixtures where found for component in "${fullPath}".`);
     }
   };
+  const fixtures = withoutFixtures ? runFixtures : {};
 
-  if (withoutFixtures) {
-    fixtures = runFixtures;
-  } else {
+  if (fixturesPath) {
+    readdirSync(fixturesPath)
+      .forEach((filename) => {
+        const absPath = join(fixturesPath, filename);
+        const extension = extname(filename);
+        const testName = basename(filename).replace(extension, '');
+
+        if (/^\.js(on)?$/.test(extension)) {
+          /* eslint-disable-next-line global-require, import/no-dynamic-require */
+          fixtures[testName] = require(absPath) || {};
+        }
+      });
+  }
+
+  if (!withoutFixtures) {
     runFixtures();
   }
 
-  return {
-    fixtures,
-    render,
-  };
+  return { fixtures, render };
 };
