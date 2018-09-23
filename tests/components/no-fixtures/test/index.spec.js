@@ -12,6 +12,6 @@ describe('When component is rendered', () => {
   });
 
   it('should not throw an error about missing fixtures folder', () => {
-    expect(true).toBe(true);
+    expect(true);
   });
 });

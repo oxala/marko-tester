@@ -60,3 +60,19 @@ describe('When component is rendered without data', () => {
     expect(component.util).toBe(mockUtil);
   });
 });
+
+describe('When component is rendered without fixture', () => {
+  let component;
+
+  beforeEach(() => {
+    component = render();
+  });
+
+  afterEach(() => {
+    component.destroy();
+  });
+
+  it('should not error', () => {
+    expect(true);
+  });
+});
