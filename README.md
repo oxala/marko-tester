@@ -26,26 +26,32 @@ In the global JEST object, you can pass a `tester` configuration:
 }
 ```
 
-- shallow - You can turn off shallow rendering by passing `false` here. That way marko won't isolate any component test. _(Default: true)_
+- `shallow` _(default: true)_ - You can turn off shallow rendering by passing `false` here. That way marko won't isolate any component test.
 
 ## Usage
 `marko-tester` returns a function for you to use. Pass a relative path to a marko component file and you will receive a `render` method and `fixtures` method/object. By default this will run JEST SnapShots test for the fixtures of the component.
 
-- `render` is a method that renders a component with a given input and mounts it to `document.body`. The mounted component instance is returned.
+- `render` - a method that renders a component with a given input and mounts it to `document.body`. The mounted component instance is returned.
 
-- `fixtures` is an object by default. It contains all the fixtures that are found within the `__snapshots__` folder for the component. If a `withoutFixtures` option is passed, `fixtures` will also be a function that will run JEST SnapShots test for your fixtures. You will still be able to get any fixture content by the filename: `fixtures[FixtureFileName]`.
+- `fixtures` - an object that contains all fixtures that are found within the `__snapshots__` folder for the component. You can get content of a fixture by specifying a filename: `fixtures[FixtureFileName]`.
 
-### Example
-You can find examples in the `tests` folder. The boilerplate looks like this:
+As a second argument you can pass options object:
+
+- `withoutFixtures` _(default: false)_ - set this to true if you don't want automatic snapshot test execution. At this point `fixtures` will become executable and you will be able to run snapshot test using `fixtures()`.
+
+- `withAwait` _(default: false)_ - if your template has `<await/>` tag in it, you need to set this to true. At this point `render` will become an asynchronous function and you will need to treat it with await.
+
+### Examples
+The boilerplate looks like this:
 
 ```
-const { render } = require('marko-tester')('../index.marko');
+const { render, fixtures } = require('marko-tester')('../index.marko');
 
-describe('When component is rendered', () => {
+describe('When component is rendered without results', () => {
   let component;
 
   beforeEach(() => {
-    component = render(fixtures.default);
+    component = render(fixtures['without-results']);
   });
 
   afterEach(() => {
@@ -56,8 +62,52 @@ describe('When component is rendered', () => {
 });
 ```
 
+Without fixtures:
+
+```
+const { render, fixtures } = require('marko-tester')('../index.marko', { withoutFixtures: true });
+
+fixtures();
+
+describe('When component is rendered with records', () => {
+  let component;
+
+  beforeEach(() => {
+    component = render(fixtures.records);
+  });
+
+  afterEach(() => {
+    component.destroy();
+  });
+
+  ...your assertions...
+});
+```
+
+Asynchronous:
+
+```
+const { render, fixtures } = require('marko-tester')('../index.marko', { withAwait: true });
+
+describe('When component is rendered without model', () => {
+  let component;
+
+  beforeEach(async () => {
+    component = await render(fixtures.empty);
+  });
+
+  afterEach(() => {
+    component.destroy();
+  });
+
+  ...your assertions...
+});
+```
+
+You can find more examples in the `tests` folder.
+
 ## References
-* [Marko](http://markojs.com)
+* [marko](http://markojs.com)
 * [jest](https://jestjs.io)
 
 ## Thanks

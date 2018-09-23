@@ -1,0 +1,15 @@
+<div class="mock-component">
+  <await(res from input)>
+    <h1>${res.title}</h1>
+
+    <button type="button" key="button" on-click('changeInput')>Hello</button>
+
+    <tbody-component attribute=input key="tbody" if(!state.hidden)>
+      <@body>
+        <await(none from {})>
+          body is here
+        </await>
+      </@body>
+    </tbody-component>
+  </await>
+</div>

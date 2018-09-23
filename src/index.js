@@ -32,7 +32,7 @@ const getFullPath = (componentPath) => {
   return index > -1 && resolve(stack[index].getFileName(), '..', componentPath);
 };
 
-module.exports = (componentPath, { withoutFixtures } = {}) => {
+module.exports = (componentPath, { withoutFixtures, withAwait } = {}) => {
   const fullPath = getFullPath(componentPath);
 
   if (!fullPath) {
@@ -42,16 +42,16 @@ module.exports = (componentPath, { withoutFixtures } = {}) => {
   const render = (input) => {
     /* eslint-disable-next-line global-require, import/no-dynamic-require */
     const component = require(fullPath);
+    const mount = comp => comp.appendTo(document.body).getComponent();
 
     /* eslint-disable-next-line global-require, import/no-unresolved */
     require('marko/components').init();
 
     jest.resetModules();
 
-    return component
-      .renderSync(clone(input))
-      .appendTo(document.body)
-      .getComponent();
+    return withAwait
+      ? component.render(clone(input)).then(mount)
+      : mount(component.renderSync(clone(input)));
   };
   const fixturesPath = getFullPath('__snapshots__');
   const runFixtures = () => {
@@ -59,8 +59,8 @@ module.exports = (componentPath, { withoutFixtures } = {}) => {
     const fixturesEntries = Object.entries(fixtures);
 
     fixturesEntries.forEach(([name, fixture]) => {
-      it(`should render component with ${name} fixture`, () => {
-        const comp = render(clone(fixture));
+      it(`should render component with ${name} fixture`, async () => {
+        const comp = await render(clone(fixture));
         expect(Array.from(document.body.childNodes)).toMatchSnapshot();
         comp.destroy();
       });
