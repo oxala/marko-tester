@@ -1,3 +1,10 @@
+# [9.2.0](https://github.com/oxala/marko-tester/compare/v9.1.0...v9.2.0) (2018-09-23)
+
+
+### Features
+
+* added support for <await/> tags ([5c13acc](https://github.com/oxala/marko-tester/commit/5c13acc))
+
 # [9.1.0](https://github.com/oxala/marko-tester/compare/v9.0.5...v9.1.0) (2018-09-22)
 
 
