@@ -3,6 +3,6 @@ const { fixtures } = require('../../../../src/index')('../index.marko', { withou
 it('should store all the fixtures with content', () => {
   Object.keys(fixtures).forEach((fixtureName) => {
     /* eslint-disable-next-line global-require, import/no-dynamic-require */
-    expect(require(`./${global.tester.fixturesDir}/${fixtureName}`) || {}).toEqual(fixtures[fixtureName]);
+    expect(require(`./__snapshots__/${fixtureName}`) || {}).toEqual(fixtures[fixtureName]);
   });
 });
