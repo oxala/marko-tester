@@ -7,10 +7,6 @@ const stackTrace = require('stack-trace');
 const clone = require('just-clone');
 const markoModulesMockingMap = require('../marko-modules-mocking-map');
 
-global.tester = Object.assign({
-  shallow: true,
-}, global.tester);
-
 Object.keys(markoModulesMockingMap)
   .forEach(moduleToMock => jest.mock(
     moduleToMock,
