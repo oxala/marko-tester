@@ -104,7 +104,7 @@ describe('When component is rendered without model', () => {
 });
 ```
 
-You can find more examples in the `tests` folder.
+You can find more examples in the [tests folder](https://github.com/oxala/marko-tester/tree/master/tests).
 
 ## References
 * [marko](http://markojs.com)
