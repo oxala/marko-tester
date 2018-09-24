@@ -6,11 +6,12 @@
     "type": "git",
     "url": "git@github.com:oxala/marko-tester.git"
   },
-  "main": "./source/index",
+  "main": "./src",
   "bin": {
     "markotester": "./source/markotester.js"
   },
   "scripts": {
+    "postinstall": "node ./src/generate-marko-module-map.js",
     "lint": "yarn test --no-mocha",
     "test": "node ./source/markotester source --no-coverage",
     "test:integration": "node ./source/markotester test",
