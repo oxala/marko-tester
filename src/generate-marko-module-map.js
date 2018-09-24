@@ -1,13 +1,13 @@
 const glob = require('glob');
 const { isDebug } = require('marko/env');
 const { promisify } = require('util');
-const fs = require('fs');
-const path = require('path');
+const { readFile, writeFile, exists } = require('fs');
+const { relative, resolve: resolvePath, join } = require('path');
 
-const readFileAsync = promisify(fs.readFile);
-const writeFileAsync = promisify(fs.writeFile);
-const fileExistsAsync = promisify(fs.exists);
-const NODE_MODULES_PATH = path.relative(`${__dirname}/..`, path.resolve(require.resolve('marko'), '..', '..'));
+const readFileAsync = promisify(readFile);
+const writeFileAsync = promisify(writeFile);
+const fileExistsAsync = promisify(exists);
+const NODE_MODULES_PATH = relative(`${__dirname}/..`, resolvePath(require.resolve('marko'), '..', '..'));
 const MARKO_DIST = `marko/${isDebug && process.env.NODE_ENV !== 'test' ? 'src' : 'dist'}`;
 const BASE_PATH = `${NODE_MODULES_PATH}/${MARKO_DIST}`;
 const OUTPUT_PATH = './marko-modules-mocking-map.json';
@@ -34,8 +34,8 @@ function getPackageFiles() {
 
 function flattenBrowserMap(folderName, browserMap) {
   return Object.keys(browserMap).reduce((curr, mapKey) => {
-    const mockSource = path.join(folderName, mapKey);
-    const mockTarget = path.join(folderName, browserMap[mapKey]);
+    const mockSource = join(folderName, mapKey);
+    const mockTarget = join(folderName, browserMap[mapKey]);
 
     return Object.assign(curr, {
       [mockSource]: mockTarget,
@@ -58,8 +58,8 @@ async function processPackageFile(packageFile) {
 
 async function filterExistingFiles(browserMap) {
   const existingModules = await Promise.all(Object.keys(browserMap).map(async (mapKey) => {
-    const targetModule = path.join(NODE_MODULES_PATH, mapKey);
-    const mockModule = path.join(NODE_MODULES_PATH, browserMap[mapKey]);
+    const targetModule = join(NODE_MODULES_PATH, mapKey);
+    const mockModule = join(NODE_MODULES_PATH, browserMap[mapKey]);
     const isTargeFileExisted = await fileExistsAsync(targetModule);
     const isMockFileExisted = await fileExistsAsync(mockModule);
 
