@@ -1,6 +1,6 @@
 const { readdirSync } = require('fs');
 const {
-  resolve, join, extname, basename,
+  resolve: resolvePath, join, extname, basename,
 } = require('path');
 const { existsSync } = require('fs');
 const stackTrace = require('stack-trace');
@@ -20,12 +20,12 @@ const getFullPath = (componentPath) => {
 
   const index = stack.findIndex((trace) => {
     const filename = trace.getFileName();
-    const fullPath = resolve(filename || '', '..', componentPath);
+    const fullPath = resolvePath(filename || '', '..', componentPath);
 
     return existsSync(fullPath);
   });
 
-  return index > -1 && resolve(stack[index].getFileName(), '..', componentPath);
+  return index > -1 && resolvePath(stack[index].getFileName(), '..', componentPath);
 };
 const render = (fullPath, withAwait) => (input) => {
   /* eslint-disable-next-line global-require, import/no-dynamic-require */
@@ -71,8 +71,16 @@ const runFixtures = (fixtures, fullPath, withAwait) => (fixtureName) => {
 
   return {};
 };
-
-module.exports = (componentPath, { withoutFixtures, withAwait } = {}) => {
+const helpers = {
+  createEvent: eventName => (customEvent => (customEvent.initEvent(eventName, true, true) || customEvent))(document.createEvent('Event')),
+  defer: () => (toReturn => Object.assign(toReturn, {
+    promise: new Promise((resolve, reject) => Object.assign(toReturn, {
+      resolve,
+      reject,
+    })),
+  }))({}),
+};
+const tester = (componentPath, { withoutFixtures, withAwait } = {}) => {
   const fullPath = getFullPath(componentPath);
 
   if (!fullPath) {
@@ -82,11 +90,13 @@ module.exports = (componentPath, { withoutFixtures, withAwait } = {}) => {
   const fixtures = getFixtures();
   const boundRunFixtures = runFixtures(fixtures, fullPath, withAwait);
 
-  return {
+  return Object.assign(helpers, {
     fixtures: Object.assign(
       withoutFixtures ? boundRunFixtures : boundRunFixtures(),
       fixtures,
     ),
     render: render(fullPath, withAwait),
-  };
+  });
 };
+
+module.exports = Object.assign(tester, helpers);

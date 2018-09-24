@@ -3,6 +3,8 @@
 
   <button type="button" key="button" on-click('changeInput')>Hello</button>
 
+  <button type="button" key="emit-button" on-click('emit', 'hello')/>
+
   <tbody-component attribute=input key="tbody" if(!state.hidden)>
     <@body>
       body is here

@@ -14,6 +14,9 @@ Array [
     >
       Hello
     </button>
+    <button
+      type="button"
+    />
     <tbody-component
       attribute="{\\"title\\":\\"hello\\",\\"i\\":0,\\"hello\\":\\"world\\"}"
     >
@@ -40,6 +43,9 @@ Array [
     >
       Hello
     </button>
+    <button
+      type="button"
+    />
   </div>,
   ,
 ]
@@ -59,6 +65,9 @@ Array [
     >
       Hello
     </button>
+    <button
+      type="button"
+    />
     <tbody-component
       attribute="{\\"hello\\":\\"world\\"}"
     >

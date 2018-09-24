@@ -1,4 +1,4 @@
-const { render, fixtures } = require('../../../../src/index')('../index.marko', { withoutFixtures: true });
+const { render, fixtures, createEvent } = require('../../../../src/index')('../index.marko', { withoutFixtures: true });
 
 fixtures();
 
@@ -38,6 +38,21 @@ describe('When component is rendered with data', () => {
     it('should set change the state and rerender', () => {
       expect(component.state.hidden).toBe(true);
       expect(component.getEl('tbody')).toBe(undefined);
+    });
+  });
+
+  describe('When user clicks emit button', () => {
+    let clickEvent;
+
+    beforeEach(() => {
+      clickEvent = createEvent('click');
+
+      jest.spyOn(component, 'emit');
+      component.getEl('emit-button').dispatchEvent(clickEvent);
+    });
+
+    it('should emit "hello" with event and element', () => {
+      expect(component.emit).toBeCalledWith('hello', clickEvent, clickEvent.target);
     });
   });
 });

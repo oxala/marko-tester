@@ -1,5 +1,8 @@
-module.exports = (hello) => {
-  window.alert(hello);
+const serviceCall = require('./service');
 
-  return '$';
+module.exports = {
+  handledPromise: () => serviceCall.get()
+    .then(response => Object.assign({ success: true }, response))
+    .catch(response => Object.assign({ fail: true }, response)),
+  unhandledPromise: () => serviceCall.get(),
 };
