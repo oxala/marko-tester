@@ -27,6 +27,18 @@ const getFullPath = (componentPath) => {
 
   return index > -1 && resolve(stack[index].getFileName(), '..', componentPath);
 };
+const getFixtures = fixturesFullPath => (fixturesFullPath ? readdirSync(fixturesFullPath) : [])
+  .filter(filename => /\.js(on)?$/.test(filename))
+  .reduce((fixtures, filename) => {
+    const absPath = join(fixturesFullPath, filename);
+    const extension = extname(filename);
+    const testName = basename(filename).replace(extension, '');
+
+    /* eslint-disable-next-line global-require, import/no-dynamic-require */
+    Object.assign(fixtures, { [testName]: require(absPath) || {} });
+
+    return fixtures;
+  }, {});
 
 module.exports = (componentPath, { withoutFixtures, withAwait } = {}) => {
   const fullPath = getFullPath(componentPath);
@@ -49,10 +61,14 @@ module.exports = (componentPath, { withoutFixtures, withAwait } = {}) => {
       ? component.render(clone(input)).then(mount)
       : mount(component.renderSync(clone(input)));
   };
-  const fixturesPath = getFullPath('__snapshots__');
+  const fixturesFullPath = getFullPath('__snapshots__');
   const runFixtures = () => {
     /* eslint-disable-next-line no-use-before-define */
-    const fixturesEntries = Object.entries(fixtures);
+    const fixturesEntries = Object.entries(fixturesData);
+
+    if (fixturesEntries.length === 0 && fixturesFullPath) {
+      throw new Error(`No fixtures where found for component in "${fullPath}".`);
+    }
 
     fixturesEntries.forEach(([name, fixture]) => {
       it(`should render component with ${name} fixture`, async () => {
@@ -62,29 +78,13 @@ module.exports = (componentPath, { withoutFixtures, withAwait } = {}) => {
       });
     });
 
-    if (fixturesEntries.length === 0 && fixturesPath) {
-      throw new Error(`No fixtures where found for component in "${fullPath}".`);
-    }
+    return {};
   };
-  const fixtures = withoutFixtures ? runFixtures : {};
-
-  if (fixturesPath) {
-    readdirSync(fixturesPath)
-      .forEach((filename) => {
-        const absPath = join(fixturesPath, filename);
-        const extension = extname(filename);
-        const testName = basename(filename).replace(extension, '');
-
-        if (/^\.js(on)?$/.test(extension)) {
-          /* eslint-disable-next-line global-require, import/no-dynamic-require */
-          fixtures[testName] = require(absPath) || {};
-        }
-      });
-  }
-
-  if (!withoutFixtures) {
-    runFixtures();
-  }
+  const fixturesData = getFixtures(fixturesFullPath);
+  const fixtures = Object.assign(
+    withoutFixtures ? runFixtures : runFixtures(),
+    fixturesData,
+  );
 
   return { fixtures, render };
 };
