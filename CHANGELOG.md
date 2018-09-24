@@ -1,3 +1,16 @@
+# [9.3.0](https://github.com/oxala/marko-tester/compare/v9.2.0...v9.3.0) (2018-09-24)
+
+
+### Bug Fixes
+
+* worked around the issue for legacy component rerenders ([208b34f](https://github.com/oxala/marko-tester/commit/208b34f))
+
+
+### Features
+
+* added feature to run snapshot test selectively ([182bc5e](https://github.com/oxala/marko-tester/commit/182bc5e))
+* added helpers for defer and custom event ([ea7bf50](https://github.com/oxala/marko-tester/commit/ea7bf50))
+
 # [9.2.0](https://github.com/oxala/marko-tester/compare/v9.1.0...v9.2.0) (2018-09-23)
 
 
