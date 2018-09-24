@@ -53,7 +53,7 @@ const getFixtures = (fixturesPath => () => (fixturesPath ? readdirSync(fixturesP
 
     return fixtures;
   }, {}))(getFullPath('__snapshots__'));
-const runFixtures = (fixtures, fullPath, withAwait) => () => {
+const runFixtures = (fixtures, fullPath, withAwait) => (fixtureName) => {
   const fixturesEntries = Object.entries(fixtures);
   const fixturesPath = getFullPath('__snapshots__');
 
@@ -61,13 +61,13 @@ const runFixtures = (fixtures, fullPath, withAwait) => () => {
     throw new Error(`No fixtures where found for component in "${fullPath}".`);
   }
 
-  fixturesEntries.forEach(([name, fixture]) => {
-    it(`should render component with ${name} fixture`, async () => {
+  fixturesEntries
+    .filter(([name]) => (!fixtureName || fixtureName === name))
+    .forEach(([name, fixture]) => it(`should render component with ${name} fixture`, async () => {
       const comp = await render(fullPath, withAwait)(clone(fixture));
       expect(Array.from(document.body.childNodes)).toMatchSnapshot();
       comp.destroy();
-    });
-  });
+    }));
 
   return {};
 };

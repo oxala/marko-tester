@@ -37,12 +37,11 @@ In the global JEST object, you can pass a `tester` configuration:
 
 As a second argument you can pass options object:
 
-- `withoutFixtures` _(default: false)_ - set this to true if you don't want automatic snapshot test execution. At this point `fixtures` will become executable and you will be able to run snapshot test using `fixtures()`.
+- `withoutFixtures` _(default: false)_ - set this to true if you don't want automatic snapshot test execution. At this point `fixtures` will become executable and you will be able to run snapshot test using `fixtures()`. You can run specific snapshot by providing a fixture name `fixtures(FixtureFileName)`.
 
 - `withAwait` _(default: false)_ - if your template has `<await/>` tag in it, you need to set this to true. At this point `render` will become an asynchronous function and you will need to treat it with await.
 
 ### Examples
-The boilerplate looks like this:
 
 ```
 const { render, fixtures } = require('marko-tester')('../index.marko');
