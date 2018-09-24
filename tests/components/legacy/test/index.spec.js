@@ -4,7 +4,7 @@ beforeEach(() => {
   window.alert = jest.fn();
 });
 
-describe('When component is rendered with data', () => {
+describe('When legacy component is rendered with data', () => {
   let component;
 
   beforeEach(() => {
@@ -19,14 +19,14 @@ describe('When component is rendered with data', () => {
     expect(window.alert).toBeCalledWith(fixtures.index.visible);
   });
 
-  // describe('When user clicks the button', () => {
-  //   beforeEach((done) => {
-  //     component.getEl('button').click();
-  //     component.once('update', done);
-  //   });
+  describe('When user clicks the button', () => {
+    beforeEach((done) => {
+      component.getEl('button').click();
+      component.once('update', done);
+    });
 
-  //   it('should set change the state and rerender the template', () => {
-  //     expect(component.state.visible).toBe(false);
-  //   });
-  // });
+    it('should set change the state and rerender the template', () => {
+      expect(component.state.visible).toBe(false);
+    });
+  });
 });
