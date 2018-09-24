@@ -71,6 +71,23 @@ const runFixtures = (fixtures, fullPath, withAwait) => (fixtureName) => {
 
   return {};
 };
+const createEvent = (eventName) => {
+  const customEvent = document.createEvent('Event');
+
+  customEvent.initEvent(eventName, true, true);
+
+  return customEvent;
+};
+const defer = () => {
+  const toReturn = {};
+
+  return Object.assign(toReturn, {
+    promise: new Promise((resolve, reject) => Object.assign(toReturn, {
+      resolve,
+      reject
+    }))
+  });
+};
 
 module.exports = (componentPath, { withoutFixtures, withAwait } = {}) => {
   const fullPath = getFullPath(componentPath);
@@ -88,5 +105,7 @@ module.exports = (componentPath, { withoutFixtures, withAwait } = {}) => {
       fixtures,
     ),
     render: render(fullPath, withAwait),
+    createEvent,
+    defer
   };
 };
