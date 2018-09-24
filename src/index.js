@@ -27,10 +27,24 @@ const getFullPath = (componentPath) => {
 
   return index > -1 && resolve(stack[index].getFileName(), '..', componentPath);
 };
-const getFixtures = fixturesFullPath => (fixturesFullPath ? readdirSync(fixturesFullPath) : [])
+const render = (fullPath, withAwait) => (input) => {
+  /* eslint-disable-next-line global-require, import/no-dynamic-require */
+  const component = require(fullPath);
+  const mount = comp => comp.appendTo(document.body).getComponent();
+
+  /* eslint-disable-next-line global-require, import/no-unresolved */
+  require('marko/components').init();
+
+  jest.resetModules();
+
+  return withAwait
+    ? component.render(clone(input)).then(mount)
+    : mount(component.renderSync(clone(input)));
+};
+const getFixtures = (fixturesPath => () => (fixturesPath ? readdirSync(fixturesPath) : [])
   .filter(filename => /\.js(on)?$/.test(filename))
   .reduce((fixtures, filename) => {
-    const absPath = join(fixturesFullPath, filename);
+    const absPath = join(fixturesPath, filename);
     const extension = extname(filename);
     const testName = basename(filename).replace(extension, '');
 
@@ -38,7 +52,25 @@ const getFixtures = fixturesFullPath => (fixturesFullPath ? readdirSync(fixtures
     Object.assign(fixtures, { [testName]: require(absPath) || {} });
 
     return fixtures;
-  }, {});
+  }, {}))(getFullPath('__snapshots__'));
+const runFixtures = (fixtures, fullPath, withAwait) => () => {
+  const fixturesEntries = Object.entries(fixtures);
+  const fixturesPath = getFullPath('__snapshots__');
+
+  if (fixturesEntries.length === 0 && fixturesPath) {
+    throw new Error(`No fixtures where found for component in "${fullPath}".`);
+  }
+
+  fixturesEntries.forEach(([name, fixture]) => {
+    it(`should render component with ${name} fixture`, async () => {
+      const comp = await render(fullPath, withAwait)(clone(fixture));
+      expect(Array.from(document.body.childNodes)).toMatchSnapshot();
+      comp.destroy();
+    });
+  });
+
+  return {};
+};
 
 module.exports = (componentPath, { withoutFixtures, withAwait } = {}) => {
   const fullPath = getFullPath(componentPath);
@@ -47,44 +79,14 @@ module.exports = (componentPath, { withoutFixtures, withAwait } = {}) => {
     throw new Error(`Cannot find specified component at "${componentPath}".`);
   }
 
-  const render = (input) => {
-    /* eslint-disable-next-line global-require, import/no-dynamic-require */
-    const component = require(fullPath);
-    const mount = comp => comp.appendTo(document.body).getComponent();
+  const fixtures = getFixtures();
+  const boundRunFixtures = runFixtures(fixtures, fullPath, withAwait);
 
-    /* eslint-disable-next-line global-require, import/no-unresolved */
-    require('marko/components').init();
-
-    jest.resetModules();
-
-    return withAwait
-      ? component.render(clone(input)).then(mount)
-      : mount(component.renderSync(clone(input)));
+  return {
+    fixtures: Object.assign(
+      withoutFixtures ? boundRunFixtures : boundRunFixtures(),
+      fixtures,
+    ),
+    render: render(fullPath, withAwait),
   };
-  const fixturesFullPath = getFullPath('__snapshots__');
-  const runFixtures = () => {
-    /* eslint-disable-next-line no-use-before-define */
-    const fixturesEntries = Object.entries(fixturesData);
-
-    if (fixturesEntries.length === 0 && fixturesFullPath) {
-      throw new Error(`No fixtures where found for component in "${fullPath}".`);
-    }
-
-    fixturesEntries.forEach(([name, fixture]) => {
-      it(`should render component with ${name} fixture`, async () => {
-        const comp = await render(clone(fixture));
-        expect(Array.from(document.body.childNodes)).toMatchSnapshot();
-        comp.destroy();
-      });
-    });
-
-    return {};
-  };
-  const fixturesData = getFixtures(fixturesFullPath);
-  const fixtures = Object.assign(
-    withoutFixtures ? runFixtures : runFixtures(),
-    fixturesData,
-  );
-
-  return { fixtures, render };
 };
