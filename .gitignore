@@ -1,6 +1,6 @@
 .DS_Store
 coverage
 node_modules
-yarn*
+yarn-error*
 .vscode
 marko-modules-mocking-map.json
