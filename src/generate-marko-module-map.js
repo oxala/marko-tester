@@ -1,5 +1,6 @@
 const glob = require('glob');
 const { promisify } = require('util');
+const { isDebug } = require('marko/env');
 const { readFile, writeFile, exists } = require('fs');
 const { relative, resolve: resolvePath, join } = require('path');
 
@@ -7,7 +8,7 @@ const readFileAsync = promisify(readFile);
 const writeFileAsync = promisify(writeFile);
 const fileExistsAsync = promisify(exists);
 const NODE_MODULES_PATH = relative(`${__dirname}/..`, resolvePath(require.resolve('marko'), '..', '..'));
-const MARKO_DIST = 'marko/src';
+const MARKO_DIST = `marko/${isDebug && ('NODE_ENV' in process.env) && process.env.NODE_ENV !== 'test' ? 'src' : 'dist'}`;
 const BASE_PATH = `${NODE_MODULES_PATH}/${MARKO_DIST}`;
 const OUTPUT_PATH = './marko-modules-mocking-map.json';
 

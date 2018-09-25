@@ -85,6 +85,7 @@
     "roots": [
       "<rootDir>/tests/"
     ],
+    "cache": false,
     "transform": {
       "^.+\\.marko$": "<rootDir>/preprocessor.js"
     },

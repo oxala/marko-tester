@@ -7,6 +7,6 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - npm run lint && npm run test -- --coverage && npm run release
+  - npm run lint && npm run test -- --ci --coverage && npm run release
 after_script:
   - ./cc-test-reporter after-build -t lcov --exit-code $TRAVIS_TEST_RESULT

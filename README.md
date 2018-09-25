@@ -4,10 +4,11 @@ A utility that helps you test marko components within the JEST framework.
 
 ## Requirements
 Your project needs to have `jest@^23` and `marko@^4.5` installed.
-Within your regular JEST configuration, you need to specify a transform for `*.marko` files:
+Within your regular JEST configuration, you need to specify a transform for `*.marko` files and disable cache (Note: you don't need to disable cache if your NODE_ENV is set to `dev` or `development`):
 
 ```
 ...
+"cache": false,
 "transform": {
   ...
   "^.+\\.marko$": "<rootDir>/node_modules/marko-jest/preprocessor.js"
