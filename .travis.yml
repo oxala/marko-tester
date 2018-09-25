@@ -1,17 +1,12 @@
 language: node_js
+cache: false
 node_js:
   - "8.11.2"
-matrix:
-  fast_finish: true
-env:
-  - NODE_ENV=test
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - npm run lint
-  - npm run test -- --coverage
-  - npm run release
+  - npm run lint && npm run test -- --coverage && npm run release
 after_script:
   - ./cc-test-reporter after-build -t lcov --exit-code $TRAVIS_TEST_RESULT
