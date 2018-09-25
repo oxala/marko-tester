@@ -1,3 +1,10 @@
+## [9.3.1](https://github.com/oxala/marko-tester/compare/v9.3.0...v9.3.1) (2018-09-25)
+
+
+### Bug Fixes
+
+* treated `test` environment as debug for marko ([bc30815](https://github.com/oxala/marko-tester/commit/bc30815))
+
 # [9.3.0](https://github.com/oxala/marko-tester/compare/v9.2.0...v9.3.0) (2018-09-24)
 
 
