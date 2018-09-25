@@ -1,3 +1,16 @@
+# [9.4.0](https://github.com/oxala/marko-tester/compare/v9.3.0...v9.4.0) (2018-09-25)
+
+
+### Bug Fixes
+
+* set marko's isDebug to always be true ([ae7c7b6](https://github.com/oxala/marko-tester/commit/ae7c7b6))
+* treated `test` environment as debug for marko ([e553045](https://github.com/oxala/marko-tester/commit/e553045))
+
+
+### Features
+
+* enviromental differentiation between install and run ([84911c9](https://github.com/oxala/marko-tester/commit/84911c9))
+
 ## [9.3.1](https://github.com/oxala/marko-tester/compare/v9.3.0...v9.3.1) (2018-09-25)
 
 
