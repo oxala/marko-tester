@@ -9,9 +9,7 @@ const markoModulesMockingMap = require('../marko-modules-mocking-map');
 
 delete global.WeakMap;
 
-if (process.env.NODE_ENV === 'test') {
-  jest.mock('marko/env', () => ({ isDebug: true }));
-}
+jest.mock('marko/env', () => ({ isDebug: true }));
 
 Object.keys(markoModulesMockingMap)
   .forEach(moduleToMock => jest.mock(
