@@ -1,3 +1,10 @@
+## [9.4.1](https://github.com/oxala/marko-tester/compare/v9.4.0...v9.4.1) (2018-09-26)
+
+
+### Bug Fixes
+
+* change some code styling ([10d8324](https://github.com/oxala/marko-tester/commit/10d8324))
+
 # [9.4.0](https://github.com/oxala/marko-tester/compare/v9.3.0...v9.4.0) (2018-09-25)
 
 
