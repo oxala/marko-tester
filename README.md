@@ -11,7 +11,7 @@ Within your regular JEST configuration, you need to specify a transform for `*.m
 "cache": false,
 "transform": {
   ...
-  "^.+\\.marko$": "<rootDir>/node_modules/marko-jest/preprocessor.js"
+  "^.+\\.marko$": "<rootDir>/node_modules/marko-tester/preprocessor.js"
 }
 ```
 
