@@ -67,6 +67,7 @@ const runFixtures = (fixtures, fullPath, withAwait) => (fixtureName) => {
     .filter(([name]) => (!fixtureName || fixtureName === name))
     .forEach(([name, fixture]) => it(`should render component with ${name} fixture`, async () => {
       const comp = await render(fullPath, withAwait)(clone(fixture));
+
       expect(Array.from(document.body.childNodes)).toMatchSnapshot();
       comp.destroy();
     }));
@@ -76,10 +77,7 @@ const runFixtures = (fixtures, fullPath, withAwait) => (fixtureName) => {
 const helpers = {
   createEvent: eventName => (customEvent => (customEvent.initEvent(eventName, true, true) || customEvent))(document.createEvent('Event')),
   defer: () => (toReturn => Object.assign(toReturn, {
-    promise: new Promise((resolve, reject) => Object.assign(toReturn, {
-      resolve,
-      reject,
-    })),
+    promise: new Promise((resolve, reject) => Object.assign(toReturn, { resolve, reject })),
   }))({}),
 };
 const tester = (componentPath, { withoutFixtures, withAwait } = {}) => {
