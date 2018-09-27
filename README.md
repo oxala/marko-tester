@@ -3,7 +3,7 @@
 A utility that helps you test marko components within `jest` framework.
 
 ## Requirements
-Your project needs to have `jest@^23` and `marko@^4.13` (with `marko-widgets@^7, if legacy components support is needed) installed.
+Your project needs to have `jest@^23` and `marko@^4.13` (with `marko-widgets@^7`, if legacy components support is needed) installed.
 
 Within your regular jest config, you need to specify a transform for `*.marko` files _(Note: if your NODE_ENV is set to `dev` or `development`, you need to run jest with `"cache": false` option)_:
 
