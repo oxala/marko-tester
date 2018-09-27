@@ -6,6 +6,7 @@ const { existsSync } = require('fs');
 const stackTrace = require('stack-trace');
 const clone = require('just-clone');
 const browserMap = require('./browser-map');
+const { markoVersion, markoWidgetsVersion } = require('./versions');
 
 delete global.WeakMap;
 
@@ -32,16 +33,25 @@ const getFullPath = (componentPath) => {
 const render = (fullPath, withAwait) => (input) => {
   /* eslint-disable-next-line global-require, import/no-dynamic-require */
   const component = require(fullPath);
-  const mount = comp => comp.appendTo(document.body).getComponent();
-
-  /* eslint-disable-next-line global-require, import/no-unresolved */
-  require('marko/components').init();
+  const mount = comp => comp.appendTo(document.body);
+  const mountComponent = comp => mount(comp).getComponent();
+  const mountWidget = comp => mount(comp).getWidget();
+  let componentInstance;
 
   jest.resetModules();
 
-  return withAwait
-    ? component.render(clone(input)).then(mount)
-    : mount(component.renderSync(clone(input)));
+  if (markoVersion === 3 && markoWidgetsVersion === 6) {
+    componentInstance = mountWidget(component.renderSync(clone(input)));
+  } else if (markoVersion === 4) {
+    /* eslint-disable-next-line global-require, import/no-unresolved */
+    require('marko/components').init();
+
+    componentInstance = withAwait
+      ? component.render(clone(input)).then(mountComponent)
+      : mountComponent(component.renderSync(clone(input)));
+  }
+
+  return componentInstance;
 };
 const getFixtures = (fixturesPath => () => (fixturesPath ? readdirSync(fixturesPath) : [])
   .filter(filename => /\.js(on)?$/.test(filename))

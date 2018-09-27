@@ -10,6 +10,9 @@
   "scripts": {
     "lint": "eslint src tests",
     "test": "jest",
+    "pretest:legacy": "yarn upgrade marko@^3 marko-widgets@^6 --no-lockfile",
+    "test:legacy": "yarn test --no-cache --roots tests/marko3",
+    "posttest:legacy": "git checkout package.json && yarn",
     "clean": "markoc . --clean && rm -rf coverage",
     "prepush": "yarn lint && yarn test",
     "commitmsg": "commitlint -e",
@@ -82,7 +85,8 @@
     "rootDir": "./",
     "coverageDirectory": "<rootDir>/coverage/",
     "roots": [
-      "<rootDir>/tests/"
+      "<rootDir>/tests/components",
+      "<rootDir>/tests/no-component"
     ],
     "transform": {
       "^.+\\.marko$": "<rootDir>/preprocessor.js"

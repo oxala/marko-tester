@@ -3,20 +3,23 @@
 A utility that helps you test marko components within `jest` framework.
 
 ## Requirements
-Your project needs to have `jest@^23` and `marko@^4.13` installed.
+Your project needs to have `jest@^23` and `marko@^4.13` (with `marko-widgets@^7, if legacy components support is needed) installed.
+
 Within your regular jest config, you need to specify a transform for `*.marko` files _(Note: if your NODE_ENV is set to `dev` or `development`, you need to run jest with `"cache": false` option)_:
 
 ```
 ...
-"cache": false, // Only if NODE_ENV is either `dev` or `development`.
+"cache": false, // Only if your NODE_ENV is either `dev` or `development`.
 "transform": {
   ...
   "^.+\\.marko$": "<rootDir>/node_modules/marko-tester/preprocessor.js"
 }
 ```
 
+You can also test projects with `marko@^3.14` and `marko-widgets@^6.6`. In this scenario always disable jest's cache.
+
 ## Configuration
-In the global JEST object, you can pass a `tester` configuration:
+You can set up `tester` in the "global" section of jest's config:
 
 ```
 "global": {

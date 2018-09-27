@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render component with index fixture 1`] = `
+Array [
+  <div
+    class="legacy"
+    id="wc0"
+  >
+    <section>
+      Section
+    </section>
+    <button
+      data-w-onclick="changeInput|wc0"
+      id="wc0-button"
+      type="button"
+    >
+      Hello
+    </button>
+    <inner-legacy />
+  </div>,
+]
+`;
