@@ -1,14 +1,14 @@
 [![Build Status](https://travis-ci.org/oxala/marko-tester.svg?branch=master)](https://travis-ci.org/oxala/marko-tester) [![Test Coverage](https://api.codeclimate.com/v1/badges/46c76b421392b0cdc6e1/test_coverage)](https://codeclimate.com/github/oxala/marko-tester/test_coverage)
 # marko-tester
-A utility that helps you test marko components within the JEST framework.
+A utility that helps you test marko components within `jest` framework.
 
 ## Requirements
 Your project needs to have `jest@^23` and `marko@^4.5` installed.
-Within your regular JEST configuration, you need to specify a transform for `*.marko` files and disable cache (Note: you don't need to disable cache if your NODE_ENV is set to `dev` or `development`):
+Within your regular jest config, you need to specify a transform for `*.marko` files _(Note: if your NODE_ENV is set to `dev` or `development`, you need to run jest with `"cache": false` option)_:
 
 ```
 ...
-"cache": false,
+"cache": false, // Only if NODE_ENV is either `dev` or `development`.
 "transform": {
   ...
   "^.+\\.marko$": "<rootDir>/node_modules/marko-tester/preprocessor.js"
