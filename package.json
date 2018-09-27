@@ -8,7 +8,6 @@
   },
   "main": "./src/index",
   "scripts": {
-    "postinstall": "node ./src/generate-marko-module-map.js",
     "lint": "eslint src tests",
     "test": "jest",
     "clean": "markoc . --clean && rm -rf coverage",
@@ -85,7 +84,6 @@
     "roots": [
       "<rootDir>/tests/"
     ],
-    "cache": false,
     "transform": {
       "^.+\\.marko$": "<rootDir>/preprocessor.js"
     },
