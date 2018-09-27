@@ -1,3 +1,10 @@
+## [9.4.2](https://github.com/oxala/marko-tester/compare/v9.4.1...v9.4.2) (2018-09-27)
+
+
+### Bug Fixes
+
+* updated package.json for new browser-map ([c41e4cf](https://github.com/oxala/marko-tester/commit/c41e4cf))
+
 ## [9.4.1](https://github.com/oxala/marko-tester/compare/v9.4.0...v9.4.1) (2018-09-26)
 
 
