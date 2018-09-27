@@ -1,3 +1,10 @@
+# [9.5.0](https://github.com/oxala/marko-tester/compare/v9.4.2...v9.5.0) (2018-09-27)
+
+
+### Features
+
+* adjusted code to work with marko@3 and marko-widgets@6 ([5810050](https://github.com/oxala/marko-tester/commit/5810050))
+
 ## [9.4.2](https://github.com/oxala/marko-tester/compare/v9.4.1...v9.4.2) (2018-09-27)
 
 
