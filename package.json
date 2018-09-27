@@ -50,7 +50,7 @@
   },
   "peerDependencies": {
     "jest": "^23",
-    "marko": "^4.5"
+    "marko": "^4.13"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
