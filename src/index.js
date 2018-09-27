@@ -5,14 +5,14 @@ const {
 const { existsSync } = require('fs');
 const stackTrace = require('stack-trace');
 const clone = require('just-clone');
-const markoModulesMockingMap = require('../marko-modules-mocking-map');
+const browserMap = require('./browser-map');
 
 delete global.WeakMap;
 
-Object.keys(markoModulesMockingMap)
+Object.keys(browserMap)
   .forEach(moduleToMock => jest.mock(
     moduleToMock,
-    () => require.requireActual(markoModulesMockingMap[moduleToMock]),
+    () => require.requireActual(browserMap[moduleToMock]),
   ));
 
 const getFullPath = (componentPath) => {
