@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`should render component with hidden fixture 1`] = `
-Array [
-  ,
-  fixtures,
-  ,
-]
-`;

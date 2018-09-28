@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render component with default fixture 1`] = `
+Array [
+  ,
+  <tbody>
+    <tr>
+      <td>
+        tbody-component
+        <lasso-img
+          src="."
+        />
+      </td>
+    </tr>
+  </tbody>,
+  ,
+]
+`;

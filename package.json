@@ -9,9 +9,9 @@
   "main": "./src/index",
   "scripts": {
     "lint": "eslint src tests",
-    "test": "jest",
+    "test": "jest --no-cache",
     "pretest:legacy": "yarn upgrade marko@^3 marko-widgets@^6 --no-lockfile",
-    "test:legacy": "yarn test --no-cache --roots tests/marko3",
+    "test:legacy": "yarn test --roots tests/marko3 tests/common",
     "posttest:legacy": "git checkout package.json && yarn",
     "clean": "markoc . --clean && rm -rf coverage",
     "prepush": "yarn lint && yarn test && yarn test:legacy",
@@ -28,7 +28,7 @@
     "unit",
     "component"
   ],
-  "author": "Ryshkov, Gleb <gleb@ryshkov.com>",
+  "author": "Gleb Ryshkov",
   "license": "MIT",
   "dependencies": {
     "glob": "^7.1.3",
@@ -85,8 +85,8 @@
     "rootDir": "./",
     "coverageDirectory": "<rootDir>/coverage/",
     "roots": [
-      "<rootDir>/tests/components",
-      "<rootDir>/tests/no-component"
+      "<rootDir>/tests/marko4",
+      "<rootDir>/tests/common"
     ],
     "transform": {
       "^.+\\.marko$": "<rootDir>/preprocessor.js"

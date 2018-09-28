@@ -3,6 +3,14 @@ const { markoVersion } = require('./versions');
 
 const mount = comp => comp.appendTo(document.body);
 const getWidgetInstance = (renderer, input) => {
+  if (/\.marko$/.test(renderer.path)) {
+    document.body.insertAdjacentHTML('afterbegin', renderer.renderToString(clone(input)));
+
+    return {
+      destroy: () => document.body.childNodes.forEach(node => document.body.removeChild(node)),
+    };
+  }
+
   const mountWidget = comp => mount(comp).getWidget();
 
   return mountWidget(renderer.renderSync(clone(input)));
