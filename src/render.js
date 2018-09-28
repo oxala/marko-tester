@@ -11,9 +11,7 @@ const getWidgetInstance = (renderer, input) => {
     };
   }
 
-  const mountWidget = comp => mount(comp).getWidget();
-
-  return mountWidget(renderer.renderSync(clone(input)));
+  return mount(renderer.renderSync(clone(input))).getWidget();
 };
 const getComponentInstance = (renderer, input, withAwait) => {
   const mountComponent = comp => mount(comp).getComponent();
