@@ -1,3 +1,3 @@
-const { fixtures } = require('../../../../../src/index')('../index.marko', { withoutFixtures: true });
+const { fixtures } = require('../../../../..')('../index.marko', { withoutFixtures: true });
 
 fixtures('hidden');

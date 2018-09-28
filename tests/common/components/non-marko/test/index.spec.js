@@ -2,7 +2,7 @@ const mockService = { get: jest.fn() };
 
 jest.mock('../service', () => mockService);
 
-const { defer } = require('../../../../../src/index');
+const { defer } = require('../../../../..');
 const util = require('..');
 
 describe('When handled promise is being called', () => {

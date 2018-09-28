@@ -1,4 +1,4 @@
-const { render, fixtures } = require('../../../../../src/index')('../component.js');
+const { render, fixtures } = require('../../../../..')('../component.js');
 
 beforeEach(() => {
   window.alert = jest.fn();
