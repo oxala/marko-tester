@@ -7,6 +7,6 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - npm run lint && npm run test -- --ci --coverage && npm run test:legacy && npm run release
+  - yarn lint && yarn test --ci --coverage && yarn test:legacy --coverage && ./node_modules/.bin/istanbul-combine -r lcov coverage/marko*/coverage-final.json && yarn release
 after_script:
   - ./cc-test-reporter after-build -t lcov --exit-code $TRAVIS_TEST_RESULT

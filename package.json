@@ -11,7 +11,7 @@
     "lint": "eslint src tests",
     "test": "jest --no-cache",
     "pretest:legacy": "yarn upgrade marko@^3 marko-widgets@^6 --no-lockfile",
-    "test:legacy": "yarn test --roots tests/marko3 tests/common",
+    "test:legacy": "yarn test --roots ./tests/marko3 ./tests/common --coverageDirectory ./coverage/marko3",
     "posttest:legacy": "git checkout package.json && yarn",
     "clean": "markoc . --clean && rm -rf coverage",
     "prepush": "yarn lint && yarn test && yarn test:legacy",
@@ -46,6 +46,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jest": "^21.22.0",
     "husky": "^0.14.3",
+    "istanbul-combine": "^0.3.0",
     "jest": "^23.6.0",
     "marko": "^4.13.5",
     "marko-widgets": "^7",
@@ -83,13 +84,13 @@
   },
   "jest": {
     "rootDir": "./",
-    "coverageDirectory": "<rootDir>/coverage/",
+    "coverageDirectory": "./coverage/marko4",
     "roots": [
-      "<rootDir>/tests/marko4",
-      "<rootDir>/tests/common"
+      "./tests/marko4",
+      "./tests/common"
     ],
     "transform": {
-      "^.+\\.marko$": "<rootDir>/preprocessor.js"
+      "^.+\\.marko$": "./preprocessor.js"
     },
     "testRegex": ".*\\.spec\\.(js)$",
     "moduleDirectories": [
