@@ -14,7 +14,7 @@
     "test:legacy": "yarn test --no-cache --roots tests/marko3",
     "posttest:legacy": "git checkout package.json && yarn",
     "clean": "markoc . --clean && rm -rf coverage",
-    "prepush": "yarn lint && yarn test",
+    "prepush": "yarn lint && yarn test && yarn test:legacy",
     "commitmsg": "commitlint -e",
     "release": "semantic-release"
   },

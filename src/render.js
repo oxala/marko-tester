@@ -1,0 +1,30 @@
+const clone = require('just-clone');
+const { markoVersion } = require('./versions');
+
+const mount = comp => comp.appendTo(document.body);
+const getWidgetInstance = (renderer, input) => {
+  const mountWidget = comp => mount(comp).getWidget();
+
+  return mountWidget(renderer.renderSync(clone(input)));
+};
+const getComponentInstance = (renderer, input, withAwait) => {
+  const mountComponent = comp => mount(comp).getComponent();
+
+  /* eslint-disable-next-line global-require, import/no-unresolved */
+  require('marko/components').init();
+
+  return withAwait
+    ? renderer.render(clone(input)).then(mountComponent)
+    : mountComponent(renderer.renderSync(clone(input)));
+};
+
+module.exports = (fullPath, withAwait) => (input) => {
+  jest.resetModules();
+
+  /* eslint-disable-next-line global-require, import/no-dynamic-require */
+  const renderer = require(fullPath);
+
+  return markoVersion === 3
+    ? getWidgetInstance(renderer, input)
+    : getComponentInstance(renderer, input, withAwait);
+};

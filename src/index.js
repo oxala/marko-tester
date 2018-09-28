@@ -1,12 +1,12 @@
 const { readdirSync } = require('fs');
 const {
-  resolve: resolvePath, join, extname, basename,
+  resolve, join, extname, basename,
 } = require('path');
 const { existsSync } = require('fs');
 const stackTrace = require('stack-trace');
 const clone = require('just-clone');
 const browserMap = require('./browser-map');
-const { markoVersion, markoWidgetsVersion } = require('./versions');
+const render = require('./render');
 
 delete global.WeakMap;
 
@@ -23,35 +23,12 @@ const getFullPath = (componentPath) => {
 
   const index = stack.findIndex((trace) => {
     const filename = trace.getFileName();
-    const fullPath = resolvePath(filename || '', '..', componentPath);
+    const fullPath = resolve(filename || '', '..', componentPath);
 
     return existsSync(fullPath);
   });
 
-  return index > -1 && resolvePath(stack[index].getFileName(), '..', componentPath);
-};
-const render = (fullPath, withAwait) => (input) => {
-  /* eslint-disable-next-line global-require, import/no-dynamic-require */
-  const component = require(fullPath);
-  const mount = comp => comp.appendTo(document.body);
-  const mountComponent = comp => mount(comp).getComponent();
-  const mountWidget = comp => mount(comp).getWidget();
-  let componentInstance;
-
-  jest.resetModules();
-
-  if (markoVersion === 3 && markoWidgetsVersion === 6) {
-    componentInstance = mountWidget(component.renderSync(clone(input)));
-  } else if (markoVersion === 4) {
-    /* eslint-disable-next-line global-require, import/no-unresolved */
-    require('marko/components').init();
-
-    componentInstance = withAwait
-      ? component.render(clone(input)).then(mountComponent)
-      : mountComponent(component.renderSync(clone(input)));
-  }
-
-  return componentInstance;
+  return index > -1 && resolve(stack[index].getFileName(), '..', componentPath);
 };
 const getFixtures = (fixturesPath => () => (fixturesPath ? readdirSync(fixturesPath) : [])
   .filter(filename => /\.js(on)?$/.test(filename))
@@ -87,7 +64,7 @@ const runFixtures = (fixtures, fullPath, withAwait) => (fixtureName) => {
 const helpers = {
   createEvent: eventName => (customEvent => (customEvent.initEvent(eventName, true, true) || customEvent))(document.createEvent('Event')),
   defer: () => (toReturn => Object.assign(toReturn, {
-    promise: new Promise((resolve, reject) => Object.assign(toReturn, { resolve, reject })),
+    promise: new Promise((res, rej) => Object.assign(toReturn, { resolve: res, reject: rej })),
   }))({}),
 };
 const tester = (componentPath, { withoutFixtures, withAwait } = {}) => {
