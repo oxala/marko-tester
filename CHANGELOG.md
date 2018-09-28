@@ -1,3 +1,10 @@
+## [9.5.1](https://github.com/oxala/marko-tester/compare/v9.5.0...v9.5.1) (2018-09-28)
+
+
+### Bug Fixes
+
+* fixed marko 3 components without widgets ([c755035](https://github.com/oxala/marko-tester/commit/c755035))
+
 # [9.5.0](https://github.com/oxala/marko-tester/compare/v9.4.2...v9.5.0) (2018-09-27)
 
 
