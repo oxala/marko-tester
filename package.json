@@ -13,6 +13,8 @@
     "pretest:legacy": "yarn upgrade marko@^3 marko-widgets@^6 --no-lockfile",
     "test:legacy": "yarn test --roots ./tests/marko3 ./tests/common --coverageDirectory ./coverage/marko3",
     "posttest:legacy": "git checkout package.json && yarn",
+    "coverage": "yarn test --ci --coverage && yarn test:legacy --coverage",
+    "postcoverage": "istanbul-combine -r lcov ./coverage/marko*/coverage-final.json",
     "clean": "markoc . --clean && rm -rf coverage",
     "prepush": "yarn lint && yarn test && yarn test:legacy",
     "commitmsg": "commitlint -e",

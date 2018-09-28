@@ -9,9 +9,7 @@ before_script:
 script:
   - |
     yarn lint && \
-    yarn test --ci --coverage && \
-    yarn test:legacy --coverage && \
-    ./node_modules/.bin/istanbul-combine -r lcov coverage/marko*/coverage-final.json && \
+    yarn coverage && \
     yarn release
 after_script:
   - ./cc-test-reporter after-build -t lcov --exit-code $TRAVIS_TEST_RESULT
