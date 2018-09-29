@@ -1,0 +1,11 @@
+<div class="mock-component">
+  <h1>${input.title}</h1>
+
+  <button type="button" key="emit-button" on-click('emit', 'hello')/>
+
+  <tbody-component attribute=input key="tbody" if(!input.hidden)>
+    <@body>
+      body is here
+    </@body>
+  </tbody-component>
+</div>
