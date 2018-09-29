@@ -25,7 +25,7 @@ describe('When legacy component is rendered with data', () => {
       component.once('update', done);
     });
 
-    it('should set change the state and rerender the template', () => {
+    it('should set change the state and re-render the template', () => {
       expect(component.state.visible).toBe(false);
     });
   });
