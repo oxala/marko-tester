@@ -16,19 +16,19 @@ Object.keys(browserMap)
     () => require.requireActual(browserMap[moduleToMock]),
   ));
 
-const getFullPath = (componentPath) => {
+const getFullPath = (path) => {
   const stack = stackTrace.get();
 
   stack.splice(0, 2);
 
   const index = stack.findIndex((trace) => {
     const filename = trace.getFileName();
-    const fullPath = resolve(filename || '', '..', componentPath);
+    const fullPath = resolve(filename || '', '..', path);
 
-    return existsSync(fullPath);
+    return existsSync(fullPath) || existsSync(`${fullPath}.js`);
   });
 
-  return index > -1 && resolve(stack[index].getFileName(), '..', componentPath);
+  return index > -1 && resolve(stack[index].getFileName(), '..', path);
 };
 const getFixtures = (fixturesPath => () => (fixturesPath ? readdirSync(fixturesPath) : [])
   .filter(filename => /\.js(on)?$/.test(filename))

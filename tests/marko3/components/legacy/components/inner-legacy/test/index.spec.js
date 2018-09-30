@@ -1,1 +1,1 @@
-require('../../../../../../..')('../../../../../../marko4/components/legacy/components/inner-legacy/component.js');
+require('../../../../../../..')('../../../../../../marko4/components/legacy/components/inner-legacy/component');

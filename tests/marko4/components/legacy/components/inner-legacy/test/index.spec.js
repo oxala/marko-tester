@@ -1,1 +1,1 @@
-require('../../../../../../..')('../component.js', { withAwait: true });
+require('../../../../../../..')('../component', { withAwait: true });
