@@ -6,14 +6,12 @@ const {
   markoPath,
   markoWidgetsPath,
   markoVersion,
-  markoWidgetsVersion,
 } = require('./versions');
 
 function getPackages() {
-  /* eslint-disable-next-line global-require, import/no-dynamic-require */
   let marko3Packages = [];
 
-  if (markoVersion === 3 && markoWidgetsVersion === 6) {
+  if (markoVersion === 3) {
     marko3Packages = [
       ...glob.sync(`${markoWidgetsPath}/!(node_modules)/**/package.json`),
       ...glob.sync(`${markoWidgetsPath}/package.json`),
@@ -37,7 +35,6 @@ function getExisting(packagePath) {
   const relativeTo = `${packagePath.split('node_modules').slice(0, -1).join('node_modules')}/node_modules`;
 
   if (typeof browser === 'string') {
-    /* eslint-disable-next-line no-param-reassign */
     browser = { [main]: browser };
   }
 
