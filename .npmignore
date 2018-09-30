@@ -10,3 +10,4 @@ tests
 .gitignore
 .npmignore
 .npmrc
+.yarnrc
