@@ -11,7 +11,6 @@
     "markotester": "./source/markotester.js"
   },
   "scripts": {
-    "postinstall": "node ./src/generate-marko-module-map.js",
     "lint": "yarn test --no-mocha",
     "test": "node ./source/markotester source --no-coverage",
     "test:integration": "node ./source/markotester test",
