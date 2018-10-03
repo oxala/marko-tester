@@ -1,7 +1,9 @@
 <div class="mock-component">
   <h1>${input.title}</h1>
 
-  <button type="button" key="emit-button" on-click('emit', 'hello')/>
+  <await(hello from {})>
+    <button type="button" key="emit-button" on-click('onClick', 'hello')/>
+  </await>
 
   <tbody-component attribute=input key="tbody" if(!input.hidden)>
     <@body>

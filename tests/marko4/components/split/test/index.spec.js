@@ -1,10 +1,10 @@
-const { render, fixtures, createEvent } = require('marko-tester')('../index.marko');
+const { render, fixtures, createEvent } = require('marko-tester')('../index.marko', { withAwait: true });
 
 describe('When component is rendered with data', () => {
   let component;
 
-  beforeEach(() => {
-    component = render(fixtures.default);
+  beforeEach(async () => {
+    component = await render(fixtures.default);
   });
 
   afterEach(() => {
