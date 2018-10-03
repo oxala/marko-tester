@@ -1,4 +1,4 @@
-const { render, fixtures } = require('../../../../..')('../index.marko', { withAwait: true });
+const { render, fixtures } = require('marko-tester')('../index.marko', { withAwait: true });
 
 describe('When component is rendered', () => {
   let component;

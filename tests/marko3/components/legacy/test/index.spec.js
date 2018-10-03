@@ -1,4 +1,4 @@
-const { render, fixtures } = require('../../../../..')('../../../../marko4/components/legacy/component');
+const { render, fixtures } = require('marko-tester')('../../../../marko4/components/legacy/component');
 
 beforeEach(() => {
   window.alert = jest.fn();

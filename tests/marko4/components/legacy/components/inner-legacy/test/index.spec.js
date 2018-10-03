@@ -1,1 +1,1 @@
-require('../../../../../../..')('../component', { withAwait: true });
+require('marko-tester')('../component', { withAwait: true });

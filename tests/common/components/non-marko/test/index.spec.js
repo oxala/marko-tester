@@ -2,7 +2,7 @@ const mockService = { get: jest.fn() };
 
 jest.mock('../service', () => mockService);
 
-const { defer } = require('../../../../..');
+const { defer } = require('marko-tester');
 const util = require('..');
 
 describe('When handled promise is being called', () => {

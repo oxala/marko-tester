@@ -1,4 +1,4 @@
-const { render, fixtures, createEvent } = require('../../../../..')('../index.marko');
+const { render, fixtures, createEvent } = require('marko-tester')('../index.marko');
 
 describe('When component is rendered with data', () => {
   let component;

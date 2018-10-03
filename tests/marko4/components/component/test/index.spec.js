@@ -1,4 +1,4 @@
-const { render, fixtures, createEvent } = require('../../../../..')('../index.marko', { withoutFixtures: true });
+const { render, fixtures, createEvent } = require('marko-tester')('../index.marko', { withoutFixtures: true });
 
 fixtures();
 

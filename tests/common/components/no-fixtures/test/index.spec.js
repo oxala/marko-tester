@@ -1,4 +1,4 @@
-const { render } = require('../../../../..')('../index.marko');
+const { render } = require('marko-tester')('../index.marko');
 
 describe('When component is rendered', () => {
   let component;

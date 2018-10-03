@@ -1,4 +1,4 @@
-const { fixtures } = require('../../../../..')('../index.marko', { withoutFixtures: true });
+const { fixtures } = require('marko-tester')('../index.marko', { withoutFixtures: true });
 
 it('should store all the fixtures with content', () => {
   Object.keys(fixtures).forEach((fixtureName) => {

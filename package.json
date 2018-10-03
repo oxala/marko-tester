@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git@github.com:oxala/marko-tester.git"
   },
-  "main": "./src/index",
+  "main": "./src",
   "scripts": {
     "lint": "eslint src tests",
     "test": "jest --no-cache",
