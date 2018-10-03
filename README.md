@@ -107,6 +107,12 @@ describe('When component is rendered without model', () => {
 });
 ```
 
+If you just want to have snapshot test:
+
+```
+require('marko-tester')('../index.marko');
+```
+
 You can find more examples in the [tests folder](https://github.com/oxala/marko-tester/tree/master/tests).
 
 ## References
