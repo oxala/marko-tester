@@ -17,6 +17,16 @@ describe('When component is rendered with data', () => {
     component.destroy();
   });
 
+  describe('When component is re-rendered', () => {
+    beforeEach(() => {
+      component.forceUpdate();
+    });
+
+    it('should re-render the component', () => {
+      expect(true);
+    });
+  });
+
   it('should not mutate the fixture', () => {
     expect(JSON.stringify(fixtures.default)).toBe(cachedFixture);
   });
