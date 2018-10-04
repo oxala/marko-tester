@@ -1,3 +1,10 @@
+## [9.5.2](https://github.com/oxala/marko-tester/compare/v9.5.1...v9.5.2) (2018-10-04)
+
+
+### Bug Fixes
+
+* improved createEvent helper ([d0f6c9a](https://github.com/oxala/marko-tester/commit/d0f6c9a))
+
 ## [9.5.1](https://github.com/oxala/marko-tester/compare/v9.5.0...v9.5.1) (2018-09-28)
 
 
