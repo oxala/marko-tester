@@ -13,7 +13,11 @@ module.exports = {
     this.util = util;
   },
 
-  changeInput() {
-    this.state.hidden = true;
+  changeInput(event) {
+    if (event.keyCode === 13) {
+      this.state.hidden = true;
+
+      event.preventDefault();
+    }
   },
 };

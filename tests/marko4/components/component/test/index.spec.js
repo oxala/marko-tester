@@ -29,15 +29,24 @@ describe('When component is rendered with data', () => {
     expect(component.getEl('tbody').tagName).toBe('TBODY-COMPONENT');
   });
 
-  describe('When user clicks the button', () => {
-    beforeEach((done) => {
-      component.getEl('button').click();
-      component.once('update', done);
+  describe('When user press ENTER on the button', () => {
+    let preventDefault;
+
+    beforeEach(() => {
+      preventDefault = jest.fn();
+
+      component.getEl('button').dispatchEvent(createEvent('keypress', { keyCode: 13, preventDefault }));
     });
 
     it('should set change the state and re-render', () => {
       expect(component.state.hidden).toBe(true);
+      expect(component.getEl('tbody')).not.toBe(undefined);
+      component.update();
       expect(component.getEl('tbody')).toBe(undefined);
+    });
+
+    it('should prevent default behavior', () => {
+      expect(preventDefault).toBeCalled();
     });
   });
 

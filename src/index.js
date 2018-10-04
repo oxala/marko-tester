@@ -62,7 +62,13 @@ const runFixtures = (fixtures, fullPath, withAwait) => (fixtureName) => {
   return {};
 };
 const helpers = {
-  createEvent: eventName => (customEvent => (customEvent.initEvent(eventName, true, true) || customEvent))(document.createEvent('Event')),
+  createEvent: (eventName, options = {}) => ((customEvent) => {
+    const { bubbles = true, cancelable = true } = options;
+
+    customEvent.initEvent(eventName, bubbles, cancelable);
+
+    return Object.assign(customEvent, options);
+  })(document.createEvent('Event')),
   defer: () => (toReturn => Object.assign(toReturn, {
     promise: new Promise((res, rej) => Object.assign(toReturn, { resolve: res, reject: rej })),
   }))({}),
