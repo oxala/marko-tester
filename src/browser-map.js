@@ -34,7 +34,7 @@ function getExisting(packagePath) {
   let { browser = {} } = packageData;
   const relativeTo = `${packagePath.split('node_modules').slice(0, -1).join('node_modules')}/node_modules`;
 
-  if (typeof browser === 'string') {
+  if (typeof browser === 'string' && main) {
     browser = { [main]: browser };
   }
 
