@@ -45,9 +45,7 @@ const runFixtures = (fixtures, fullPath, withAwait) => (fixtureName) => {
   const fixturesEntries = Object.entries(fixtures);
   const fixturesPath = getFullPath('__snapshots__');
 
-  if (fixturesEntries.length === 0 && fixturesPath) {
-    throw new Error(`No fixtures where found for component in "${fullPath}".`);
-  }
+  if (fixturesPath && fixturesEntries.length === 0) throw new Error(`No fixtures where found for component in "${fullPath}".`);
 
   fixturesEntries
     .filter(([name]) => (!fixtureName || fixtureName === name))
@@ -75,9 +73,7 @@ const helpers = {
 const tester = (componentPath, { withoutFixtures, withAwait } = {}) => {
   const fullPath = getFullPath(componentPath);
 
-  if (!fullPath) {
-    throw new Error(`Cannot find specified component at "${componentPath}".`);
-  }
+  if (!fullPath) throw new Error(`Cannot find specified component at "${componentPath}".`);
 
   const fixtures = getFixtures();
   const boundRunFixtures = runFixtures(fixtures, fullPath, withAwait);
