@@ -65,7 +65,7 @@ describe('When component is rendered without results', () => {
 });
 ```
 
-Without fixtures:
+#### Without fixtures:
 
 ```
 const { render, fixtures } = require('marko-tester')('../index.marko', { withoutFixtures: true });
@@ -87,7 +87,7 @@ describe('When component is rendered with records', () => {
 });
 ```
 
-Asynchronous:
+#### Asynchronous:
 
 ```
 const { render, fixtures } = require('marko-tester')('../index.marko', { withAwait: true });
@@ -107,7 +107,7 @@ describe('When component is rendered without model', () => {
 });
 ```
 
-If you just want to have snapshot test:
+#### If you just want to have snapshot test:
 
 ```
 require('marko-tester')('../index.marko');
