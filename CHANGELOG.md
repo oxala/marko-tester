@@ -1,3 +1,10 @@
+## [9.5.3](https://github.com/oxala/marko-tester/compare/v9.5.2...v9.5.3) (2018-10-06)
+
+
+### Bug Fixes
+
+* removed just-clone dependency ([4113d26](https://github.com/oxala/marko-tester/commit/4113d26))
+
 ## [9.5.2](https://github.com/oxala/marko-tester/compare/v9.5.1...v9.5.2) (2018-10-04)
 
 
