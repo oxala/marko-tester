@@ -12,7 +12,7 @@ Within your regular jest config, you need to specify a transform for `*.marko` f
 "cache": false, // Only if your NODE_ENV is either `dev` or `development`.
 "transform": {
   ...
-  "^.+\\.marko$": "<rootDir>/node_modules/marko-tester/preprocessor.js"
+  "\\.marko$": "<rootDir>/node_modules/marko-tester/preprocessor.js"
 }
 ```
 

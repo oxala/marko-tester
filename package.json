@@ -91,7 +91,7 @@
       "./tests/common"
     ],
     "transform": {
-      "^.+\\.marko$": "./preprocessor.js"
+      "\\.marko$": "./preprocessor.js"
     },
     "testRegex": ".*\\.spec\\.(js)$",
     "moduleDirectories": [
