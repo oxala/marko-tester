@@ -48,7 +48,7 @@ describe('When component is rendered with data', () => {
       component.getEl('button').dispatchEvent(createEvent('keypress', { keyCode: 13, preventDefault }));
     });
 
-    it('should set change the state and re-render', () => {
+    it('should change the state and re-render', () => {
       expect(component.state.hidden).toBe(true);
       expect(component.getEl('tbody')).not.toBe(undefined);
       component.update();
@@ -57,6 +57,23 @@ describe('When component is rendered with data', () => {
 
     it('should prevent default behavior', () => {
       expect(preventDefault).toBeCalled();
+    });
+
+    describe('When component is updated', () => {
+      beforeEach(() => {
+        component.update();
+      });
+
+      describe('When document is being clicked', () => {
+        beforeEach(() => {
+          jest.spyOn(component, 'emit');
+          document.dispatchEvent(createEvent('click'));
+        });
+
+        it('should not execute event handler', () => {
+          expect(component.emit).not.toBeCalled();
+        });
+      });
     });
   });
 
@@ -72,6 +89,17 @@ describe('When component is rendered with data', () => {
 
     it('should emit "hello" with event and element', () => {
       expect(component.emit).toBeCalledWith('hello', clickEvent, clickEvent.target);
+    });
+  });
+
+  describe('When document is being clicked', () => {
+    beforeEach(() => {
+      jest.spyOn(component, 'emit');
+      document.dispatchEvent(createEvent('click'));
+    });
+
+    it('should execute event handler', () => {
+      expect(component.emit).toBeCalledWith('document');
     });
   });
 });

@@ -5,6 +5,8 @@
 
   <button type="button" key="emit-button" on-click('emit', 'hello')/>
 
+  <subscribe to=document on-click('documentClick') if(!state.hidden)/>
+
   <tbody-component attribute=input key="tbody" if(!state.hidden)>
     <@body>
       body is here

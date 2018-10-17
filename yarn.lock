@@ -175,6 +175,11 @@
     mkdirp "^0.5.1"
     rimraf "^2.5.2"
 
+"@marko-tags/subscribe@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.npmjs.org/@marko-tags/subscribe/-/subscribe-0.2.0.tgz#f28f3dd96b296d429bb3ae0216275409c9413fee"
+  integrity sha512-BpDirnF+oIm//bFujRFFqwb62yR5nALNvuvnk8uGNSki53CAIgOJfExYKMiSxg90rCNkrxd8gKqn0UamvQvDRA==
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.npmjs.org/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"

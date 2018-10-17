@@ -20,4 +20,8 @@ module.exports = {
       event.preventDefault();
     }
   },
+
+  documentClick() {
+    this.emit('document');
+  },
 };
