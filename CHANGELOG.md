@@ -1,3 +1,10 @@
+## [9.6.1](https://github.com/oxala/marko-tester/compare/v9.6.0...v9.6.1) (2018-10-17)
+
+
+### Bug Fixes
+
+* reverted to just-clone for renderBody ([9832386](https://github.com/oxala/marko-tester/commit/9832386))
+
 # [9.6.0](https://github.com/oxala/marko-tester/compare/v9.5.3...v9.6.0) (2018-10-17)
 
 
