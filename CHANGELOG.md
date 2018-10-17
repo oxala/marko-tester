@@ -1,3 +1,10 @@
+# [9.6.0](https://github.com/oxala/marko-tester/compare/v9.5.3...v9.6.0) (2018-10-17)
+
+
+### Features
+
+* added ability to render specified taglibs ([7d8b9f0](https://github.com/oxala/marko-tester/commit/7d8b9f0))
+
 ## [9.5.3](https://github.com/oxala/marko-tester/compare/v9.5.2...v9.5.3) (2018-10-06)
 
 
