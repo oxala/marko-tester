@@ -11,6 +11,7 @@
     "markotester": "./source/markotester.js"
   },
   "scripts": {
+    "postinstall": "git submodule update --init --remote",
     "lint": "yarn test --no-mocha",
     "test": "node ./source/markotester source --no-coverage",
     "test:integration": "node ./source/markotester test",
