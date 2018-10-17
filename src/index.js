@@ -4,6 +4,7 @@ const {
 } = require('path');
 const { existsSync } = require('fs');
 const stackTrace = require('stack-trace');
+const clone = require('just-clone');
 const browserMap = require('./browser-map');
 const render = require('./render');
 
@@ -50,7 +51,7 @@ const runFixtures = (fixtures, fullPath, withAwait) => (fixtureName) => {
   fixturesEntries
     .filter(([name]) => (!fixtureName || fixtureName === name))
     .forEach(([name, fixture]) => it(`should render component with ${name} fixture`, async () => {
-      const comp = await render(fullPath, withAwait)(JSON.parse(JSON.stringify(fixture)));
+      const comp = await render(fullPath, withAwait)(clone(fixture));
 
       expect(Array.from(document.body.childNodes)).toMatchSnapshot();
       comp.destroy();

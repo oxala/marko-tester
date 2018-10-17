@@ -1,16 +1,17 @@
+const clone = require('just-clone');
 const { markoVersion } = require('./versions');
 
 const mount = comp => comp.appendTo(document.body);
 const getWidgetInstance = (renderer, input) => {
   if (/\.marko$/.test(renderer.path)) {
-    document.body.insertAdjacentHTML('afterbegin', renderer.renderToString(JSON.parse(JSON.stringify(input))));
+    document.body.insertAdjacentHTML('afterbegin', renderer.renderToString(clone(input)));
 
     return {
       destroy: () => document.body.childNodes.forEach(node => document.body.removeChild(node)),
     };
   }
 
-  return mount(renderer.renderSync(JSON.parse(JSON.stringify(input)))).getWidget();
+  return mount(renderer.renderSync(clone(input))).getWidget();
 };
 const getComponentInstance = (renderer, input, withAwait) => {
   const mountComponent = comp => mount(comp).getComponent();
@@ -19,8 +20,8 @@ const getComponentInstance = (renderer, input, withAwait) => {
   require('marko/components').init();
 
   return withAwait
-    ? renderer.render(JSON.parse(JSON.stringify(input))).then(mountComponent)
-    : mountComponent(renderer.renderSync(JSON.parse(JSON.stringify(input))));
+    ? renderer.render(clone(input)).then(mountComponent)
+    : mountComponent(renderer.renderSync(clone(input)));
 };
 
 module.exports = (fullPath, withAwait) => (input = {}) => {
