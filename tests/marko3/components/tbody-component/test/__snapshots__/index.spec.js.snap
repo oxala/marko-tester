@@ -9,6 +9,9 @@ Array [
         <lasso-img
           src="."
         />
+        <div>
+          Taglib component
+        </div>
       </td>
     </tr>
   </tbody>,

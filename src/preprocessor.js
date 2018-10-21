@@ -5,24 +5,37 @@ const {
   taglibLoader,
   compileFileForBrowser,
 } = require('marko/compiler');
+const { resolve } = require('path');
 const { markoVersion } = require('./versions');
 
 const discoverTaglibs = (taglibs) => {
-  if (markoVersion === 4) {
-    taglibs
-      .map(taglibPath => `${taglibPath}/marko.json`)
-      .forEach((taglibPath) => {
+  taglibs
+    .map(taglibPath => `${taglibPath}/marko.json`)
+    .map((taglibPath) => {
+      try {
+        return require.resolve(taglibPath);
+      } catch (error) {
         try {
-          const taglib = taglibLoader.createTaglib(require.resolve(taglibPath));
-
-          /* eslint-disable-next-line global-require, import/no-dynamic-require */
-          taglibLoader.loadTaglibFromProps(taglib, require(taglib.path));
-          taglibLookup.registerTaglib(taglib);
-        } catch (error) {
-          console.warn('No marko taglib was found.', error);
+          return require.resolve(resolve(process.cwd(), taglibPath));
+        } catch (error2) {
+          return console.warn('No marko taglib was found for:', taglibPath);
         }
-      });
-  }
+      }
+    })
+    .filter(resolvedTaglibPath => !!resolvedTaglibPath)
+    .forEach((resolvedTaglibPath) => {
+      if (markoVersion === 4) {
+        const taglib = taglibLoader.createTaglib(resolvedTaglibPath);
+
+        /* eslint-disable-next-line global-require, import/no-dynamic-require */
+        taglibLoader.loadTaglibFromProps(taglib, require(taglib.path));
+        taglibLookup.registerTaglib(taglib);
+      } else {
+        const taglib = taglibLoader.load(resolvedTaglibPath);
+
+        taglibLookup.registerTaglib(taglib);
+      }
+    });
 };
 
 const shallowPatch = () => {

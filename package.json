@@ -103,6 +103,7 @@
     "globals": {
       "tester": {
         "taglibs": [
+          "./tests/taglib",
           "@marko-tags/subscribe"
         ]
       }

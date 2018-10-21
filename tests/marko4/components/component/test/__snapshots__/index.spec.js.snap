@@ -26,6 +26,11 @@ Array [
         body is here
       </at_body>
     </tbody-component>
+    
+    <div>
+      Taglib component
+    </div>
+    
   </div>,
   ,
 ]
@@ -48,6 +53,11 @@ Array [
     <button
       type="button"
     />
+    
+    <div>
+      Taglib component
+    </div>
+    
   </div>,
   ,
 ]
@@ -79,6 +89,11 @@ Array [
         body is here
       </at_body>
     </tbody-component>
+    
+    <div>
+      Taglib component
+    </div>
+    
   </div>,
   ,
 ]
