@@ -1,3 +1,10 @@
+## [9.6.2](https://github.com/oxala/marko-tester/compare/v9.6.1...v9.6.2) (2018-10-21)
+
+
+### Bug Fixes
+
+* added render-ability of specific taglibs for marko3 ([08541f9](https://github.com/oxala/marko-tester/commit/08541f9))
+
 ## [9.6.1](https://github.com/oxala/marko-tester/compare/v9.6.0...v9.6.1) (2018-10-17)
 
 
