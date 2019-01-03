@@ -22,7 +22,7 @@ You can also test projects with `marko@^3.14` and `marko-widgets@^6.6`. In this 
 You can set up `tester` in the "global" section of jest's config:
 
 ```
-"global": {
+"globals": {
   ...
   "tester": {
     "shallow": false
