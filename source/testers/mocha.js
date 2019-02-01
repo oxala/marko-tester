@@ -34,7 +34,7 @@ const mocha = new Mocha({
       mochaFile: `./${utils.config.coverage.dest}/junit.xml`
     }
   },
-  globals: ['document', 'window', 'GLOBAL_LASSO']
+  globals: ['document', 'window', 'GLOBAL_LASSO', '$W10NOOP']
 });
 const preRequire = (ctx) => {
   const fakeDescribe = (originalDescribe, testType) => (describeText, options, callback) => {
