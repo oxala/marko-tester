@@ -1,9 +1,9 @@
 const {
   taglibFinder,
   taglibLookup,
-  compileFile,
+  compile,
   taglibLoader,
-  compileFileForBrowser,
+  compileForBrowser,
 } = require('marko/compiler');
 const { resolve } = require('path');
 const { markoVersion } = require('./versions');
@@ -58,8 +58,8 @@ module.exports = {
     if (shallow) shallowPatch();
 
     return (markoVersion === 3)
-      ? compileFile(filepath)
-      : compileFileForBrowser(filepath, {
+      ? compile(src, filepath)
+      : compileForBrowser(src, filepath, {
         ignoreUnrecognizedTags: true,
         escapeAtTags: true,
       });

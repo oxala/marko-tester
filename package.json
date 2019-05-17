@@ -51,7 +51,7 @@
     "husky": "^0.14.3",
     "istanbul": "^0.4.5",
     "jest": "^23.6.0",
-    "marko": "^4.13.5",
+    "marko": "^4.16.15",
     "marko-widgets": "^7",
     "semantic-release": "^15.9.16"
   },

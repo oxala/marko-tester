@@ -5,11 +5,14 @@ Array [
   ,
   <div
     class="legacy"
+    data-widget="/undefined$0/marko4/components/legacy/component"
+    id="c2"
   >
     <section>
       Section
     </section>
     <button
+      id="c2-button"
       type="button"
     >
       Hello
