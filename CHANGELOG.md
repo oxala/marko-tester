@@ -1,3 +1,10 @@
+## [9.6.3](https://github.com/oxala/marko-tester/compare/v9.6.2...v9.6.3) (2019-05-17)
+
+
+### Bug Fixes
+
+* passed source to Marko compiler ([#26](https://github.com/oxala/marko-tester/issues/26)) ([9bdec73](https://github.com/oxala/marko-tester/commit/9bdec73))
+
 ## [9.6.2](https://github.com/oxala/marko-tester/compare/v9.6.1...v9.6.2) (2018-10-21)
 
 
