@@ -1,3 +1,10 @@
+## [9.6.4](https://github.com/oxala/marko-tester/compare/v9.6.3...v9.6.4) (2019-05-24)
+
+
+### Bug Fixes
+
+* fixed marko resolver for Windows ([#27](https://github.com/oxala/marko-tester/issues/27)) ([35c6c17](https://github.com/oxala/marko-tester/commit/35c6c17))
+
 ## [9.6.3](https://github.com/oxala/marko-tester/compare/v9.6.2...v9.6.3) (2019-05-17)
 
 
