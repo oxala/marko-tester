@@ -1,4 +1,5 @@
 const { join } = require('path');
+
 const getModulePath = moduleName => require.resolve(join(moduleName, 'package.json')).replace(join(' ', 'package.json').substr(1), '');
 const markoPath = getModulePath('marko');
 /* eslint-disable-next-line global-require, import/no-dynamic-require */
