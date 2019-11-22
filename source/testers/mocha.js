@@ -17,7 +17,7 @@ var mocha = new Mocha({
       mochaFile: './.coverage/junit.xml'
     }
   },
-  globals: ['document', 'window', 'GLOBAL_LASSO', '$W10NOOP']
+  globals: ['document', 'window', 'GLOBAL_LASSO', '$W10NOOP', 'version']
 });
 
 function testMocha(done) {
