@@ -1,3 +1,5 @@
+# DEPRECATED! Please look at [marko-testing-library](https://github.com/marko-js/testing-library) for testing marko code.
+
 [![Build Status](https://travis-ci.org/oxala/marko-tester.svg?branch=master)](https://travis-ci.org/oxala/marko-tester) [![Test Coverage](https://api.codeclimate.com/v1/badges/46c76b421392b0cdc6e1/test_coverage)](https://codeclimate.com/github/oxala/marko-tester/test_coverage)
 # marko-tester
 A utility that helps you test marko components within `jest` framework.
