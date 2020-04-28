@@ -13,10 +13,11 @@
   "scripts": {
     "test": "npm run eslint && npm run coverage && npm run integration-test",
     "eslint": "node ./source/markotester source --no-mocha",
-    "unit-test": "./node_modules/.bin/_mocha $(find source -name '*.spec.js')",
+    "eslint-fix": "eslint ./source --fix",
+    "unit-test": "./node_modules/mocha/bin/_mocha `find source -name '*.spec.js'`",
     "integration-test": "node ./source/markotester test --no-coverage --no-lint",
-    "coverage": "istanbul cover ./node_modules/.bin/_mocha $(find source -name '*.spec.js')",
-    "clean": "rm -rf .beans .cache static source/browser.json $(find test -name '*.marko.js') $(find source -name '*.marko.js') .coverage",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha `find source -name '*.spec.js'`",
+    "clean": "rm -rf .beans .cache static source/browser.json `find test -name '*.marko.js'` `find source -name '*.marko.js'` .coverage",
     "bump": "sh ./tasks/bump.sh"
   },
   "prepush": [
