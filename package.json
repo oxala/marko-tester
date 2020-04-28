@@ -1,6 +1,6 @@
 {
   "name": "marko-tester",
-  "version": "6.33.0",
+  "version": "6.32.4",
   "description": "Assist Marko components unit/client testing",
   "repository": {
     "type": "git",
@@ -13,7 +13,6 @@
   "scripts": {
     "test": "npm run eslint && npm run coverage && npm run integration-test",
     "eslint": "node ./source/markotester source --no-mocha",
-    "eslint-fix": "eslint ./source --fix",
     "unit-test": "./node_modules/mocha/bin/_mocha `find source -name '*.spec.js'`",
     "integration-test": "node ./source/markotester test --no-coverage --no-lint",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha `find source -name '*.spec.js'`",

@@ -69,13 +69,6 @@ function getStaticModule(file, testPath, errorMessage) {
     mod = mod.replace(/\\/g, '/');
   }
 
-  /*
-  console.log('file:        ', file)
-  console.log('testPath:    ', testPath);
-  console.log('errorMessage:', errorMessage);
-  console.log('mod:         ', mod);
-  console.log('');
-*/
   return mod;
 }
 
