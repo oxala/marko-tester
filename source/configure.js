@@ -1,6 +1,6 @@
 'use strict';
 
-var path = require('path');
+var path = require('upath');
 var utils = require('./utils');
 
 require('app-module-path').addPath(utils.getHelpers().rootPath);

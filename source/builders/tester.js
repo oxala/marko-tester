@@ -1,7 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
-var path = require('path');
+var path = require('upath');
 var chai = require('chai');
 var sinon = require('sinon');
 var mockRequire = require('mock-require');

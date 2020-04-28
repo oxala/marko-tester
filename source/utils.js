@@ -1,13 +1,13 @@
 'use strict';
 
 var fs = require('fs-extra');
-var path = require('path');
+var path = require('upath');
 var glob = require('glob');
 var stackTrace = require('stack-trace');
 var args = require('optimist').argv;
 var _ = require('lodash');
 var markoTesterConfig = require('../.marko-tester.js');
-var rootPath = process.cwd();
+var rootPath = path.resolve(process.cwd());
 var packageInfo = require(rootPath + '/package');
 var helpers;
 
@@ -69,6 +69,13 @@ function getStaticModule(file, testPath, errorMessage) {
     mod = mod.replace(/\\/g, '/');
   }
 
+  /*
+  console.log('file:        ', file)
+  console.log('testPath:    ', testPath);
+  console.log('errorMessage:', errorMessage);
+  console.log('mod:         ', mod);
+  console.log('');
+*/
   return mod;
 }
 

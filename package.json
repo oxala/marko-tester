@@ -64,6 +64,7 @@
     "stream-browserify": "^2.0.1",
     "stylelint": "^8.0.0",
     "stylelint-config-standard": "^17.0.0",
+    "upath": "^1.2.0",
     "webdriverio": "^4.4.0"
   },
   "peerDependencies":{

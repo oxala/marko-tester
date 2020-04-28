@@ -1,7 +1,7 @@
 'use strict';
 
 var exec = require('child_process').exec;
-var path = require('path');
+var path = require('upath');
 var glob = require('glob');
 var Mocha = require('mocha');
 var args = require('optimist').argv;
