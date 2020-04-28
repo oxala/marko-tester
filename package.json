@@ -13,10 +13,10 @@
   "scripts": {
     "test": "npm run eslint && npm run coverage && npm run integration-test",
     "eslint": "node ./source/markotester source --no-mocha",
-    "unit-test": "./node_modules/.bin/_mocha $(find source -name '*.spec.js')",
+    "unit-test": "./node_modules/mocha/bin/_mocha `find source -name '*.spec.js'`",
     "integration-test": "node ./source/markotester test --no-coverage --no-lint",
-    "coverage": "istanbul cover ./node_modules/.bin/_mocha $(find source -name '*.spec.js')",
-    "clean": "rm -rf .beans .cache static source/browser.json $(find test -name '*.marko.js') $(find source -name '*.marko.js') .coverage",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha `find source -name '*.spec.js'`",
+    "clean": "rm -rf .beans .cache static source/browser.json `find test -name '*.marko.js'` `find source -name '*.marko.js'` .coverage",
     "bump": "sh ./tasks/bump.sh"
   },
   "prepush": [
@@ -38,7 +38,8 @@
     "bluebird": "^3.5.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^3.12.2",
+    "diffable-html": "^4",
+    "eslint": "^3.19.0",
     "eslint-config-marko-tester": "^1.2.0",
     "firefox-profile": "^0.4.2",
     "fs-extra": "^0.30.0",
@@ -50,9 +51,7 @@
     "lasso-less": "^2.1.2",
     "lasso-marko": "^2.0.4",
     "lodash": "^4.13.1",
-    "marko": "^3.5.0",
-    "marko-widgets": "^6.1.1",
-    "mocha": "^4.0.1",
+    "mocha": "^4.1.0",
     "mocha-junit-reporter": "^1.15.0",
     "mocha-multi-reporters": "^1.1.6",
     "mock-require": "^1.3.0",
@@ -65,9 +64,16 @@
     "stream-browserify": "^2.0.1",
     "stylelint": "^8.0.0",
     "stylelint-config-standard": "^17.0.0",
+    "upath": "^1.2.0",
     "webdriverio": "^4.4.0"
   },
+  "peerDependencies": {
+    "marko": "^3",
+    "marko-widgets": "^6"
+  },
   "devDependencies": {
+    "marko": "^3.14.4",
+    "marko-widgets": "^6.6.6",
     "pre-push": "^0.1.1"
   },
   "publishConfig": {

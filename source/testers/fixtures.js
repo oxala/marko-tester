@@ -8,6 +8,7 @@ var Promise = require('bluebird');
 var utils = require('../utils');
 var expect = chai.expect;
 var excludedAttributes = [];
+var diff = require('diffable-html');
 
 function excludeAttribute(attr) {
   excludedAttributes.push(attr);
@@ -27,7 +28,7 @@ function normalizer() {
 function cleanRenderedHtml(html) {
   var trimmedHtml = (html || '').trim();
 
-  return trimmedHtml && normalizer().domString(trimmedHtml);
+  return trimmedHtml && diff(normalizer().domString(trimmedHtml));
 }
 
 function renderHtml(renderer, fixture) {

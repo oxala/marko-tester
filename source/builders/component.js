@@ -1,6 +1,6 @@
 'use strict';
 
-var path = require('path');
+var path = require('upath');
 var glob = require('glob');
 var _ = require('lodash');
 var testConfiguration = require('../configure');

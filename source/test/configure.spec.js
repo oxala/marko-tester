@@ -2,6 +2,7 @@
 
 var mockRequire = require('mock-require');
 var sinon = require('sinon');
+var path = require('upath');
 var chai = require('chai');
 var sinonChai = require('sinon-chai');
 var expect = chai.expect;
@@ -109,7 +110,7 @@ describe('configure', function () {
     var mockExcludeAttribute;
 
     beforeEach(function () {
-      mockExcludeDir = '/';
+      mockExcludeDir = path.resolve('/');
       mockExcludePackage = 'excludePackage';
       mockExcludeAttribute = 'HELLO';
       mockConfig = {

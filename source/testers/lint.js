@@ -1,6 +1,6 @@
 'use strict';
 
-var path = require('path');
+var path = require('upath');
 var fs = require('fs-extra');
 var _ = require('lodash');
 var glob = require('glob');

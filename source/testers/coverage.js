@@ -3,7 +3,7 @@
 'use strict';
 
 var fs = require('fs-extra');
-var path = require('path');
+var path = require('upath');
 var glob = require('glob');
 var istanbul = require('istanbul');
 var utils = require('../utils');
