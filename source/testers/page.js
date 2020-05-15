@@ -1,6 +1,6 @@
 'use strict';
 
-const path = require('path');
+const path = require('upath');
 const fs = require('fs-extra');
 const JSDOM = require('jsdom').JSDOM;
 const lasso = require('lasso');

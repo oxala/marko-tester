@@ -9,7 +9,7 @@ const testPage = require('./testers/page');
 const testComponent = require('./testers/component');
 const testFixtures = require('./testers/fixtures');
 const rewire = require('rewire');
-const path = require('path');
+const path = require('upath');
 const utils = require('./utils');
 
 require('app-module-path')

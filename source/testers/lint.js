@@ -1,6 +1,6 @@
 'use strict';
 
-const path = require('path');
+const path = require('upath');
 const _ = require('lodash');
 const stylelint = require('stylelint');
 const CLI = require('eslint').CLIEngine;
