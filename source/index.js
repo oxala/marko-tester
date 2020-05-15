@@ -13,7 +13,7 @@ const path = require('path');
 const utils = require('./utils');
 
 require('app-module-path')
-  .addPath(utils.config.rootPath);
+  .addPath(path.resolve(utils.config.rootPath));
 
 const sinonChai = require('sinon-chai');
 const chaiAsPromised = require('chai-as-promised');
