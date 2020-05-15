@@ -1,6 +1,6 @@
 {
   "name": "marko-tester",
-  "version": "7.9.1",
+  "version": "7.10.0",
   "description": "Assist Marko components unit/client testing",
   "repository": {
     "type": "git",
@@ -70,7 +70,7 @@
     "lasso-marko": "^2.3.1",
     "pre-push": "^0.1.1",
     "marko": "^4",
-    "lasso-less" :"^3.0.2"
+    "lasso-less": "^3.0.2"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
