@@ -35,10 +35,10 @@
   "dependencies": {
     "app-module-path": "^2.0.0",
     "async": "^2.1.2",
-    "bluebird": "^3.5.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "eslint": "^4.3.0",
+    "diffable-html": "^4",
     "eslint-config-marko-tester": "^1.2.0",
     "fs-extra": "^0.30.0",
     "glob": "^7.0.5",

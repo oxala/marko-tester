@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs-extra');
 const JSDOM = require('jsdom').JSDOM;
 const lasso = require('lasso');
-const Promise = require('bluebird');
 const utils = require('../utils');
 const coverage = require('../testers/coverage');
 

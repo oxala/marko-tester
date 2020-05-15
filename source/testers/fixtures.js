@@ -3,8 +3,8 @@
 const Normalizer = require('html-normalizer');
 const fs = require('fs-extra');
 const chai = require('chai');
-const Promise = require('bluebird');
 const utils = require('../utils');
+const diffableHTML = require('diffable-html');
 
 const expect = chai.expect;
 const excludedAttributes = utils.config.excludedAttributes.map(attr => attr.toLowerCase());
@@ -27,7 +27,7 @@ const cleanRenderedHtml = (html) => {
       });
   }
 
-  return trimmedHtml;
+  return diffableHTML(trimmedHtml);
 };
 const testFixtures = (context, opts) => {
   const options = opts || {};

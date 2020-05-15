@@ -16,7 +16,7 @@ const rootPackageInfo = require(`${process.cwd()}/package`);
 const eslintEs5 = require(path.join(__dirname, '..', 'eslintrc-legacy'));
 const eslint = require(path.join(__dirname, '..', 'eslintrc-es6'));
 
-const rootPath = process.cwd();
+const rootPath = path.resolve(process.cwd());
 const config = {
   stylelint,
   eslintEs5,
