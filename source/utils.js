@@ -2,7 +2,7 @@
 
 'use strict';
 
-const path = require('path');
+const path = require('upath');
 const fs = require('fs');
 const _ = require('lodash');
 const argv = require('optimist').argv;
@@ -16,7 +16,7 @@ const rootPackageInfo = require(`${process.cwd()}/package`);
 const eslintEs5 = require(path.join(__dirname, '..', 'eslintrc-legacy'));
 const eslint = require(path.join(__dirname, '..', 'eslintrc-es6'));
 
-const rootPath = process.cwd();
+const rootPath = path.resolve(process.cwd());
 const config = {
   stylelint,
   eslintEs5,
@@ -134,7 +134,7 @@ module.exports = {
   },
 
   get renderer() {
-    let rendererPath = glob.sync(path.resolve(
+    const rendererPath = glob.sync(path.resolve(
       path.join(this.testPath, '..'),
       'index.@(marko|js)'
     )).sort(f1 => !(/marko$/.test(f1)));

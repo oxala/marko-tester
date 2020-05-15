@@ -21,6 +21,5 @@ jshint.html
 mocha.xunit
 *.marko.js
 .coverage
-yarn.lock
 .vscode
 .reports

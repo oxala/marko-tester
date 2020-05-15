@@ -9,11 +9,11 @@ const testPage = require('./testers/page');
 const testComponent = require('./testers/component');
 const testFixtures = require('./testers/fixtures');
 const rewire = require('rewire');
-const path = require('path');
+const path = require('upath');
 const utils = require('./utils');
 
 require('app-module-path')
-  .addPath(utils.config.rootPath);
+  .addPath(path.resolve(utils.config.rootPath));
 
 const sinonChai = require('sinon-chai');
 const chaiAsPromised = require('chai-as-promised');

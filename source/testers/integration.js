@@ -1,6 +1,6 @@
 'use strict';
 
-const path = require('path');
+const path = require('upath');
 const glob = require('glob');
 const Mocha = require('mocha');
 const args = require('optimist').argv;
